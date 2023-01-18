@@ -1,0 +1,20 @@
+
+# hidden folders
+.__pycache__/
+.ipynb_checkpoints/
+.pytest_cache/
+.Rproj.user/
+.vscode/
+
+# r stuff
+jags/
+automated-cmr.Rproj
+
+# unneeded folders
+notebooks/
+results/
+writing/
+
+# unnecessary file types
+*.pyc
+*.DS_Store

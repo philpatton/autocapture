@@ -1,0 +1,9 @@
+# jolly seber hyper parameters
+N: 400
+T: 7
+p: 0.5
+phi: 0.7
+b0: 0.34
+
+# experimental hyperparameters
+trial_count: 100
