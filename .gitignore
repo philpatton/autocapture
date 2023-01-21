@@ -18,3 +18,4 @@ writing/
 # unnecessary file types
 *.pyc
 *.DS_Store
+*.R
