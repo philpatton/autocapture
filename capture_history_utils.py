@@ -1,17 +1,7 @@
 import numpy as np
 
-def main():
-
-    # read in the inp file 
-    path = 'capsid.txt'
-    history, history_counts = read_inp(path)
-    
-    summary = summarize_condensed_history(history, history_counts)
-    
-    return summary
-
 def read_inp(path):
-    
+    """Read in a .inp file, standard Mark file. Many TODO items"""
     inp_comment_char = '/*'
 
     histories = []
@@ -32,7 +22,7 @@ def read_inp(path):
                 history_counts.append(int(history_count))
 
                 
-    # explode the character string 0011 into a list 
+    # explode the character string into a list 
     exploded = [[*hist] for hist in histories]
     capture_array = np.array(exploded).astype(int)
 
@@ -53,22 +43,25 @@ def summarize_condensed_history(history, history_counts):
     return result
 
 def summarize_individual_history(history):
-    
+    """Convert capture histories into summary statistics"""
     occasion_count = history.shape[1]
     
     # n: total number of animals captured at occasion t 
     n = history.sum(axis=0)
 
+    # summary statistics from the capture histories
     u = []
     m = []
     r = []
     z = []
     for occasion in range(occasion_count):
         
+        # characterize each capture 
         captured_this_time = history[:, occasion] == 1
         captured_prior = (history[:, :occasion] > 0).any(axis=1)
         captured_later = (history[:, (occasion + 1):] > 0).any(axis=1)
 
+        # populate the statistics based on each condition 
         uu = history[captured_this_time & ~captured_prior].shape[0]
         mm = history[captured_this_time & captured_prior].shape[0]
         rr = history[captured_this_time & captured_later].shape[0]
@@ -79,18 +72,35 @@ def summarize_individual_history(history):
         m.append(mm)
         r.append(rr)
         z.append(zz)
-        
+    
+    # convert the lists to numpy arrays 
+    m = np.array(m)
+    u = np.array(u)
+    r = np.array(r)
+    z = np.array(z)
+    
+    never_recaptured = n - r  
     m_array = create_m_array(history)
         
-    result = {'n':n, 'm':m, 'u':u, 'r':r, 'z':z, 'm_array':m_array}
+    result = {'number_released':n, 'm':m, 'u':u, 'r':r, 'z':z, 
+              'never_recaptured':never_recaptured, 'm_array':m_array}
     
     return result
 
 def create_m_array(history):
+    """Calculate the so-called m-arrary from an individual capture history.
     
+    The m-array is an upper triangle matrix where each cell, m_{i,j}, denotes 
+    the number of individuals released at occasion t_i and next encountered 
+    alive at occasion t_j.    
+    
+    Args:
+        history: Matrix of shape (n_animals_captured, n_occasions) where 1 
+        indicates that the animal was captured at occasion
+    """
     occasion_count = history.shape[1]
     
-    M_array = np.zeros((occasion_count - 1, occasion_count))
+    M_array = np.zeros((occasion_count - 1, occasion_count - 1))
     for occasion in range(occasion_count - 1):
 
         captured_this_time = history[:, occasion] == 1
@@ -98,12 +108,9 @@ def create_m_array(history):
         now_and_later = captured_this_time & captured_later
         
         remaining_history = history[now_and_later, (occasion + 1):]
-        next_capture_occasion = (remaining_history.argmax(axis=1)) + occasion + 1
+        next_capture_occasion = (remaining_history.argmax(axis=1)) + occasion 
 
         ind, count = np.unique(next_capture_occasion, return_counts=True)
-
         M_array[occasion, ind] = count
         
-    return M_array
-
-res = main()
+    return M_array.astype(np.int64)
