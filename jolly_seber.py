@@ -33,6 +33,44 @@ class JollySeber:
         self.alpha = alpha
         self.beta = beta
         self.rng = np.random.default_rng(seed)
+ 
+    def simulate_data(self):
+        """Simulates the Jolly Seber model from the hyperparameters.
+        
+        Returns:
+            out_dict: dictionary containing the capture history, number of 
+            entrants, and the true N at each occasion. 
+        """
+
+        entry_occasions = self.simulate_entry()
+        _, B = np.unique(entry_occasions, return_counts=True)
+        
+        Z = self.simulate_z(entry_occasions)
+        N_true = Z.sum(axis=0)
+        
+        captures = self.simulate_capture()
+
+        # captured AND available for capture, i.e., has entered and is alive
+        true_history = captures * Z
+
+        # adjust capture history with false rejects
+        if self.alpha is not None:
+
+            capture_history = true_history.copy()
+            false_reject_indices = self.flag_false_rejects(capture_history)
+            ghost_history = self.create_ghost_history(false_reject_indices)
+    
+            # TODO: allocate recaptures after false reject to both ghost/true
+            capture_history[false_reject_indices] = 0
+            capture_history = np.vstack((capture_history, ghost_history))
+
+        # filter all zero histories
+        was_seen = (capture_history != 0).any(axis=1)
+        capture_history = capture_history[was_seen]
+
+        out_dict = {'capture_history':capture_history, 'B':B, 'N':N_true}
+        
+        return out_dict
 
     def simulate_entry(self):
         """Simulate occasion for animal's entry into population."""
@@ -96,32 +134,31 @@ class JollySeber:
         capture = np.stack(capture, axis=0)
 
         return capture
-    
-    def simulate_data(self):
-        """Simulates the Jolly Seber model from the hyperparameters.
-        
-        Returns:
-            out_dict: dictionary containing the capture history, number of 
-            entrants, and the true N at each occasion. 
-        """
 
-        entry_occasions = self.simulate_entry()
-        _, B = np.unique(entry_occasions, return_counts=True)
-        
-        Z = self.simulate_z(entry_occasions)
-        N_true = Z.sum(axis=0)
-        
-        captures = self.simulate_capture()
+    def flag_false_rejects(self, capture_history):
 
-        # captured AND available for capture, i.e., has entered and is alive
-        capture_history = captures * Z
-        
-        # filter all zero histories
-        was_seen = (capture_history != 0).any(axis=1)
-        capture_history = capture_history[was_seen]
+        # simulate false rejects
+        total_captures = capture_history.sum()
+        dummy_randoms = self.rng.uniform(size=total_captures)
+        is_false_reject = (dummy_randoms > self.alpha)
 
-        out_dict = {'capture_history':capture_history, 'B':B, 'N':N_true}
-        
-        return out_dict
+        # find the (animal, occassion) for each false reject
+        detection_indices = capture_history.nonzero()
+        false_reject_animal = detection_indices[0][is_false_reject]
+        false_reject_occasion = detection_indices[1][is_false_reject]
 
-    def simulate_false_reject()
+        return false_reject_animal, false_reject_occasion
+
+    def create_ghost_history(self, false_reject_indices):
+
+        false_reject_occasion = false_reject_indices[1]
+        
+        # create ghost histories
+        total_false_rejects = len(false_reject_occasion)
+        ghost_history = np.zeros((total_false_rejects, self.T))
+
+        # 'indices' ensures we select each false_reject_occasion in turn 
+        indices = np.arange(total_false_rejects)
+        ghost_history[indices, false_reject_occasion] = 1
+
+        return ghost_history
