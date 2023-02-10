@@ -1,12 +1,21 @@
-import numpy as np 
-import json 
+import numpy as np
+import pandas as pd
+import argparse
+from config import Config, load_config
 
-experiment_name = 'tmp'
-experiment_dir = f'results/{experiment_name}'
+def parse():
+    parser = argparse.ArgumentParser(description="Simulating Jolly-Seber")
+    parser.add_argument("--sim_data_dir", default="sim_data")
+    parser.add_argument("--experiment_name", default="tmp")
+    parser.add_argument("--config_path", default="config/debug.yaml")
+    return parser.parse_args()
 
-trial_path = f'{experiment_dir}/trial_2.json'
+def main():
 
-with open(trial_path, 'r') as f:
-  trial_results = json.loads(json.load(f))
+    args = parse()
+    cfg = load_config(args.config_path, "config/default.yaml")
 
-capture_history = np.asarray(trial_results["N"])
+    return None
+
+if __name__ == '__main__':
+    main()
