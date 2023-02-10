@@ -4,18 +4,18 @@
 This code was adapted from Kery and Schaub (2011) BPA, Chapter 10.
 '''
 
-from tqdm import tqdm
 import numpy as np
 import argparse
 import json
 import os
 
+from tqdm import tqdm
 from jolly_seber import JollySeber
 from config import Config, load_config
 
 def parse():
     parser = argparse.ArgumentParser(description="Simulating Jolly-Seber")
-    parser.add_argument("--base_output_dir", default="result")
+    parser.add_argument("--sim_data_dir", default="sim_data")
     parser.add_argument("--experiment_name", default="tmp")
     parser.add_argument("--config_path", default="config/debug.yaml")
     return parser.parse_args()
@@ -31,7 +31,7 @@ def main():
     args = parse()
     cfg = load_config(args.config_path, "config/default.yaml")
 
-    experiment_dir =  f'results/{args.experiment_name}'
+    experiment_dir =  f'{args.base_output_dir}/{args.experiment_name}'
 
     # don't overwrite, unless we're writing to tmp 
     if os.path.isdir(experiment_dir):
@@ -73,7 +73,9 @@ def main():
     settings = {'N': cfg.N, 'b': b, 'phi': cfg.phi, 'p': cfg.p}
     dumped = json.dumps(settings, cls=NumpyEncoder)
     
-    path = f'results/{args.experiment_name}/experiment_settings.json'
+    path = (
+        f'{args.base_output_dir}/{args.experiment_name}/experiment_settings.json'
+    )
     with open(path, 'w') as f:
         json.dump(dumped, f)
 
