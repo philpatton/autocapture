@@ -14,6 +14,7 @@ automated-cmr.Rproj
 notebooks/
 results/
 writing/
+sim_data/
 
 # unnecessary file types
 *.pyc
