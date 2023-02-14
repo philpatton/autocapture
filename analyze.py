@@ -21,6 +21,7 @@ def parse():
     parser.add_argument("--results_dir", default="results")
     parser.add_argument("--experiment_name", default="tmp")
     parser.add_argument("--config_path", default="config/debug.yaml")
+    parser.add_argument("--jax", default=False)
     return parser.parse_args()
 
 def main():
@@ -39,10 +40,12 @@ def main():
     logger = logging.getLogger('pymc')
     logger.setLevel(logging.ERROR)
 
+    logging.basicConfig(filename=f'{experiment_dir}/test.log"')
+
     # don't overwrite, unless we're writing to tmp 
     if os.path.isdir(experiment_dir):
         if args.experiment_name != 'tmp':
-            raise NameError(f'Directory: {cfg.experiment_dir} already exists.')
+            raise NameError(f'Directory: {experiment_dir} already exists.')
     else:
         os.mkdir(experiment_dir)
 
@@ -60,39 +63,27 @@ def main():
     SAMPLE_KWARGS = {
         'draws': draws,
         'tune': tune,
-        'progressbar': False
+        # 'progressbar': False
     }
 
     for trial in tqdm(range(cfg.trial_count)):
 
+        # load in capture history
         trial_path = f'{data_dir}/trial_{trial}.json'
-
         with open(trial_path, 'r') as f:
             trial_results = json.loads(json.load(f))
 
+        # summarize history for js model
         capture_history = np.asarray(trial_results["capture_history"])
+        capture_summary = summarize_individual_history(capture_history)
 
-        trial_results = analyze_trial(capture_history, SAMPLE_KWARGS)
+        # estimate N, p, phi, and b from capture history 
+        js_model = build_model(capture_summary)
+        idata = sample_model(js_model, SAMPLE_KWARGS, jax=True)
 
+        trial_results = az.summary(idata).round(2)
         out_file = f'{args.results_dir}/{args.experiment_name}/trial_{trial}.csv'
-
         trial_results.to_csv(out_file)
-
-
-def analyze_trial(capture_history, SAMPLE_KWARGS):
-
-    args = parse()
-    cfg = load_config(args.config_path, "config/default.yaml")
-
-    capture_summary = summarize_individual_history(capture_history)
-
-    js_model = build_model(capture_summary)
-
-    idata = sample_model(js_model, SAMPLE_KWARGS)
-
-    summary_stats = az.summary(idata).round(2)
-
-    return summary_stats
 
 # logp of the dist for unmarked animals {u1, ...} ~ Mult(N; psi1 * p, ...)
 def logp(x, n, p):
