@@ -31,7 +31,7 @@ def main():
     args = parse()
     cfg = load_config(args.config_path, "config/default.yaml")
 
-    experiment_dir =  f'{args.base_output_dir}/{args.experiment_name}'
+    experiment_dir =  f'{args.sim_data_dir}/{args.experiment_name}'
 
     # don't overwrite, unless we're writing to tmp 
     if os.path.isdir(experiment_dir):
@@ -53,9 +53,17 @@ def main():
     b[0] = cfg.b0
     b[1:] = (1 - b[0]) / (len(b) - 1) # ensure sums to one 
 
-    js = JollySeber(N=cfg.N, PHI=PHI, P=P, b=b)
+    # false reject, false accept, and mark change rates
+    alpha = cfg.alpha 
+    beta = cfg.beta 
+    gamma = cfg.gamma  
 
-    print(f'Starting experiment: {args.experiment_name}')
+    N = cfg.N
+
+    print(alpha is None)
+    js = JollySeber(N=N, PHI=PHI, P=P, b=b, alpha=alpha, beta=beta, gamma=gamma)
+
+    print(f'Simulating data for experiment: {args.experiment_name}')
 
     for trial in tqdm(range(cfg.trial_count)):
 
@@ -74,7 +82,7 @@ def main():
     dumped = json.dumps(settings, cls=NumpyEncoder)
     
     path = (
-        f'{args.base_output_dir}/{args.experiment_name}/experiment_settings.json'
+        f'{args.sim_data_dir}/{args.experiment_name}/experiment_settings.json'
     )
     with open(path, 'w') as f:
         json.dump(dumped, f)
