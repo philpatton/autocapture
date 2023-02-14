@@ -3,7 +3,10 @@ N: 2
 T: 2
 p: 0.5
 phi: 0.5
-b0: 0.5
+b0: 0.5    
+alpha: null
+beta: null
+gamma: null
 
 # experimental hyperparameters
 trial_count: 2

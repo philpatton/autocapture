@@ -7,7 +7,9 @@ import pymc.sampling_jax
 import json 
 import argparse
 import os 
+import logging
 
+from tqdm import tqdm
 from config import load_config, Config
 from capture_history_utils import summarize_individual_history
 from pymc.distributions.dist_math import factln
@@ -16,38 +18,29 @@ from pytensor import tensor as pt
 def parse():
     parser = argparse.ArgumentParser(description="Simulating Jolly-Seber")
     parser.add_argument("--sim_data_dir", default="sim_data")
+    parser.add_argument("--results_dir", default="results")
     parser.add_argument("--experiment_name", default="tmp")
     parser.add_argument("--config_path", default="config/debug.yaml")
+    parser.add_argument("--jax", default=False)
     return parser.parse_args()
 
 def main():
 
     args = parse()
     cfg = load_config(args.config_path, "config/default.yaml")
+    experiment_dir = f'{args.results_dir}/{args.experiment_name}'
 
-    base_output_dir = 'sim_data'
-    experiment_name = 'tmp'
-    experiment_dir = f'{base_output_dir}/{experiment_name}'
-    trial_path = f'{experiment_dir}/trial_2.json'
+    # logger = logging.getLogger('pymc')
+    # logger.setLevel(logging.DEBUG)
+    # log_fname = f'{args.results_dir}/{args.experiment_name}.log'
+    # fh = logging.FileHandler(log_fname)
+    # fh.setLevel(logging.DEBUG)
+    # logger.addHandler(fh)
 
-    with open(trial_path, 'r') as f:
-        trial_results = json.loads(json.load(f))
+    logger = logging.getLogger('pymc')
+    logger.setLevel(logging.ERROR)
 
-    capture_history = np.asarray(trial_results["N"])
-
-    capture_summary = summarize_individual_history(capture_history)
-
-    SAMPLE_KWARGS = {
-        'draws': cfg.draws,
-        'tune': cfg.tune,
-        'progress_bar': False
-    }
-
-    js_model = build_model(capture_summary)
-
-    idata = sample_model(js_model, SAMPLE_KWARGS)
-
-    summary_stats = az.summary(idata).round(2)
+    logging.basicConfig(filename=f'{experiment_dir}/test.log"')
 
     # don't overwrite, unless we're writing to tmp 
     if os.path.isdir(experiment_dir):
@@ -56,11 +49,41 @@ def main():
     else:
         os.mkdir(experiment_dir)
 
-    out_file = f'sim_results/{experiment_name}/trial_002_results.csv'
+    # check to see theres a json file for each trial in trial_count
+    data_dir = f'{args.sim_data_dir}/{args.experiment_name}'
+    files = [f'{data_dir}/trial_{t}.json' for t in range(cfg.trial_count)]
+    file_existence = [os.path.isfile(f) for f in files]
+    if not all(file_existence):
+        e = f'{data_dir} missing data for each trial in {cfg.trial_count}'
+        raise OSError(e)
 
-    summary_stats.to_csv(out_file)
+    draws = cfg.draws
+    tune = cfg.tune
 
-    return None
+    SAMPLE_KWARGS = {
+        'draws': draws,
+        'tune': tune,
+        # 'progressbar': False
+    }
+
+    for trial in tqdm(range(cfg.trial_count)):
+
+        # load in capture history
+        trial_path = f'{data_dir}/trial_{trial}.json'
+        with open(trial_path, 'r') as f:
+            trial_results = json.loads(json.load(f))
+
+        # summarize history for js model
+        capture_history = np.asarray(trial_results["capture_history"])
+        capture_summary = summarize_individual_history(capture_history)
+
+        # estimate N, p, phi, and b from capture history 
+        js_model = build_model(capture_summary)
+        idata = sample_model(js_model, SAMPLE_KWARGS, jax=True)
+
+        trial_results = az.summary(idata).round(2)
+        out_file = f'{args.results_dir}/{args.experiment_name}/trial_{trial}.csv'
+        trial_results.to_csv(out_file)
 
 # logp of the dist for unmarked animals {u1, ...} ~ Mult(N; psi1 * p, ...)
 def logp(x, n, p):
@@ -175,10 +198,16 @@ def build_model(capture_summary):
     
     return js_sim
 
-def sample_model(model, SAMPLE_KWARGS):
+def sample_model(model, SAMPLE_KWARGS, jax=False):
 
     with model:
-        idata = pm.sampling_jax.sample_numpyro_nuts(**SAMPLE_KWARGS)
-        # idata = pm.sample(**SAMPLE_KWARGS)
+
+        if jax:
+            idata = pm.sampling_jax.sample_numpyro_nuts(**SAMPLE_KWARGS)
+        else:
+            idata = pm.sample(**SAMPLE_KWARGS)
     
     return idata
+
+if __name__ == '__main__':
+    main()

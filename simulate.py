@@ -8,6 +8,7 @@ import numpy as np
 import argparse
 import json
 import os
+import logging
 
 from tqdm import tqdm
 from jolly_seber import JollySeber
@@ -31,14 +32,16 @@ def main():
     args = parse()
     cfg = load_config(args.config_path, "config/default.yaml")
 
-    experiment_dir =  f'{args.base_output_dir}/{args.experiment_name}'
-
+    experiment_dir =  f'{args.sim_data_dir}/{args.experiment_name}'
     # don't overwrite, unless we're writing to tmp 
     if os.path.isdir(experiment_dir):
         if args.experiment_name != 'tmp':
             raise NameError(f'Directory: {experiment_dir} already exists.')
     else:
         os.mkdir(experiment_dir)
+
+    logging.basicConfig(filename=f'{experiment_dir}/test.log', 
+                        level=logging.DEBUG)
 
     # survival probabilities 
     phi_shape = (cfg.N, cfg.T - 1)
@@ -53,9 +56,15 @@ def main():
     b[0] = cfg.b0
     b[1:] = (1 - b[0]) / (len(b) - 1) # ensure sums to one 
 
-    js = JollySeber(N=cfg.N, PHI=PHI, P=P, b=b)
+    # false reject, false accept, mark change rates; superpopulation size 
+    alpha = cfg.alpha 
+    beta = cfg.beta 
+    gamma = cfg.gamma  
+    N = cfg.N
 
-    print(f'Starting experiment: {args.experiment_name}')
+    js = JollySeber(N=N, PHI=PHI, P=P, b=b, alpha=alpha, beta=beta, gamma=gamma)
+
+    logging.debug(f'Simulating data for experiment: {args.experiment_name}')
 
     for trial in tqdm(range(cfg.trial_count)):
 
@@ -74,12 +83,12 @@ def main():
     dumped = json.dumps(settings, cls=NumpyEncoder)
     
     path = (
-        f'{args.base_output_dir}/{args.experiment_name}/experiment_settings.json'
+        f'{args.sim_data_dir}/{args.experiment_name}/experiment_settings.json'
     )
     with open(path, 'w') as f:
         json.dump(dumped, f)
 
-    print('Experiment complete.')
+    logging.debug('Experiment complete.')
 
 if __name__ == '__main__':
     main()
