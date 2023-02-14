@@ -1,13 +1,16 @@
 # jolly seber hyper parameters
-N: 400
-T: 7
-p: 0.5
-phi: 0.7
+N: 1000
+T: 10
+p: 0.4
+phi: 0.9
 b0: 0.34
+alpha: null
+beta: null
+gamma: null
 
 # experimental hyperparameters
 trial_count: 100
 
 # mcmc parameters
-draws: 10000
-tune: 10000
+draws: 100
+tune: 100
