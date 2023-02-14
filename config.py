@@ -1,6 +1,7 @@
 from typing import Optional
 
 import yaml
+import logging
 
 class Config(dict):
     def __getattr__(self, key):
@@ -22,6 +23,6 @@ def load_config(path: str, default_path: Optional[str]) -> Config:
             default_cfg = Config(yaml.full_load(f))
         for key, val in default_cfg.items():
             if key not in cfg:
-                print(f"used default config {key}: {val}")
+                logging.debug(f"used default config {key}: {val}")
                 cfg[key] = val
     return cfg
