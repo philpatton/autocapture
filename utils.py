@@ -1,5 +1,13 @@
 import numpy as np
 
+def softmax(x):
+    return np.exp(x) / (np.exp(x)).sum()
+
+def first_nonzero(arr, axis=1, invalid_val=-1):
+    """Finds the first nonzero value along an axis."""
+    mask = arr!=0
+    return np.where(mask.any(axis=axis), mask.argmax(axis=axis), invalid_val)
+
 def read_inp(path):
     """Read in a .inp file, standard Mark file. Many TODO items"""
     inp_comment_char = '/*'
