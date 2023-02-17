@@ -1,7 +1,7 @@
 import numpy as np
 
 def softmax(x):
-    return np.exp(x) / (np.exp(x)).sum()
+    return x / x.sum()
 
 def first_nonzero(arr, axis=1, invalid_val=-1):
     """Finds the first nonzero value along an axis."""
