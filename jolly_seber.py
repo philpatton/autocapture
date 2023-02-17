@@ -1,7 +1,7 @@
 
-""" Simulate data for a Jolly-Seber model. 
+"""Simulate data for a Jolly-Seber model. 
 
-This code was adapted from Kery and Schaub (2011) BPA, Chapter 10.
+This code was adapted from Kery and Schaub (2011) BPA, Chapter 10. 
 
 Typical usage example:
 
@@ -47,12 +47,24 @@ class JollySeber:
         self.rng = np.random.default_rng(seed)
         self.A = A
         self.B = B
- 
+
     def simulate(self):
-        """Simulates the Jolly Seber model from the hyperparameters.
+        """Simulates """
+        sim_dict = self.simulate_true_history()
+
+        capture_history = self.simulate_capture_history(
+            sim_dict['true_history']
+        )
+
+        sim_dict['capture_history'] = capture_history
+
+        return sim_dict
+ 
+    def simulate_true_history(self):
+        """Simulates the JSSA model from the hyperparameters.
         
         Returns:
-            out_dict: dictionary containing the capture history, number of 
+            out_dict: dictionary containing the true history, number of 
             entrants, and the true N at each occasion. 
         """
 
@@ -69,81 +81,12 @@ class JollySeber:
 
         # captured AND available for capture, i.e., has entered and is alive
         true_history = captures * Z
-        
-        # create observed capture_history, which may contain misid errors
-        capture_history = true_history.copy()
-
-        # both types of misids only occur on recaptures
-        recapture_history = self.create_recapture_history(capture_history)
-
-        # flag the recaptures for each error type (false accept or reject)
-        flag_dict = self.flag_errors(recapture_history)
-
-        if any(flag_dict['false_accept']):
-
-            # copy recaptures to        
-            false_accept_indices = self.get_error_indices(
-                recapture_history,
-                flag_dict['false_accept']
-            )
-            wrong_animals = self.pick_wrong_animals(
-                false_accept_indices,
-                capture_history
-            )
-                        
-            # copy the recaptures to the misidentified animal 
-            capture_history[wrong_animals, false_accept_indices[1]] = 1
-                    
-            # zero out falsely accepted animals
-            capture_history[false_accept_indices] = 0
-
-        if any(flag_dict['mark_change']):
-
-            # create ghost histories for every changed animal
-            mark_change_indices = self.get_error_indices(
-                recapture_history,
-                flag_dict['mark_change']
-            )
-            mark_change_history = self.create_ghost_history(mark_change_indices)
-
-            # copy recaptures from the animals original history to the new one
-            mark_change_history = self.copy_recaptures_to_changed_animal(
-                mark_change_indices,
-                mark_change_history,
-                recapture_history
-            )
-
-            # zero out recapture and subsequent history for changed animal 
-            mc_animals, mc_occasions = mark_change_indices
-            for animal, occasion in zip(mc_animals, mc_occasions):
-                capture_history[animal, occasion:] = 0
-
-            capture_history = np.vstack((capture_history, mark_change_history))
-
-        if any(flag_dict['ghost']):
-
-            # create ghost histories for non-mark-changes
-            ghost_indices = self.get_error_indices(
-                recapture_history,
-                flag_dict['ghost']
-            )
-            ghost_history = self.create_ghost_history(ghost_indices)
-        
-            # for ghosts, zero out recapture in original capture history 
-            capture_history[ghost_indices] = 0
-
-            capture_history = np.vstack((capture_history, ghost_history))
-
-        # filter all zero histories
-        was_seen = (capture_history != 0).any(axis=1)
-        capture_history = capture_history[was_seen]
 
         # filter all zero histories
         was_seen = (true_history != 0).any(axis=1)
         true_history = true_history[was_seen]
         
-        out_dict = {'capture_history':capture_history, 'B':B, 'N':N_true,
-                    'true_history':true_history}
+        out_dict = {'true_history':true_history, 'B':B, 'N':N_true}
         
         return out_dict
 
@@ -209,6 +152,73 @@ class JollySeber:
         capture = np.stack(capture, axis=0)
 
         return capture
+
+    def simulate_capture_history(self, true_history):
+
+        capture_history = true_history.copy()
+
+        # both types of misids only occur on recaptures
+        recapture_history = self.create_recapture_history(capture_history)
+
+        # flag the recaptures for each error type (false accept or reject)
+        flag_dict = self.flag_errors(recapture_history)
+
+        if any(flag_dict['false_accept']):
+
+            # copy recaptures to        
+            false_accept_indices = self.get_error_indices(
+                recapture_history,
+                flag_dict['false_accept']
+            )
+            wrong_animals = self.pick_wrong_animals(
+                false_accept_indices,
+                capture_history
+            )
+                        
+            # copy the recaptures to the misidentified animal 
+            capture_history[wrong_animals, false_accept_indices[1]] = 1
+                    
+            # zero out falsely accepted animals
+            capture_history[false_accept_indices] = 0
+
+        if any(flag_dict['mark_change']):
+
+            # create ghost histories for every changed animal
+            mark_change_indices = self.get_error_indices(
+                recapture_history,
+                flag_dict['mark_change']
+            )
+            mark_change_history = self.create_ghost_history(mark_change_indices)
+
+            # copy recaptures from the animals original history to the new one
+            mark_change_history = self.copy_recaptures_to_changed_animal(
+                mark_change_indices,
+                mark_change_history,
+                recapture_history
+            )
+
+            # zero out recapture and subsequent history for changed animal 
+            mc_animals, mc_occasions = mark_change_indices
+            for animal, occasion in zip(mc_animals, mc_occasions):
+                capture_history[animal, occasion:] = 0
+
+            capture_history = np.vstack((capture_history, mark_change_history))
+
+        if any(flag_dict['ghost']):
+
+            # create ghost histories for non-mark-changes
+            ghost_indices = self.get_error_indices(
+                recapture_history,
+                flag_dict['ghost']
+            )
+            ghost_history = self.create_ghost_history(ghost_indices)
+        
+            # for ghosts, zero out recapture in original capture history 
+            capture_history[ghost_indices] = 0
+
+            capture_history = np.vstack((capture_history, ghost_history))
+
+        return capture_history
 
     def create_recapture_history(self, capture_history):
 
