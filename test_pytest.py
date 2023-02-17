@@ -50,17 +50,17 @@ def test_simulate_entry():
 
     assert np.array_equal(entry_occasions, should_be)
 
-def test_simulate():
+def test_simulate_true_history():
 
     js = JollySeber(**debug_kwargs)   
 
-    results = js.simulate()
+    results = js.simulate_true_history()
 
-    ch_should_be = np.array([[0, 1], [0, 1]])
+    th_should_be = np.array([[0, 1], [0, 1]])
     B_should_be = np.array([1, 1])
     N_should_be = np.array([1, 2])
 
-    assert np.array_equal(results['capture_history'], ch_should_be)
+    assert np.array_equal(results['true_history'], th_should_be)
     assert np.array_equal(results['B'], B_should_be)
     assert np.array_equal(results['N'], N_should_be)
 
@@ -143,11 +143,15 @@ def test_pick_wrong_animals():
 
 def test_copy_recaptures_to_changed_animal():
 
+    N = 3
+    T = 4
+
     kwargs = {
         'N': 3,
-        'PHI': np.array([[0.5], [0.5]]),
-        'P': np.array([[0.5, 0.5], [0.5, 0.5]]),
-        'b': np.array([0.25, 0.25, 0.25, 0.25]),
+        'T': T,
+        'PHI': np.full((N, T - 1), 0.5),
+        'P': np.full((N, T), 0.5),
+        'b': np.full(T, 1/T),
         'seed': 42
     }
 
@@ -186,6 +190,37 @@ def test_simulate_similarity():
     assert sim.shape[0] == 10
     assert sim.shape[1] == 10
 
+def test_simulate_capture_history():
+
+    N=5
+    T=10
+    kwargs={
+        'N':N,
+        'T':T,
+        'PHI':np.full((N, T-1), 0.9),
+        'P':np.full((N, T), 0.5),
+        'b':np.full(T, 1/T),
+        'seed':42
+    }
+
+    js = JollySeber(**kwargs)
+
+    sim_dict = js.simulate()
+
+    # when alpha, beta, gamma all zero, capture_history should == true_history
+    assert np.array_equal(sim_dict['capture_history'], sim_dict['true_history'])
+
+    alpha = 0.2
+    beta = 0.2
+    gamma = 0.2
+
+    js_error = JollySeber(**kwargs, alpha=alpha, beta=beta, gamma=gamma)
+
+    error_dict = js_error.simulate()
+
+    assert error_dict['true_history'].shape == (4, 10)
+    assert error_dict['capture_history'].shape == (6, 10)
+
 def test_main():
 
     N = 1000
@@ -203,17 +238,15 @@ def test_main():
     b[1:] = (1 - b[0]) / (len(b) - 1) # ensure sums to one 
 
     # survival probabilities 
-    phi_shape = (N, T - 1)
-    PHI = np.full(phi_shape, phi)
+    PHI = np.full((N, T - 1), phi)
 
     # capture probabilities 
-    p_shape = (N, T)
-    P = np.full(p_shape, p)
+    P = np.full((N, T), p)
 
     seed = 42
 
-    js = JollySeber(N=N, PHI=PHI, P=P, b=b, alpha=alpha, beta=beta, gamma=gamma,
-                    seed=seed)
+    js = JollySeber(N=N, T=T, PHI=PHI, P=P, b=b, alpha=alpha, beta=beta, 
+                    gamma=gamma, seed=seed)
 
     sim = js.simulate()
 
