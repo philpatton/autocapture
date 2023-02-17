@@ -34,7 +34,7 @@ class JollySeber:
 
     def __init__(self, N: int, T: int, PHI: np.ndarray, P: np.ndarray,
                  b: np.ndarray, alpha: float = 0, beta: float = 0, 
-                 gamma: float = 0, seed: int = 0, A: float = 2, B: float = 5):
+                 gamma: float = 0, seed: int = None, A: float = 2, B: float = 5):
         """Init the data generator with hyperparameters and init the rng"""
         self.N = N
         self.T = T
