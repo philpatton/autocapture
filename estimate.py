@@ -11,7 +11,7 @@ import logging
 
 from tqdm import tqdm
 from config import load_config, Config
-from capture_history_utils import summarize_individual_history
+from utils import summarize_individual_history
 from pymc.distributions.dist_math import factln
 from pytensor import tensor as pt
 

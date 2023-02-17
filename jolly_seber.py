@@ -1,7 +1,8 @@
 
-""" Simulate data for a Jolly-Seber model. 
+"""Simulate data for a Jolly-Seber model. 
 
-This code was adapted from Kery and Schaub (2011) BPA, Chapter 10.
+This code was adapted from Kery and Schaub (2011) BPA, Chapter 10. This is the 
+POPAN or JSSA (Jolly-Seber-Schwarz-Arnason) version
 
 Typical usage example:
 
@@ -10,45 +11,9 @@ Typical usage example:
     print(results['capture_history'][:5])
 """
 
+from utils import softmax, first_nonzero
+
 import numpy as np
-
-def first_nonzero(arr, axis=1, invalid_val=-1):
-    """Finds the first nonzero value along an axis."""
-    mask = arr!=0
-    return np.where(mask.any(axis=axis), mask.argmax(axis=axis), invalid_val)
-
-def main():
-
-    N = 1000
-    T = 10
-    phi = 0.9
-    p = 0.4 
-    b0 = 0.35
-    frr = 0.05 
-    mark_change_rate = 0.2
-
-    gamma = (1 - mark_change_rate)
-    alpha = (1 - frr)
-
-    b = np.zeros(T)
-    b[0] = b0
-    b[1:] = (1 - b[0]) / (len(b) - 1) # ensure sums to one 
-
-    # survival probabilities 
-    phi_shape = (N, T - 1)
-    PHI = np.full(phi_shape, phi)
-
-    # capture probabilities 
-    p_shape = (N, T)
-    P = np.full(p_shape, p)
-
-    js = JollySeber(N=N, PHI=PHI, P=P, b=b, alpha=alpha, gamma=gamma)
-
-    results = js.simulate_data()
-
-    th = results['true_history']
-
-    print(th)
 
 class JollySeber:
     """Data simulator for jolly seber models.
@@ -58,28 +23,60 @@ class JollySeber:
         PHI: N by T-1 matrix of survival probabilities between occassions
         P: N by T matrix of capture probabilities
         b: T by 1 vector of entrance probabilities 
-        rng: Random number generator used by the model 
+        rng: np.random.Generator used by the model 
+        seed: integer seed for the rng
+        alpha: the proportion of recaptures resulting in ghosts 
+        beta: the proportion of recatpures resulting in mark changes
+        gamma: the proportion of recaptures resulting in false accepts 
+        A: alpha parameter in beta distribution of similarity scores
+        B: beta parameter in beta distribution of similarity scores
     """
 
-    def __init__(self, N: int, PHI: np.ndarray, P: np.ndarray,
-                 b: np.ndarray, alpha: float = None, beta: float = None, 
-                 gamma: float = None, seed: int = None):
-        """Init the data genertor with hyperparameters and init the rng"""
+    def __init__(self, N: int, T: int, PHI: np.ndarray, P: np.ndarray,
+                 b: np.ndarray, alpha: float = 0, beta: float = 0, 
+                 gamma: float = 0, seed: int = None, A: float = 2, B: float = 5):
+        """Init the data generator with hyperparameters and init the rng"""
         self.N = N
+        self.T = T
         self.PHI = PHI
         self.P = P
         self.b = b
-        self.T = len(b)
         self.alpha = alpha
         self.beta = beta
         self.gamma = gamma
+        self.seed = seed
         self.rng = np.random.default_rng(seed)
+        self.A = A
+        self.B = B
+
+        if PHI.shape != (N, T - 1):
+            raise ValueError('PHI must have shape (N, T)')
+        if P.shape != (N, T):
+            raise ValueError('P must have shape (N, T)')
+        if len(b) != T:
+            raise ValueError('b must have length T')
+
+    def simulate(self):
+        """Simulates true history and error process."""
+        
+        sim_dict = self.simulate_true_history()
+
+        capture_dict = self.simulate_capture_history(
+            sim_dict['true_history']
+        )
+
+        sim_dict['capture_history'] = capture_dict['capture_history']
+        sim_dict['flag_dict'] = capture_dict['flag_dict']
+
+        return sim_dict
  
-    def simulate_data(self):
-        """Simulates the Jolly Seber model from the hyperparameters.
+    def simulate_true_history(self):
+        """Simulates the Jolly-Seber model from the hyperparameters.
+
+        This is is the POPAN or JSSA version.
         
         Returns:
-            out_dict: dictionary containing the capture history, number of 
+            out_dict: dictionary containing the true history, number of 
             entrants, and the true N at each occasion. 
         """
 
@@ -96,47 +93,12 @@ class JollySeber:
 
         # captured AND available for capture, i.e., has entered and is alive
         true_history = captures * Z
-        
-        # create observed history containing errors
-        capture_history = true_history.copy()
-
-        # adjust capture history with false rejects
-        if self.alpha is not None:
-
-            false_reject_indices = self.flag_false_rejects(capture_history)
-            ghost_history = self.create_ghost_history(false_reject_indices,
-                                                      capture_history)
-
-            # copy recaptures to ghost histories if mark changes 
-            if self.gamma is not None:
-                ghost_history = self.copy_recaptures_to_ghost(
-                    false_reject_indices,
-                    ghost_history,
-                    capture_history
-                )
-    
-                # zero out all subsequent recaptures in true capture history
-                for idx in false_reject_indices:
-                    capture_history[idx[0], idx[1]:] = 0
-            
-            # if there are no mark changes 
-            else:
-                # zero out individual recapture in true capture history 
-                capture_history[false_reject_indices] = 0
-
-            # TODO: False positives in capture history 
-            capture_history = np.vstack((capture_history, ghost_history))
-
-        # filter all zero histories
-        was_seen = (capture_history != 0).any(axis=1)
-        capture_history = capture_history[was_seen]
 
         # filter all zero histories
         was_seen = (true_history != 0).any(axis=1)
         true_history = true_history[was_seen]
         
-        out_dict = {'capture_history':capture_history, 'B':B, 'N':N_true,
-                    'true_history':true_history}
+        out_dict = {'true_history':true_history, 'B':B, 'N':N_true}
         
         return out_dict
 
@@ -203,96 +165,236 @@ class JollySeber:
 
         return capture
 
-    def flag_false_rejects(self, capture_history):
-        """Flag captures as false rejects.
+    def simulate_capture_history(self, true_history):
+        """Simulates misidentification errors for a capture history.
         
-        This iteration only flags the recaptures as false rejects. 
-        
-        Return:
-            tuple with (animal, occassion) for false rejects.
+        The misidentification errors can be false rejects, with or without mark
+        changes, or false accepts.
+
+        Args:
+            true_history: N by T matrix indicating capture
+        Returns:
+            N by T matrix indicating capture, including misid errors 
         """
-        first_capture_occasion = first_nonzero(capture_history)
+        capture_history = true_history.copy()
+
+        # both types of misids only occur on recaptures
+        recapture_history = self.create_recapture_history(capture_history)
+
+        # flag the recaptures for each error type (false accept or reject)
+        flag_dict = self.flag_errors(recapture_history)
+
+        if any(flag_dict['false_accept']):
+
+            capture_history = self.false_accept_process(
+                recapture_history=recapture_history,
+                flag_dict=flag_dict,
+                capture_history=capture_history
+            )
+
+        if any(flag_dict['mark_change']):
+
+            capture_history = self.mark_change_process(
+                recapture_history=recapture_history,
+                flag_dict=flag_dict,
+                capture_history=capture_history
+            )
+
+        if any(flag_dict['ghost']):
+
+            capture_history = self.ghost_process(
+                recapture_history=recapture_history,
+                flag_dict=flag_dict,
+                capture_history=capture_history
+            )
+
+        return {
+            'capture_history': capture_history,
+            'flag_dict': flag_dict
+        }
+
+    def create_recapture_history(self, capture_history):
+        """Sets initial captures in capture_history to zero"""
 
         # zero out the first capture occasion to get the recapture history 
         recapture_history = capture_history.copy()
         capture_count = capture_history.shape[0]
+        first_capture_occasion = first_nonzero(capture_history)
         recapture_history[np.arange(capture_count), first_capture_occasion] = 0
-          
+
+        return recapture_history
+
+    def flag_errors(self, recapture_history):
+        """Flag recaptures as ghosts, mark changes, false accepts."""
+
+        # draw random uniform for classifying each recapture
         recapture_count = recapture_history.sum()
         dummy_randoms = self.rng.uniform(size=recapture_count)
-        is_false_reject = dummy_randoms > self.alpha
 
-        # find the (animal, occassion) for each false reject
+        # cutoffs for errors 
+        abg = self.alpha + self.beta + self.gamma
+        bg = self.beta + self.gamma 
+        
+        # classify errors
+        ghost_flag = (abg > dummy_randoms) & (dummy_randoms > bg)
+        mark_change_flag = (bg > dummy_randoms) & (dummy_randoms > self.beta)
+        false_accept_flag = dummy_randoms < self.beta
+        
+        flag_dict = {
+            'ghost':ghost_flag,
+            'mark_change':mark_change_flag,
+            'false_accept':false_accept_flag
+        }
+
+        return flag_dict
+
+    def false_accept_process(self, recapture_history, flag_dict, 
+                             capture_history):
+
+        # copy recaptures to        
+        false_accept_indices = self.get_error_indices(
+            recapture_history,
+            flag_dict['false_accept']
+        )
+        wrong_animals = self.pick_wrong_animals(
+            false_accept_indices,
+            capture_history
+        )
+                    
+        # copy the recaptures to the misidentified animal 
+        capture_history[wrong_animals, false_accept_indices[1]] = 1
+                
+        # zero out falsely accepted animals
+        capture_history[false_accept_indices] = 0
+
+        return capture_history
+
+    def get_error_indices(self, recapture_history, error_flag):
+        """Gets the (animal, occasion) of the erroneous recatpure."""
         recapture_idx = recapture_history.nonzero()
-        false_reject_animal = recapture_idx[0][is_false_reject]
-        false_reject_occasion = recapture_idx[1][is_false_reject]
+        error_animal = recapture_idx[0][error_flag]
+        error_occasion = recapture_idx[1][error_flag]
 
-        return false_reject_animal, false_reject_occasion
+        return error_animal, error_occasion
 
-    def flag_mark_changes(self, false_reject_indices):
+    def pick_wrong_animals(self, false_accept_indices, capture_history):
+        """Picks animals to be confused with for each false acceptance."""
+        false_accept_animal, false_accept_occasion = false_accept_indices
 
-        false_reject_animal, false_reject_occasion = false_reject_indices
+        animal_count = capture_history.shape[0]
+        similarity = self.simulate_similarity(animal_count)
 
-        # randomly classify some of the false rejects as mark change  
-        total_false_rejects = len(false_reject_animal)      
-        dummy_randoms = self.rng.uniform(size=total_false_rejects)
-        is_mark_change = dummy_randoms > self.gamma
+        def pick_wrong_animal(a, t):
+            """Selects animal to be confused with"""
 
-        mark_change_animal = false_reject_animal[is_mark_change]
-        mark_change_occasion = false_reject_occasion[is_mark_change]
+            # animals with higher similarity are more likely to be picked 
+            pi = similarity[a].copy()
 
-        return mark_change_animal, mark_change_occasion
+            # animals not captured cant be mistaken
+            not_yet_captured = capture_history[:,:t].max(axis=1) == 0
+            pi[not_yet_captured] = 0
+            pi = softmax(pi)
+            wrong_animal = np.argmax(self.rng.multinomial(1, pi))
 
-    def copy_recaptures_to_ghost(
-        self, 
-        false_reject_indices, 
-        ghost_history, 
-        capture_history
-    ):
-        """Moves recaptures from true capture history to ghosts."""
-        false_reject_animal, false_reject_occasion = false_reject_indices
+            return wrong_animal
 
-        # randomly classify some of the false rejects as mark change  
-        total_false_rejects = len(false_reject_animal)      
-        dummy_randoms = self.rng.uniform(size=total_false_rejects)
-        is_mark_change = dummy_randoms > self.gamma
+        # choose mididentified animals based on similarity 
+        wrong_animal = [pick_wrong_animal(a, t) for a, t 
+                        in zip(false_accept_animal, false_accept_occasion)]
+        wrong_animal = np.asarray(wrong_animal)
+        
+        return wrong_animal
 
-        mark_change_animal = false_reject_animal[is_mark_change]
-        mark_change_occasion = false_reject_occasion[is_mark_change]
+    def mark_change_process(self, recapture_history, flag_dict, capture_history):
 
-        # filling in the ghost history after each change
-        mark_change_idx = np.where(is_mark_change)
-        for i in range(len(mark_change_idx)):
+        # create ghost histories for every changed animal
+        mark_change_indices = self.get_error_indices(
+            recapture_history,
+            flag_dict['mark_change']
+        )
+        mark_change_history = self.create_ghost_history(mark_change_indices)
 
-            # capture history after the mark change
-            post_change = capture_history[mark_change_animal[i], 
-                                            (mark_change_occasion[i] + 1):]
+        # copy recaptures from the animals original history to the new one
+        mark_change_history = self.copy_recaptures_to_changed_animal(
+            mark_change_indices,
+            mark_change_history,
+            recapture_history
+        )
 
-            # add this history to the ghost history
-            occ = (mark_change_occasion[i] + 1)
-            ghost_history[mark_change_idx[i], occ:] = post_change
+        # zero out recapture and subsequent history for changed animal 
+        mc_animals, mc_occasions = mark_change_indices
+        for animal, occasion in zip(mc_animals, mc_occasions):
+            capture_history[animal, occasion:] = 0
 
-        return ghost_history
+        capture_history = np.vstack((capture_history, mark_change_history))
 
+        return capture_history
 
-    def create_ghost_history(self, false_reject_indices, capture_history):
+    def create_ghost_history(self, ghost_indices):
         """Create capture histories for false rejects.
         
         If there are mark changes, recaptures will be allocated to the ghost 
         history. Otherwise, there will only be one capture for each ghost 
         history. 
         """
-        _, false_reject_occasion = false_reject_indices
+        _, ghost_occasion = ghost_indices
         
         # create ghost histories
-        total_false_rejects = len(false_reject_occasion)
+        total_false_rejects = len(ghost_occasion)
         ghost_history = np.zeros((total_false_rejects, self.T), dtype=int)
 
-        # 'indices' ensures we select each false_reject_occasion in turn 
+        # 'indices' ensures we select each ghost_occasion in turn 
         indices = np.arange(total_false_rejects)
-        ghost_history[indices, false_reject_occasion] = 1
+        ghost_history[indices, ghost_occasion] = 1
             
         return ghost_history
 
-if __name__ == '__main__':
-    main()
+    def copy_recaptures_to_changed_animal(
+            self, 
+            mark_change_indices, 
+            mark_change_history, 
+            recapture_history
+        ):
+        """Copies recaptures after the mark change to the ghost history."""
+        mark_change_animal, mark_change_occasion = mark_change_indices
+
+        # filling in the ghost history after each change
+        for i in range(len(mark_change_animal)):
+
+            # capture history after the mark change
+            next_occasion = (mark_change_occasion[i] + 1)
+            post_change = recapture_history[mark_change_animal[i], 
+                                            next_occasion:]
+
+            # add this history to the ghost history
+            mark_change_history[i, next_occasion:] = post_change
+
+        return mark_change_history
+
+    def simulate_similarity(self, animal_count):
+        """Simulates similarity scores between each animal from a beta dist."""
+        # similutate similarity 
+        similarity = self.rng.beta(self.A, self.B, (animal_count, animal_count))
+
+        # ensure sim[i,j] == sim[j,i], and sim[i,i] = 0
+        similarity = np.triu(similarity, 1)
+        i_lower = np.tril_indices(animal_count, -1)
+        similarity[i_lower] = similarity.T[i_lower]
+
+        return similarity
+
+    def ghost_process(self, recapture_history, flag_dict, capture_history):
+
+        # create ghost histories for non-mark-changes
+        ghost_indices = self.get_error_indices(
+            recapture_history,
+            flag_dict['ghost']
+        )
+        ghost_history = self.create_ghost_history(ghost_indices)
+    
+        # for ghosts, zero out recapture in original capture history 
+        capture_history[ghost_indices] = 0
+
+        capture_history = np.vstack((capture_history, ghost_history))
+
+        return capture_history

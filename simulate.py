@@ -69,7 +69,7 @@ def main():
     for trial in tqdm(range(cfg.trial_count)):
 
         # conduct the simulation
-        results = js.simulate_data() 
+        results = js.simulate() 
 
         # bundle the results in json format
         dumped = json.dumps(results, cls=NumpyEncoder)        
