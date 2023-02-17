@@ -251,3 +251,66 @@ def test_main():
     sim = js.simulate()
 
     pass
+
+class TestErrorProcesses():
+
+    ch = np.array([
+        [1,1,1,1,1],
+        [0,1,0,1,1],
+        [1,0,1,0,1],
+        [0,0,0,1,1]
+    ])
+
+    # required positional arguments
+    N, T = ch.shape
+    PHI = np.full((N, T-1), 1)
+    P = np.full((N,T), 0.8)
+    b = np.full(T, 1/T)
+    seed = 42
+
+    js = JollySeber(N=N, T=T, PHI=PHI, P=P, b=b, seed=seed)
+
+    rh = js.create_recapture_history(ch)
+
+    recapture_count = rh.sum()
+
+    flag_dict = {
+        'ghost':np.full(recapture_count, False),
+        'mark_change':np.full(recapture_count, False),
+        'false_accept':np.full(recapture_count, False),
+    }
+
+    # mark change happens for animal 0 at occasion 2
+    flag_dict['mark_change'][1] = True
+
+    # mark change happens for animal 1 at occasion 3
+    flag_dict['ghost'][4] = True
+
+    # mark change happens for animal 2 at occasion 2
+    flag_dict['false_accept'][6] = True
+
+    def test_mark_change_process(self):
+
+        ch2 = self.js.mark_change_process(self.rh, self.flag_dict, self.ch)
+
+        assert ch2.shape == (self.N + 1, self.T)
+        assert np.array_equal(ch2[0], np.array([1,1,0,0,0]))
+        assert np.array_equal(ch2[4], np.array([0,0,1,1,1]))
+        assert np.array_equal(self.ch[1:4], ch2[1:4])
+
+    def test_ghost_process(self):
+
+        ch2 = self.js.ghost_process(self.rh, self.flag_dict, self.ch)
+
+        assert ch2.shape == (self.N + 1, self.T)
+        assert np.array_equal(ch2[1], np.array([0,1,0,0,1]))
+        assert np.array_equal(ch2[4], np.array([0,0,0,1,0]))
+        assert np.array_equal(self.ch[0], ch2[0])
+
+    def test_false_accept_process(self):
+
+        ch2 = self.js.false_accept_process(self.rh, self.flag_dict, self.ch)
+
+        assert ch2.shape == self.ch.shape
+        assert np.array_equal(ch2[0], self.ch[0])
+        assert np.array_equal(ch2[2], np.array([1,0,0,0,1]))
