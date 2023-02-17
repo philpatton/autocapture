@@ -1,7 +1,8 @@
 
 """Simulate data for a Jolly-Seber model. 
 
-This code was adapted from Kery and Schaub (2011) BPA, Chapter 10. 
+This code was adapted from Kery and Schaub (2011) BPA, Chapter 10. This is the 
+POPAN or JSSA (Jolly-Seber-Schwarz-Arnason) version
 
 Typical usage example:
 
@@ -49,7 +50,8 @@ class JollySeber:
         self.B = B
 
     def simulate(self):
-        """Simulates """
+        """Simulates true history and error process."""
+        
         sim_dict = self.simulate_true_history()
 
         capture_history = self.simulate_capture_history(
@@ -61,7 +63,9 @@ class JollySeber:
         return sim_dict
  
     def simulate_true_history(self):
-        """Simulates the JSSA model from the hyperparameters.
+        """Simulates the Jolly-Seber model from the hyperparameters.
+
+        This is is the POPAN or JSSA version.
         
         Returns:
             out_dict: dictionary containing the true history, number of 
@@ -154,7 +158,16 @@ class JollySeber:
         return capture
 
     def simulate_capture_history(self, true_history):
+        """Simulates misidentification errors for a capture history.
+        
+        The misidentification errors can be false rejects, with or without mark
+        changes, or false accepts.
 
+        Args:
+            true_history: N by T matrix indicating capture
+        Returns:
+            N by T matrix indicating capture, including misid errors 
+        """
         capture_history = true_history.copy()
 
         # both types of misids only occur on recaptures
@@ -221,6 +234,7 @@ class JollySeber:
         return capture_history
 
     def create_recapture_history(self, capture_history):
+        """Sets initial captures in capture_history to zero"""
 
         # zero out the first capture occasion to get the recapture history 
         recapture_history = capture_history.copy()
@@ -255,8 +269,7 @@ class JollySeber:
         return flag_dict
 
     def get_error_indices(self, recapture_history, error_flag):
-
-        # find the (animal, occassion) for each false reject
+        """Gets the (animal, occasion) of the erroneous recatpure."""
         recapture_idx = recapture_history.nonzero()
         error_animal = recapture_idx[0][error_flag]
         error_occasion = recapture_idx[1][error_flag]
@@ -288,7 +301,7 @@ class JollySeber:
             mark_change_history, 
             recapture_history
         ):
-        """Copies recaptures from true capture history to ghosts."""
+        """Copies recaptures after the mark change to the ghost history."""
         mark_change_animal, mark_change_occasion = mark_change_indices
 
         # filling in the ghost history after each change
@@ -305,7 +318,7 @@ class JollySeber:
         return mark_change_history
 
     def pick_wrong_animals(self, false_accept_indices, capture_history):
-        
+        """Picks animals to be confused with for each false acceptance."""
         false_accept_animal, false_accept_occasion = false_accept_indices
 
         animal_count = capture_history.shape[0]
@@ -333,7 +346,7 @@ class JollySeber:
         return wrong_animal
 
     def simulate_similarity(self, animal_count):
-
+        """Simulates similarity scores between each animal from a beta dist."""
         # similutate similarity 
         similarity = self.rng.beta(self.A, self.B, (animal_count, animal_count))
 
