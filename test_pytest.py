@@ -3,6 +3,7 @@ from jolly_seber import JollySeber
 
 debug_kwargs = {
     'N': 2,
+    'T': 2,
     'PHI': np.array([[0.5], [0.5]]),
     'P': np.array([[0.5, 0.5], [0.5, 0.5]]),
     'b': np.array([0.5, 0.5]),

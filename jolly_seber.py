@@ -37,10 +37,10 @@ class JollySeber:
                  gamma: float = 0, seed: int = 0, A: float = 2, B: float = 5):
         """Init the data generator with hyperparameters and init the rng"""
         self.N = N
+        self.T = T
         self.PHI = PHI
         self.P = P
         self.b = b
-        self.T = len(b)
         self.alpha = alpha
         self.beta = beta
         self.gamma = gamma
@@ -48,6 +48,13 @@ class JollySeber:
         self.rng = np.random.default_rng(seed)
         self.A = A
         self.B = B
+
+        if PHI.shape != (N, T - 1):
+            raise ValueError('PHI must have shape (N, T)')
+        if P.shape != (N, T):
+            raise ValueError('P must have shape (N, T)')
+        if len(b) != T:
+            raise ValueError('b must have length T')
 
     def simulate(self):
         """Simulates true history and error process."""
