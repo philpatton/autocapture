@@ -32,7 +32,7 @@ class JollySeber:
         B: beta parameter in beta distribution of similarity scores
     """
 
-    def __init__(self, N: int, PHI: np.ndarray, P: np.ndarray,
+    def __init__(self, N: int, T: int, PHI: np.ndarray, P: np.ndarray,
                  b: np.ndarray, alpha: float = 0, beta: float = 0, 
                  gamma: float = 0, seed: int = 0, A: float = 2, B: float = 5):
         """Init the data generator with hyperparameters and init the rng"""
@@ -61,11 +61,12 @@ class JollySeber:
         
         sim_dict = self.simulate_true_history()
 
-        capture_history = self.simulate_capture_history(
+        capture_dict = self.simulate_capture_history(
             sim_dict['true_history']
         )
 
-        sim_dict['capture_history'] = capture_history
+        sim_dict['capture_history'] = capture_dict['capture_history']
+        sim_dict['flag_dict'] = capture_dict['flag_dict']
 
         return sim_dict
  
@@ -185,60 +186,32 @@ class JollySeber:
 
         if any(flag_dict['false_accept']):
 
-            # copy recaptures to        
-            false_accept_indices = self.get_error_indices(
-                recapture_history,
-                flag_dict['false_accept']
+            capture_history = self.false_accept_process(
+                recapture_history=recapture_history,
+                flag_dict=flag_dict,
+                capture_history=capture_history
             )
-            wrong_animals = self.pick_wrong_animals(
-                false_accept_indices,
-                capture_history
-            )
-                        
-            # copy the recaptures to the misidentified animal 
-            capture_history[wrong_animals, false_accept_indices[1]] = 1
-                    
-            # zero out falsely accepted animals
-            capture_history[false_accept_indices] = 0
 
         if any(flag_dict['mark_change']):
 
-            # create ghost histories for every changed animal
-            mark_change_indices = self.get_error_indices(
-                recapture_history,
-                flag_dict['mark_change']
+            capture_history = self.mark_change_process(
+                recapture_history=recapture_history,
+                flag_dict=flag_dict,
+                capture_history=capture_history
             )
-            mark_change_history = self.create_ghost_history(mark_change_indices)
-
-            # copy recaptures from the animals original history to the new one
-            mark_change_history = self.copy_recaptures_to_changed_animal(
-                mark_change_indices,
-                mark_change_history,
-                recapture_history
-            )
-
-            # zero out recapture and subsequent history for changed animal 
-            mc_animals, mc_occasions = mark_change_indices
-            for animal, occasion in zip(mc_animals, mc_occasions):
-                capture_history[animal, occasion:] = 0
-
-            capture_history = np.vstack((capture_history, mark_change_history))
 
         if any(flag_dict['ghost']):
 
-            # create ghost histories for non-mark-changes
-            ghost_indices = self.get_error_indices(
-                recapture_history,
-                flag_dict['ghost']
+            capture_history = self.ghost_process(
+                recapture_history=recapture_history,
+                flag_dict=flag_dict,
+                capture_history=capture_history
             )
-            ghost_history = self.create_ghost_history(ghost_indices)
-        
-            # for ghosts, zero out recapture in original capture history 
-            capture_history[ghost_indices] = 0
 
-            capture_history = np.vstack((capture_history, ghost_history))
-
-        return capture_history
+        return {
+            'capture_history': capture_history,
+            'flag_dict': flag_dict
+        }
 
     def create_recapture_history(self, capture_history):
         """Sets initial captures in capture_history to zero"""
@@ -275,6 +248,27 @@ class JollySeber:
 
         return flag_dict
 
+    def false_accept_process(self, recapture_history, flag_dict, 
+                             capture_history):
+
+        # copy recaptures to        
+        false_accept_indices = self.get_error_indices(
+            recapture_history,
+            flag_dict['false_accept']
+        )
+        wrong_animals = self.pick_wrong_animals(
+            false_accept_indices,
+            capture_history
+        )
+                    
+        # copy the recaptures to the misidentified animal 
+        capture_history[wrong_animals, false_accept_indices[1]] = 1
+                
+        # zero out falsely accepted animals
+        capture_history[false_accept_indices] = 0
+
+        return capture_history
+
     def get_error_indices(self, recapture_history, error_flag):
         """Gets the (animal, occasion) of the erroneous recatpure."""
         recapture_idx = recapture_history.nonzero()
@@ -282,6 +276,59 @@ class JollySeber:
         error_occasion = recapture_idx[1][error_flag]
 
         return error_animal, error_occasion
+
+    def pick_wrong_animals(self, false_accept_indices, capture_history):
+        """Picks animals to be confused with for each false acceptance."""
+        false_accept_animal, false_accept_occasion = false_accept_indices
+
+        animal_count = capture_history.shape[0]
+        similarity = self.simulate_similarity(animal_count)
+
+        def pick_wrong_animal(a, t):
+            """Selects animal to be confused with"""
+
+            # animals with higher similarity are more likely to be picked 
+            pi = similarity[a].copy()
+
+            # animals not captured cant be mistaken
+            not_yet_captured = capture_history[:,:t].max(axis=1) == 0
+            pi[not_yet_captured] = 0
+            pi = softmax(pi)
+            wrong_animal = np.argmax(self.rng.multinomial(1, pi))
+
+            return wrong_animal
+
+        # choose mididentified animals based on similarity 
+        wrong_animal = [pick_wrong_animal(a, t) for a, t 
+                        in zip(false_accept_animal, false_accept_occasion)]
+        wrong_animal = np.asarray(wrong_animal)
+        
+        return wrong_animal
+
+    def mark_change_process(self, recapture_history, flag_dict, capture_history):
+
+        # create ghost histories for every changed animal
+        mark_change_indices = self.get_error_indices(
+            recapture_history,
+            flag_dict['mark_change']
+        )
+        mark_change_history = self.create_ghost_history(mark_change_indices)
+
+        # copy recaptures from the animals original history to the new one
+        mark_change_history = self.copy_recaptures_to_changed_animal(
+            mark_change_indices,
+            mark_change_history,
+            recapture_history
+        )
+
+        # zero out recapture and subsequent history for changed animal 
+        mc_animals, mc_occasions = mark_change_indices
+        for animal, occasion in zip(mc_animals, mc_occasions):
+            capture_history[animal, occasion:] = 0
+
+        capture_history = np.vstack((capture_history, mark_change_history))
+
+        return capture_history
 
     def create_ghost_history(self, ghost_indices):
         """Create capture histories for false rejects.
@@ -324,34 +371,6 @@ class JollySeber:
 
         return mark_change_history
 
-    def pick_wrong_animals(self, false_accept_indices, capture_history):
-        """Picks animals to be confused with for each false acceptance."""
-        false_accept_animal, false_accept_occasion = false_accept_indices
-
-        animal_count = capture_history.shape[0]
-        similarity = self.simulate_similarity(animal_count)
-
-        def pick_wrong_animal(a, t):
-            """Selects animal to be confused with"""
-
-            # animals with higher similarity are more likely to be picked 
-            pi = similarity[a].copy()
-
-            # animals not captured cant be mistaken
-            not_yet_captured = capture_history[:,:t].max(axis=1) == 0
-            pi[not_yet_captured] = 0
-            pi = softmax(pi)
-            wrong_animal = np.argmax(self.rng.multinomial(1, pi))
-
-            return wrong_animal
-
-        # choose mididentified animals based on similarity 
-        wrong_animal = [pick_wrong_animal(a, t) for a, t 
-                        in zip(false_accept_animal, false_accept_occasion)]
-        wrong_animal = np.asarray(wrong_animal)
-        
-        return wrong_animal
-
     def simulate_similarity(self, animal_count):
         """Simulates similarity scores between each animal from a beta dist."""
         # similutate similarity 
@@ -363,3 +382,19 @@ class JollySeber:
         similarity[i_lower] = similarity.T[i_lower]
 
         return similarity
+
+    def ghost_process(self, recapture_history, flag_dict, capture_history):
+
+        # create ghost histories for non-mark-changes
+        ghost_indices = self.get_error_indices(
+            recapture_history,
+            flag_dict['ghost']
+        )
+        ghost_history = self.create_ghost_history(ghost_indices)
+    
+        # for ghosts, zero out recapture in original capture history 
+        capture_history[ghost_indices] = 0
+
+        capture_history = np.vstack((capture_history, ghost_history))
+
+        return capture_history
