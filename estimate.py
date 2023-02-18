@@ -30,16 +30,9 @@ def main():
     cfg = load_config(args.config_path, "config/default.yaml")
     experiment_dir = f'{args.results_dir}/{args.experiment_name}'
 
-    # logger = logging.getLogger('pymc')
-    # logger.setLevel(logging.DEBUG)
-    # log_fname = f'{args.results_dir}/{args.experiment_name}.log'
-    # fh = logging.FileHandler(log_fname)
-    # fh.setLevel(logging.DEBUG)
-    # logger.addHandler(fh)
-
+    # TODO: Figure out logging 
     logger = logging.getLogger('pymc')
     logger.setLevel(logging.ERROR)
-
     logging.basicConfig(filename=f'{experiment_dir}/test.log"')
 
     # don't overwrite, unless we're writing to tmp 
