@@ -128,17 +128,17 @@ def test_simulate_capture_history():
 
     true_history = np.array([[1,1,0,1],[0,0,1,0],[0,1,0,1]])
 
-    sim_dict = mi.simulate_capture_history(true_history)
+    capture_history = mi.simulate_capture_history(true_history)
 
     # when alpha, beta, gamma all zero, capture_history should == true_history
-    assert np.array_equal(sim_dict['capture_history'], true_history)
+    assert np.array_equal(capture_history, true_history)
 
     mi_error = MissID(**debug_kwargs)
 
-    error_dict = mi_error.simulate_capture_history(true_history)
+    error_history = mi_error.simulate_capture_history(true_history)
 
     # assert np.array_equal(error_dict)
-    assert error_dict['capture_history'].shape == (4, 4)
+    assert error_history.shape == (4, 4)
 
 class TestErrorProcesses():
 
