@@ -1,10 +1,14 @@
 # Code for EURING (2023) presentation
 
 Simulate data for a scenario in the `config_path`:
-```python -m simulate --config_path config/dry-run.yaml --experiment_name dry-run```
+```
+python -m simulate --config_path config/dry-run.yaml --experiment_name dry-run
+```
 
 Estimate the model parameters for those data
-```python -m estimate --config_path config/dry-run.yaml --experiment_name dry-run```
+```
+python -m estimate --config_path config/dry-run.yaml --experiment_name dry-run
+```
 
 
 ## TODO items 
