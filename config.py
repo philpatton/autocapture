@@ -91,7 +91,7 @@ def write_config():
     catalog_count = len(catalog_id)
     for i in range(catalog_count):
         
-        yaml_path = f'config/{SCENARIO}/{catalog_id[i]}.yaml'
+        yaml_path = f'{scenario_dir}/{catalog_id[i]}.yaml'
 
         scenario_dict = {
             'N': N[i],
