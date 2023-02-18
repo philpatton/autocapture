@@ -88,7 +88,8 @@ def logp(x, n, p):
             + x_last * pt.log(1 - p.sum()) - factln(x_last)
     
     # ensure that the good conditions are met.
-    good_conditions = pt.all(x >= 0) & pt.all(x <= n) & (pt.sum(x) <= n) & (n >= 0)
+    good_conditions = pt.all(x >= 0) & pt.all(x <= n) & (pt.sum(x) <= n) & \
+                        (n >= 0)
     res = pm.math.switch(good_conditions, res, -np.inf)
 
     return res
