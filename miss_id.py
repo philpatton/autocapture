@@ -70,10 +70,7 @@ class MissID:
                 capture_history=capture_history
             )
 
-        return {
-            'capture_history': capture_history,
-            'flag_dict': flag_dict
-        }
+        return capture_history
 
     def create_recapture_history(self, capture_history):
         """Sets initial captures in capture_history to zero"""
