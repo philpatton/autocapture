@@ -44,14 +44,6 @@ def main():
     logging.basicConfig(filename=f'{experiment_dir}/test.log', 
                         level=logging.DEBUG)
 
-    # survival probabilities 
-    phi_shape = (cfg.N, cfg.T - 1)
-    PHI = np.full(phi_shape, cfg.phi)
-
-    # capture probabilities 
-    p_shape = (cfg.N, cfg.T)
-    P = np.full(p_shape, cfg.p)
-
     # entrance probabilities 
     b = np.zeros(cfg.T)
     b[0] = cfg.b0
@@ -62,7 +54,7 @@ def main():
     beta = cfg.beta 
     gamma = cfg.gamma  
 
-    js = JollySeber(N=cfg.N, T=cfg.T, PHI=PHI, P=P, b=b)
+    js = JollySeber(N=cfg.N, T=cfg.T, phi=cfg.phi, p=cfg.p, b=b)
     mi = MissID(alpha=alpha, beta=beta, gamma=gamma)
 
     logging.debug(f'Simulating data for experiment: {args.experiment_name}')

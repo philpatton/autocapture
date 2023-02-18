@@ -32,22 +32,18 @@ class JollySeber:
         B: beta parameter in beta distribution of similarity scores
     """
 
-    def __init__(self, N: int, T: int, PHI: np.ndarray, P: np.ndarray,
+    def __init__(self, N: int, T: int, phi: np.ndarray, p: np.ndarray,
                  b: np.ndarray, alpha: float = 0, beta: float = 0, 
                  gamma: float = 0, seed: int = None, A: float = 2, B: float = 5):
         """Init the data generator with hyperparameters and init the rng"""
         self.N = N
         self.T = T
-        self.PHI = PHI
-        self.P = P
+        self.PHI = np.full((N, T - 1), phi)
+        self.P = np.full((N, T), p)
         self.b = b
         self.seed = seed
         self.rng = np.random.default_rng(seed)
 
-        if PHI.shape != (N, T - 1):
-            raise ValueError('PHI must have shape (N, T)')
-        if P.shape != (N, T):
-            raise ValueError('P must have shape (N, T)')
         if len(b) != T:
             raise ValueError('b must have length T')
  
