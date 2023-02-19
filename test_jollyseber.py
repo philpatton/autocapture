@@ -4,8 +4,8 @@ from jolly_seber import JollySeber
 debug_kwargs = {
     'N': 2,
     'T': 2,
-    'PHI': np.array([[0.5], [0.5]]),
-    'P': np.array([[0.5, 0.5], [0.5, 0.5]]),
+    'phi': 0.5,
+    'p': 0.5,
     'b': np.array([0.5, 0.5]),
     'seed': 42
 }
@@ -80,15 +80,9 @@ def test_main():
     b[0] = b0
     b[1:] = (1 - b[0]) / (len(b) - 1) # ensure sums to one 
 
-    # survival probabilities 
-    PHI = np.full((N, T - 1), phi)
-
-    # capture probabilities 
-    P = np.full((N, T), p)
-
     seed = 42
 
-    js = JollySeber(N=N, T=T, PHI=PHI, P=P, b=b, seed=seed)
+    js = JollySeber(N=N, T=T, phi=phi, p=p, b=b, seed=seed)
 
     sim = js.simulate()
 

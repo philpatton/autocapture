@@ -4,11 +4,12 @@
 This code was adapted from Kery and Schaub (2011) BPA, Chapter 10.
 '''
 
-import numpy as np
 import argparse
 import json
 import os
 import logging
+import numpy as np
+import pandas as pd
 
 from tqdm import tqdm
 from jolly_seber import JollySeber
@@ -16,10 +17,10 @@ from miss_id import MissID
 from config import Config, load_config
 
 def parse():
-    parser = argparse.ArgumentParser(description="Simulating Jolly-Seber")
-    parser.add_argument("--sim_data_dir", default="sim_data")
-    parser.add_argument("--experiment_name", default="tmp")
-    parser.add_argument("--config_path", default="config/debug.yaml")
+    parser = argparse.ArgumentParser(description="Simulating scenario")
+    # parser.add_argument("--sim_data_dir", default="sim_data")
+    parser.add_argument("--scenario", default="debug")
+    # parser.add_argument("--config_path", default="config/debug.yaml")
     return parser.parse_args()
 
 class NumpyEncoder(json.JSONEncoder):
@@ -29,28 +30,39 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 def main():
-    """Runs the simulation study for a given scenario."""
+
     args = parse()
-    cfg = load_config(args.config_path, "config/default.yaml")
 
-    experiment_dir =  f'{args.sim_data_dir}/{args.experiment_name}'
-    # don't overwrite, unless we're writing to tmp 
-    if os.path.isdir(experiment_dir):
-        if args.experiment_name != 'tmp':
-            raise NameError(f'Directory: {experiment_dir} already exists.')
+    catalog_ids = pd.read_csv('input/fully-rates.csv')['catalog_id']
+    print(catalog_ids)
+    if args.scenario == 'debug':
+        catalog = 'tmp'        
+        simulate_catalog(args.scenario, catalog)
+
     else:
-        os.mkdir(experiment_dir)
+        for catalog in catalog_ids:
+            simulate_catalog(args.scenario, catalog)
 
-    logging.basicConfig(filename=f'{experiment_dir}/test.log', 
+    return None
+
+def simulate_catalog(scenario, catalog):
+    """Runs the simulation study for a given scenario."""
+
+    print(catalog)
+
+    config_path = f'config/{scenario}/{catalog}.yaml'
+    cfg = load_config(config_path, "config/default.yaml")
+
+    catalog_dir =  f'sim_data/{scenario}/{catalog}'
+    # don't overwrite, unless we're writing to tmp 
+    if os.path.isdir(catalog_dir):
+        if catalog != 'tmp':
+            raise NameError(f'Directory: {catalog_dir} already exists.')
+    else:
+        os.makedirs(catalog_dir)
+
+    logging.basicConfig(filename=f'{catalog_dir}/test.log', 
                         level=logging.DEBUG)
-
-    # survival probabilities 
-    phi_shape = (cfg.N, cfg.T - 1)
-    PHI = np.full(phi_shape, cfg.phi)
-
-    # capture probabilities 
-    p_shape = (cfg.N, cfg.T)
-    P = np.full(p_shape, cfg.p)
 
     # entrance probabilities 
     b = np.zeros(cfg.T)
@@ -62,10 +74,10 @@ def main():
     beta = cfg.beta 
     gamma = cfg.gamma  
 
-    js = JollySeber(N=cfg.N, T=cfg.T, PHI=PHI, P=P, b=b)
+    js = JollySeber(N=cfg.N, T=cfg.T, phi=cfg.phi, p=cfg.p, b=b)
     mi = MissID(alpha=alpha, beta=beta, gamma=gamma)
 
-    logging.debug(f'Simulating data for experiment: {args.experiment_name}')
+    logging.debug(f'Simulating data for catalog: {catalog}')
 
     for trial in tqdm(range(cfg.trial_count)):
 
@@ -83,7 +95,7 @@ def main():
         dumped = json.dumps(results, cls=NumpyEncoder)        
 
         # save the file as json
-        path = f'{experiment_dir}/trial_{trial}.json'
+        path = f'{catalog_dir}/trial_{trial}.json'
         with open(path, 'w') as f:
             json.dump(dumped, f)
 
@@ -92,13 +104,11 @@ def main():
                 
     dumped = json.dumps(settings, cls=NumpyEncoder)
     
-    path = (
-        f'{args.sim_data_dir}/{args.experiment_name}/experiment_settings.json'
-    )
+    path = f'sim_data/{scenario}/{catalog}/catalog_settings.json'
     with open(path, 'w') as f:
         json.dump(dumped, f)
 
-    logging.debug('Experiment complete.')
+    logging.debug('catalog complete.')
 
 if __name__ == '__main__':
     main()
