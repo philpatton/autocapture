@@ -2,16 +2,18 @@
 
 Simulate data for a scenario in the `config_path`:
 ```
-python -m simulate --config_path config/dry-run.yaml --experiment_name dry-run
+python -m simulate --scenario fully
 ```
 
 Estimate the model parameters for those data
 ```
-python -m estimate --config_path config/dry-run.yaml --experiment_name dry-run
+python -m estimate --
 ```
 
 
 ## TODO items 
 
 1. Write tests for estimate
-2. Write configs for all scenarios (40 catalogs by 3 levels of oversight). 
+2. Get top 10 preds for third scenario
+3. Write configs for top 10
+4. Update estimate to reflect changes in simulate, i.e., estimate for scenario.
