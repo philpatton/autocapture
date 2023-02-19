@@ -37,6 +37,9 @@ def main():
     catalog_ids = get_catalog_ids(error_rates.species.to_numpy())
     error_rates.insert(0, 'catalog_id', catalog_ids)
 
+    # filter frasers
+    error_rates = error_rates.loc[error_rates.species != 'frasiers_dolphin']
+
     # export to csv 
     path = f'{onedrive}/school/projects/automated-cmr/input/{SCENARIO}-rates.csv'        
     error_rates.to_csv(path, index=False)
@@ -134,8 +137,6 @@ def class_pred_fully(pred, label):
 
 def class_pred_semi(preds, label):
     """Classify predictions as TP, FP, TN, FN."""
-
-    assert preds is iter
 
     coin_flip = np.random.default_rng().binomial(1, 0.01)
 
