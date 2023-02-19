@@ -78,7 +78,7 @@ def write_config():
     gamma = error_rates['FP'].to_list()
 
     # superpopulation size 
-    N = (error_rates['id_count'] * N_INFLATION).to_list()
+    N = (error_rates['id_count'] * N_INFLATION).astype(int).to_list()
 
     # translate number of training images per id to scale (P_MIN, P_MAX)
     train_img_per_id = error_rates['train_img_per_id'].to_numpy()
