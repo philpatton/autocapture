@@ -17,12 +17,12 @@ from pymc.distributions.dist_math import factln
 from pytensor import tensor as pt
 
 def parse():
-    parser = argparse.ArgumentParser(description="Simulating Jolly-Seber")
+    parser = argparse.ArgumentParser(description="Estimating Jolly-Seber")
     # parser.add_argument("--sim_data_dir", default="sim_data")
-    parser.add_argument("--results_dir", default="results")
-    parser.add_argument("--experiment_name", default="tmp")
-    parser.add_argument("--config_path", default="config/debug.yaml")
-    parser.add_argument("--jax", default=False)
+    # parser.add_argument("--results_dir", default="results")
+    # parser.add_argument("--experiment_name", default="tmp")
+    # parser.add_argument("--config_path", default="config/debug.yaml")
+    parser.add_argument("--scenario", default="debug")
     return parser.parse_args()
 
 def main():
@@ -90,7 +90,7 @@ def analyze_catalog(scenario, catalog):
 
         # estimate N, p, phi, and b from capture history 
         js_model = build_model(capture_summary)
-        idata = sample_model(js_model, SAMPLE_KWARGS, jax=True)
+        idata = sample_model(js_model, SAMPLE_KWARGS, jax=False)
 
         trial_results = az.summary(idata).round(2)
         out_file = f'results_dir/{scenario}/{catalog}/trial_{trial}.csv'
