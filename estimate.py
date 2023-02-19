@@ -46,19 +46,19 @@ def analyze_catalog(scenario, catalog):
     config_path = f'config/{scenario}/{catalog}.yaml'
     cfg = load_config(config_path, "config/default.yaml")
 
-    catalog_dir =  f'sim_data/{scenario}/{catalog}'
+    results_dir =  f'results/{scenario}/{catalog}'
 
     # TODO: Figure out logging 
     logger = logging.getLogger('pymc')
     logger.setLevel(logging.ERROR)
-    logging.basicConfig(filename=f'{catalog_dir}/test.log"')
+    logging.basicConfig(filename=f'{results_dir}/test.log"')
 
     # don't overwrite, unless we're writing to tmp 
-    if os.path.isdir(catalog_dir):
+    if os.path.isdir(results_dir):
         if catalog != 'tmp':
-            raise NameError(f'Directory: {catalog_dir} already exists.')
+            raise NameError(f'Directory: {results_dir} already exists.')
     else:
-        os.mkdir(catalog_dir)
+        os.mkdir(results_dir)
 
     # check to see theres a json file for each trial in trial_count
     data_dir = f'sim_data/{scenario}/{catalog}'
@@ -93,7 +93,7 @@ def analyze_catalog(scenario, catalog):
         idata = sample_model(js_model, SAMPLE_KWARGS, jax=False)
 
         trial_results = az.summary(idata).round(2)
-        out_file = f'results_dir/{scenario}/{catalog}/trial_{trial}.csv'
+        out_file = f'{results_dir}/trial_{trial}.csv'
         trial_results.to_csv(out_file)
 
     return None
