@@ -58,7 +58,7 @@ def analyze_catalog(scenario, catalog):
         if catalog != 'tmp':
             raise NameError(f'Directory: {results_dir} already exists.')
     else:
-        os.mkdir(results_dir)
+        os.makedirs(results_dir)
 
     # check to see theres a json file for each trial in trial_count
     data_dir = f'sim_data/{scenario}/{catalog}'
