@@ -29,14 +29,27 @@ def main():
 
     args = parse()
 
-    catalog_ids = pd.read_csv('input/fully-rates.csv')['catalog_id']
+    # TODO: Figure out logging 
+    logger = logging.getLogger('pymc')
+    # logger.setLevel(logging.ERROR)
+    logging.basicConfig(filename=f'results/{args.scenario}.log"')
+
+    catalog_ids = pd.read_csv(f'input/{args.scenario}-rates.csv')['catalog_id']
 
     if args.scenario == 'debug':
         catalog = 'tmp'        
         analyze_catalog(args.scenario, catalog)
-
     else:
+
         for catalog in catalog_ids:
+            
+            # pass on catalog if we've already analyzed it 
+            results_dir =  f'results/{args.scenario}/{catalog}'
+            if os.path.isdir(results_dir):
+                continue
+            else:
+                os.makedirs(results_dir)
+
             analyze_catalog(args.scenario, catalog)
 
     return None
@@ -45,20 +58,6 @@ def analyze_catalog(scenario, catalog):
 
     config_path = f'config/{scenario}/{catalog}.yaml'
     cfg = load_config(config_path, "config/default.yaml")
-
-    results_dir =  f'results/{scenario}/{catalog}'
-
-    # TODO: Figure out logging 
-    logger = logging.getLogger('pymc')
-    logger.setLevel(logging.ERROR)
-    logging.basicConfig(filename=f'{results_dir}/test.log"')
-
-    # don't overwrite, unless we're writing to tmp 
-    if os.path.isdir(results_dir):
-        if catalog != 'tmp':
-            raise NameError(f'Directory: {results_dir} already exists.')
-    else:
-        os.makedirs(results_dir)
 
     # check to see theres a json file for each trial in trial_count
     data_dir = f'sim_data/{scenario}/{catalog}'
@@ -89,11 +88,20 @@ def analyze_catalog(scenario, catalog):
         capture_summary = summarize_individual_history(capture_history)
 
         # estimate N, p, phi, and b from capture history 
-        js_model = build_model(capture_summary)
-        idata = sample_model(js_model, SAMPLE_KWARGS, jax=False)
+        try:
+            js_model = build_model(capture_summary)
+            idata = sample_model(js_model, SAMPLE_KWARGS, jax=False)
+        except:
+            print(f'{catalog}-{trial} failed during model compilation or sampling.')
+            continue
 
-        trial_results = az.summary(idata).round(2)
-        out_file = f'{results_dir}/trial_{trial}.csv'
+        try:
+            trial_results = az.summary(idata).round(2)
+        except ConnectionResetError:
+            print(f'{catalog}-{trial} failed from out of memory error.')
+            continue
+
+        out_file = f'results/{scenario}/{catalog}/trial_{trial}.csv'
         trial_results.to_csv(out_file)
 
     return None
