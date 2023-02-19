@@ -56,6 +56,8 @@ def main():
 
 def analyze_catalog(scenario, catalog):
 
+    print(f'Analyzing {catalog}...')
+
     config_path = f'config/{scenario}/{catalog}.yaml'
     cfg = load_config(config_path, "config/default.yaml")
 
@@ -92,7 +94,7 @@ def analyze_catalog(scenario, catalog):
             js_model = build_model(capture_summary)
             idata = sample_model(js_model, SAMPLE_KWARGS, jax=False)
         except:
-            print(f'{catalog}-{trial} failed during model compilation or sampling.')
+            print(f'{catalog}-{trial} failed during compilation or sampling.')
             continue
 
         try:
