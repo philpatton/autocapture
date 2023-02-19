@@ -8,6 +8,7 @@ import json
 import argparse
 import os 
 import logging
+import pandas as pd
 
 from tqdm import tqdm
 from config import load_config, Config
@@ -17,7 +18,7 @@ from pytensor import tensor as pt
 
 def parse():
     parser = argparse.ArgumentParser(description="Simulating Jolly-Seber")
-    parser.add_argument("--sim_data_dir", default="sim_data")
+    # parser.add_argument("--sim_data_dir", default="sim_data")
     parser.add_argument("--results_dir", default="results")
     parser.add_argument("--experiment_name", default="tmp")
     parser.add_argument("--config_path", default="config/debug.yaml")
@@ -27,23 +28,40 @@ def parse():
 def main():
 
     args = parse()
-    cfg = load_config(args.config_path, "config/default.yaml")
-    experiment_dir = f'{args.results_dir}/{args.experiment_name}'
+
+    catalog_ids = pd.read_csv('input/fully-rates.csv')['catalog_id']
+
+    if args.scenario == 'debug':
+        catalog = 'tmp'        
+        analyze_catalog(args.scenario, catalog)
+
+    else:
+        for catalog in catalog_ids:
+            analyze_catalog(args.scenario, catalog)
+
+    return None
+
+def analyze_catalog(scenario, catalog):
+
+    config_path = f'config/{scenario}/{catalog}.yaml'
+    cfg = load_config(config_path, "config/default.yaml")
+
+    catalog_dir =  f'sim_data/{scenario}/{catalog}'
 
     # TODO: Figure out logging 
     logger = logging.getLogger('pymc')
     logger.setLevel(logging.ERROR)
-    logging.basicConfig(filename=f'{experiment_dir}/test.log"')
+    logging.basicConfig(filename=f'{catalog_dir}/test.log"')
 
     # don't overwrite, unless we're writing to tmp 
-    if os.path.isdir(experiment_dir):
-        if args.experiment_name != 'tmp':
-            raise NameError(f'Directory: {experiment_dir} already exists.')
+    if os.path.isdir(catalog_dir):
+        if catalog != 'tmp':
+            raise NameError(f'Directory: {catalog_dir} already exists.')
     else:
-        os.mkdir(experiment_dir)
+        os.mkdir(catalog_dir)
 
     # check to see theres a json file for each trial in trial_count
-    data_dir = f'{args.sim_data_dir}/{args.experiment_name}'
+    data_dir = f'sim_data/{scenario}/{catalog}'
     files = [f'{data_dir}/trial_{t}.json' for t in range(cfg.trial_count)]
     file_existence = [os.path.isfile(f) for f in files]
     if not all(file_existence):
@@ -75,8 +93,10 @@ def main():
         idata = sample_model(js_model, SAMPLE_KWARGS, jax=True)
 
         trial_results = az.summary(idata).round(2)
-        out_file = f'{args.results_dir}/{args.experiment_name}/trial_{trial}.csv'
+        out_file = f'results_dir/{scenario}/{catalog}/trial_{trial}.csv'
         trial_results.to_csv(out_file)
+
+    return None
 
 # logp of the dist for unmarked animals {u1, ...} ~ Mult(N; psi1 * p, ...)
 def logp(x, n, p):
