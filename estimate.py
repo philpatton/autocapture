@@ -32,7 +32,7 @@ def main():
     # TODO: Figure out logging 
     logger = logging.getLogger('pymc')
     # logger.setLevel(logging.ERROR)
-    logging.basicConfig(filename=f'results/{args.scenario}.log"')
+    logging.basicConfig(filename=f'results/{args.scenario}.log')
 
     catalog_ids = pd.read_csv(f'input/{args.scenario}-rates.csv')['catalog_id']
 
