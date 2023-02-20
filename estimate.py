@@ -98,7 +98,7 @@ def analyze_catalog(scenario, catalog):
             continue
 
         try:
-            trial_results = az.summary(idata).round(2)
+            trial_results = az.summary(idata, round_to=4)
         except ConnectionResetError:
             print(f'{catalog}-{trial} failed from out of memory error.')
             continue
