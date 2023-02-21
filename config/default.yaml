@@ -12,5 +12,5 @@ gamma: 0
 trial_count: 100
 
 # mcmc parameters
-draws: 100
-tune: 100
+draws: 10000
+tune: 10000
