@@ -109,7 +109,7 @@ def write_config():
         if SCENARIO == 'test':
             scenario_dict['tune'] = 1000
             scenario_dict['draws'] = 1000
-            scenario_dict['trial_count'] = 4
+            scenario_dict['trial_count'] = 10
 
 
         with open(yaml_path, 'w') as outfile:
