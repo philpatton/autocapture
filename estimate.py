@@ -101,8 +101,8 @@ def analyze_catalog(scenario, catalog, posterior_summary=False, no_jax=False):
 
     for trial in tqdm(range(cfg.trial_count)):
 
+        print(f'Sampling for trial {trial} of {scenario}...')
         start = time.time()
-        #do some stuff
 
         # load in capture history
         trial_path = f'{data_dir}/trial_{trial}.json'
