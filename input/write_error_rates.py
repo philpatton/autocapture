@@ -22,7 +22,7 @@ def main():
     mapping = read_mapping(map_path)
 
     # add in the submission results
-    sub_path = f'{onedrive}/school/projects/happy-whale/pds_submission_b7.csv'
+    sub_path = f'{onedrive}/projects/happy-whale/pds_submission_b7.csv'
     results = get_results(sub_path, mapping, SCENARIO)
 
     # calculate the rates of TP, FP, TN, FN
@@ -41,9 +41,14 @@ def main():
     error_rates = error_rates.loc[error_rates.species != 'frasiers_dolphin']
 
     # export to csv 
-    path = f'{onedrive}/school/projects/automated-cmr/input/{SCENARIO}-rates.csv'        
+    path = f'{onedrive}/projects/automated-cmr/input/{SCENARIO}-rates.csv'        
     error_rates.to_csv(path, index=False)
 
+    # export catalog ids
+    path = f'{onedrive}/projects/automated-cmr/input/catalog_ids.npy' 
+    np.save(path, error_rates.catalog_id.to_numpy(), allow_pickle=True)       
+
+    return None
 
 def read_mapping(map_path):
 
