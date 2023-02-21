@@ -33,10 +33,11 @@ def main():
 
     args = parse()
 
-    catalog_ids = pd.read_csv('input/fully-rates.csv')['catalog_id']
-    print(catalog_ids)
+    id_path = ('input/catalog_ids.npy')
+    catalog_ids = np.load(id_path, allow_pickle=True)
+
     if args.scenario == 'debug':
-        catalog = 'tmp'        
+        catalog = 'debug'        
         simulate_catalog(args.scenario, catalog)
 
     else:
@@ -48,15 +49,13 @@ def main():
 def simulate_catalog(scenario, catalog):
     """Runs the simulation study for a given scenario."""
 
-    print(catalog)
-
     config_path = f'config/{scenario}/{catalog}.yaml'
     cfg = load_config(config_path, "config/default.yaml")
 
     catalog_dir =  f'sim_data/{scenario}/{catalog}'
     # don't overwrite, unless we're writing to tmp 
     if os.path.isdir(catalog_dir):
-        if catalog != 'tmp':
+        if catalog != 'debug':
             raise NameError(f'Directory: {catalog_dir} already exists.')
     else:
         os.makedirs(catalog_dir)
