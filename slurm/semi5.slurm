@@ -19,4 +19,4 @@ module load lang/Anaconda3
 
 source activate mc
 
-python -m estimate --scenario semi5 --no_jax
+python -m estimate --scenario semi5 
