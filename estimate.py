@@ -67,6 +67,7 @@ def main():
 def analyze_catalog(scenario, catalog, posterior_summary=False, no_jax=False):
 
     logging.info(f'Analyzing {catalog}...')
+    print(f'Analyzing {catalog}...')
 
     config_path = f'config/{scenario}/{catalog}.yaml'
     cfg = load_config(config_path, "config/default.yaml")
@@ -96,6 +97,7 @@ def analyze_catalog(scenario, catalog, posterior_summary=False, no_jax=False):
         }     
 
     logging.info(f'Sample kwargs:\n{SAMPLE_KWARGS}')
+    print(f'Sample kwargs:\n{SAMPLE_KWARGS}')
 
     for trial in tqdm(range(cfg.trial_count)):
 
@@ -129,6 +131,7 @@ def analyze_catalog(scenario, catalog, posterior_summary=False, no_jax=False):
         stop = time.time()
         duration = stop-start
         logging.info(f'Trial {trial} lasted {duration}')
+        print(f'Trial {trial} lasted {duration}')
 
     return None
 
