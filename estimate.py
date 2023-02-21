@@ -23,6 +23,9 @@ def parse():
     # parser.add_argument("--experiment_name", default="tmp")
     # parser.add_argument("--config_path", default="config/debug.yaml")
     parser.add_argument("--scenario", default="debug")
+    parser.add_argument('--posterior_summary', 
+                        action=argparse.BooleanOptionalAction)
+    parser.add_argument('--no_jax', action=argparse.BooleanOptionalAction)
     return parser.parse_args()
 
 def main():
@@ -34,15 +37,23 @@ def main():
     # logger.setLevel(logging.ERROR)
     logging.basicConfig(filename=f'results/{args.scenario}.log')
 
-    catalog_ids = pd.read_csv(f'input/{args.scenario}-rates.csv')['catalog_id']
+    id_path = ('input/catalog_ids.npy')
+    catalog_ids = np.load(id_path, allow_pickle=True)
+
+    # parse arguments 
+    summary = True if args.posterior_summary else False
+    no_jax = True if args.no_jax else False
 
     if args.scenario == 'debug':
-        catalog = 'tmp'        
-        analyze_catalog(args.scenario, catalog)
-    else:
 
+        results_dir =  'results/debug/debug'
+        os.makedirs(results_dir, exist_ok=True)
+
+        analyze_catalog('debug', 'debug', summary, no_jax)
+
+    else:
         for catalog in catalog_ids:
-            
+
             # pass on catalog if we've already analyzed it 
             results_dir =  f'results/{args.scenario}/{catalog}'
             if os.path.isdir(results_dir):
@@ -50,11 +61,11 @@ def main():
             else:
                 os.makedirs(results_dir)
 
-            analyze_catalog(args.scenario, catalog)
+            analyze_catalog(args.scenario, catalog, summary, no_jax)
 
     return None
 
-def analyze_catalog(scenario, catalog):
+def analyze_catalog(scenario, catalog, posterior_summary=False, no_jax=False):
 
     print(f'Analyzing {catalog}...')
 
@@ -92,20 +103,22 @@ def analyze_catalog(scenario, catalog):
         # estimate N, p, phi, and b from capture history 
         try:
             js_model = build_model(capture_summary)
-            idata = sample_model(js_model, SAMPLE_KWARGS, jax=False)
+            idata = sample_model(js_model, SAMPLE_KWARGS, no_jax=no_jax)
         except:
             print(f'{catalog}-{trial} failed during compilation or sampling.')
             continue
 
-        try:
+        if posterior_summary:
+
             trial_results = az.summary(idata, round_to=4)
-        except ConnectionResetError:
-            print(f'{catalog}-{trial} failed from out of memory error.')
-            continue
+            out_file = f'results/{scenario}/{catalog}/trial_{trial}.csv'
+            trial_results.to_csv(out_file)
 
-        out_file = f'results/{scenario}/{catalog}/trial_{trial}.csv'
-        trial_results.to_csv(out_file)
+        else:
 
+            out_file = f'results/{scenario}/{catalog}/trial_{trial}.json'
+            idata.to_json(out_file)
+                        
     return None
 
 # logp of the dist for unmarked animals {u1, ...} ~ Mult(N; psi1 * p, ...)
@@ -222,14 +235,14 @@ def build_model(capture_summary):
     
     return js_sim
 
-def sample_model(model, SAMPLE_KWARGS, jax=False):
+def sample_model(model, SAMPLE_KWARGS, no_jax=False):
 
     with model:
 
-        if jax:
-            idata = pm.sampling_jax.sample_numpyro_nuts(**SAMPLE_KWARGS)
-        else:
+        if no_jax:
             idata = pm.sample(**SAMPLE_KWARGS)
+        else:
+            idata = pm.sampling_jax.sample_numpyro_nuts(**SAMPLE_KWARGS)
     
     return idata
 
