@@ -1,11 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=semi5
-#SBATCH --partition=gpu
+#SBATCH --partition=exclusive
 #SBATCH --time=3-00:00:00
 
-#SBATCH --gres=gpu:1
-
-#SBATCH --cpus-per-task=12
+#SBATCH --cpus-per-task=8
 #SBATCH --mem=64000
 
 #SBATCH --error=results/semi5-%A.err 
