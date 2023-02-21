@@ -84,11 +84,18 @@ def analyze_catalog(scenario, catalog, posterior_summary=False, no_jax=False):
     draws = cfg.draws
     tune = cfg.tune
 
-    SAMPLE_KWARGS = {
-        'draws': draws,
-        'tune': tune,
-        'progressbar': False
-    }
+    if no_jax:
+        SAMPLE_KWARGS = {
+            'draws': draws,
+            'tune': tune,
+            'progress_bar': False
+        }
+    else: 
+         SAMPLE_KWARGS = {
+            'draws': draws,
+            'tune': tune,
+            'progressbar': False
+        }       
 
     for trial in tqdm(range(cfg.trial_count)):
 
@@ -105,12 +112,8 @@ def analyze_catalog(scenario, catalog, posterior_summary=False, no_jax=False):
         capture_summary = summarize_individual_history(capture_history)
 
         # estimate N, p, phi, and b from capture history 
-        try:
-            js_model = build_model(capture_summary)
-            idata = sample_model(js_model, SAMPLE_KWARGS, no_jax=no_jax)
-        except:
-            print(f'{catalog}-{trial} failed during compilation or sampling.')
-            continue
+        js_model = build_model(capture_summary)
+        idata = sample_model(js_model, SAMPLE_KWARGS, no_jax=no_jax)
 
         if posterior_summary:
 
