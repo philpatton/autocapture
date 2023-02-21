@@ -40,6 +40,11 @@ def main():
     # filter frasers
     error_rates = error_rates.loc[error_rates.species != 'frasiers_dolphin']
 
+    # add zeros for test cases
+    if args.scenario == 'test':
+        error_rates['FP'] = 0
+        error_rates['FN'] = 0
+
     # export to csv 
     path = f'{onedrive}/projects/automated-cmr/input/{SCENARIO}-rates.csv'        
     error_rates.to_csv(path, index=False)
@@ -87,8 +92,11 @@ def get_results(sub_path, mapping, scenario):
 
     # classify predicitions as (true + false) x (positive + negative) 
     top_pred = [pred[0] for pred in preds]
-    if scenario == 'fully':
+    if scenario == 'fully' or scenario == 'test':
         pred_class = [class_pred_fully(p, l) for p, l in zip(top_pred, labs)]
+
+    if scenario == 'test':
+        pred_class = np.where(np.array(top_pred) == np.array(labs), 'TP', 'TN')
         
     results['pred_class'] = pred_class
     

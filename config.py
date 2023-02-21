@@ -106,6 +106,12 @@ def write_config():
             'gamma': gamma[i]
         }
 
+        if SCENARIO == 'test':
+            scenario_dict['tune'] = 1000
+            scenario_dict['draws'] = 1000
+            scenario_dict['trial_count'] = 4
+
+
         with open(yaml_path, 'w') as outfile:
             yaml.dump(scenario_dict, outfile, default_flow_style=False)
 
