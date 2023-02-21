@@ -19,6 +19,6 @@ module load lang/Anaconda3
 
 source activate mc
 
-python -m simulate --scenario test
+## python -m simulate --scenario test
 
-python -m estimate --scenario test --no_jax
+python -m estimate --scenario test 
