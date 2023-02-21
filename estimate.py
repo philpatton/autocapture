@@ -4,6 +4,7 @@ import arviz as az
 import pymc as pm
 import pymc.sampling_jax
 
+import time
 import json 
 import argparse
 import os 
@@ -86,10 +87,13 @@ def analyze_catalog(scenario, catalog, posterior_summary=False, no_jax=False):
     SAMPLE_KWARGS = {
         'draws': draws,
         'tune': tune,
-        # 'progressbar': False
+        'progressbar': False
     }
 
     for trial in tqdm(range(cfg.trial_count)):
+
+        start = time.time()
+        #do some stuff
 
         # load in capture history
         trial_path = f'{data_dir}/trial_{trial}.json'
@@ -118,7 +122,11 @@ def analyze_catalog(scenario, catalog, posterior_summary=False, no_jax=False):
 
             out_file = f'results/{scenario}/{catalog}/trial_{trial}.json'
             idata.to_json(out_file)
-                        
+
+        stop = time.time()
+        duration = stop-start
+        print(duration)
+
     return None
 
 # logp of the dist for unmarked animals {u1, ...} ~ Mult(N; psi1 * p, ...)
