@@ -88,13 +88,13 @@ def analyze_catalog(scenario, catalog, posterior_summary=False, no_jax=False):
         SAMPLE_KWARGS = {
             'draws': draws,
             'tune': tune,
-            'progress_bar': False
+            'progressbar': False
         }
     else: 
          SAMPLE_KWARGS = {
             'draws': draws,
             'tune': tune,
-            'progressbar': False
+            'progress_bar': False
         }       
 
     for trial in tqdm(range(cfg.trial_count)):
