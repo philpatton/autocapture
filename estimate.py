@@ -34,8 +34,6 @@ def main():
     args = parse()
 
     # TODO: Figure out logging 
-    logger = logging.getLogger('pymc')
-    # logger.setLevel(logging.ERROR)
     logging.basicConfig(filename=f'results/{args.scenario}.log')
 
     id_path = ('input/catalog_ids.npy')
