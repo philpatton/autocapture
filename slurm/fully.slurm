@@ -19,4 +19,4 @@ module load lang/Anaconda3
 
 source activate mc
 
-python -m estimate --scenario fully
+python -m estimate --scenario fully --no_jax
