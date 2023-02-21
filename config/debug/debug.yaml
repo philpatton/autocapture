@@ -1,9 +1,9 @@
 # jolly seber hyper parameters
-N: 2
-T: 2
+N: 200
+T: 5
 p: 0.5
 phi: 0.5
-b0: 0.5    
+b0: 0.2   
 alpha: 0
 beta: 0
 gamma: 0
