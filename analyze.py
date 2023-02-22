@@ -23,12 +23,12 @@ def summarize_json():
         cfg = load_config(config_path, "config/default.yaml")
         trial_count = cfg.trial_count
 
-        summary_dir = f'/results/{args.scenario}/{catalog}/summary'
+        summary_dir = f'results/{args.scenario}/{catalog}/summary'
         if not os.path.isdir(summary_dir):
             os.mkdir(summary_dir)
 
         for trial in trial_count:
-            path = f'/results/{args.scenario}/{catalog}/trial_{trial}.json'
+            path = f'results/{args.scenario}/{catalog}/trial_{trial}.json'
             idata = az.from_json(path)  
 
             summary = az.summary(idata)
