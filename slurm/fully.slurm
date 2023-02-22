@@ -4,7 +4,7 @@
 #SBATCH --time=3-00:00:00
 
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=64000
+#SBATCH --mem=96000
 
 #SBATCH --error=results/fully-%A.err 
 #SBATCH --output=results/fully-%A.log
@@ -19,4 +19,4 @@ module load lang/Anaconda3
 
 source activate mc
 
-python -m estimate --scenario fully --no_jax
+python -m estimate --scenario fully
