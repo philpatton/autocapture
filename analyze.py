@@ -15,7 +15,7 @@ def summarize_json():
 
     args = parse()
 
-    catalog_ids = np.load('/input/catalog_ids.npy', allow_pickle=True)
+    catalog_ids = np.load('input/catalog_ids.npy', allow_pickle=True)
 
     for catalog in catalog_ids:
 
