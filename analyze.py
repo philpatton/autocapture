@@ -31,10 +31,11 @@ def summarize_json():
 
         i = 0
         for trial in range(trial_count):
-            try:
-                path = f'{results_dir}/trial_{trial}.json'
+
+            path = f'{results_dir}/trial_{trial}.json'
+            if os.path.exists(path):
                 idata = az.from_json(path)
-            except OSError:
+            else:
                 print(f'{path} is missing')
                 i += 1
                 continue
