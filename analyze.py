@@ -27,7 +27,7 @@ def summarize_json():
 
         summary_dir = f'results/{args.scenario}/summaries/{catalog}/'
         if not os.path.isdir(summary_dir):
-            os.mkdir(summary_dir)
+            os.makedirs(summary_dir)
 
         i = 0
         for trial in range(trial_count):
