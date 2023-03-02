@@ -25,7 +25,7 @@ def summarize_json():
         cfg = load_config(config_path, "config/default.yaml")
         trial_count = cfg.trial_count
 
-        summary_dir = f'{results_dir}/summary'
+        summary_dir = f'results/{args.scenario}/summaries/{catalog}/'
         if not os.path.isdir(summary_dir):
             os.mkdir(summary_dir)
 
