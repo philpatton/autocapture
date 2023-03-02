@@ -19,13 +19,7 @@ from pytensor import tensor as pt
 
 def parse():
     parser = argparse.ArgumentParser(description="Estimating Jolly-Seber")
-    # parser.add_argument("--sim_data_dir", default="sim_data")
-    # parser.add_argument("--results_dir", default="results")
-    # parser.add_argument("--experiment_name", default="tmp")
-    # parser.add_argument("--config_path", default="config/debug.yaml")
     parser.add_argument("--scenario", default="debug")
-    parser.add_argument('--posterior_summary', 
-                        action=argparse.BooleanOptionalAction)
     parser.add_argument('--no_jax', action=argparse.BooleanOptionalAction)
     return parser.parse_args()
 
@@ -39,20 +33,14 @@ def main():
     id_path = ('input/catalog_ids.npy')
     catalog_ids = np.load(id_path, allow_pickle=True)
 
-    # parse arguments 
-    summary = True if args.posterior_summary else False
-    no_jax = True if args.no_jax else False
-
     if args.scenario == 'debug':
 
         results_dir =  'results/debug/debug'
         os.makedirs(results_dir, exist_ok=True)
-
-        analyze_catalog('debug', 'debug', summary, no_jax)
+        analyze_catalog('debug', 'debug', args.no_jax)
 
     else:
         for catalog in catalog_ids:
-
             # pass on catalog if we've already analyzed it 
             results_dir =  f'results/{args.scenario}/{catalog}'
             if os.path.isdir(results_dir):
@@ -60,11 +48,11 @@ def main():
             else:
                 os.makedirs(results_dir)
 
-            analyze_catalog(args.scenario, catalog, summary, no_jax)
+            analyze_catalog(args.scenario, catalog, args.no_jax)
 
     return None
 
-def analyze_catalog(scenario, catalog, posterior_summary=False, no_jax=False):
+def analyze_catalog(scenario, catalog, no_jax=False):
 
     logging.info(f'Analyzing {catalog}...')
     print(f'Analyzing {catalog}...')
@@ -117,16 +105,9 @@ def analyze_catalog(scenario, catalog, posterior_summary=False, no_jax=False):
         js_model = build_model(capture_summary)
         idata = sample_model(js_model, SAMPLE_KWARGS, no_jax=no_jax)
 
-        if posterior_summary:
-
-            trial_results = az.summary(idata, round_to=4)
-            out_file = f'results/{scenario}/{catalog}/trial_{trial}.csv'
-            trial_results.to_csv(out_file)
-
-        else:
-
-            out_file = f'results/{scenario}/{catalog}/trial_{trial}.json'
-            idata.to_json(out_file)
+        # dump results to json
+        out_file = f'results/{scenario}/{catalog}/trial_{trial}.json'
+        idata.to_json(out_file)
 
         stop = time.time()
         duration = stop-start
