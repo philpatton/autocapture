@@ -2,7 +2,7 @@
 """Simulate data for a Jolly-Seber model. 
 
 This code was adapted from Kery and Schaub (2011) BPA, Chapter 10. This is the 
-POPAN or JSSA (Jolly-Seber-Schwarz-Arnason) version
+POPAN or JSSA (Jolly-Seber-Schwarz-Arnason) version.
 
 Typical usage example:
 
@@ -11,12 +11,10 @@ Typical usage example:
     print(results['capture_history'][:5])
 """
 
-from utils import softmax, first_nonzero
-
 import numpy as np
 
 class JollySeber:
-    """Data simulator for jolly seber models.
+    """Data simulator for Jolly-Seber models.
     
     Attributes:
         N: An integer count of the superpopulation
@@ -25,16 +23,10 @@ class JollySeber:
         b: T by 1 vector of entrance probabilities 
         rng: np.random.Generator used by the model 
         seed: integer seed for the rng
-        alpha: the proportion of recaptures resulting in ghosts 
-        beta: the proportion of recatpures resulting in mark changes
-        gamma: the proportion of recaptures resulting in false accepts 
-        A: alpha parameter in beta distribution of similarity scores
-        B: beta parameter in beta distribution of similarity scores
     """
 
-    def __init__(self, N: int, T: int, phi: np.ndarray, p: np.ndarray,
-                 b: np.ndarray, alpha: float = 0, beta: float = 0, 
-                 gamma: float = 0, seed: int = None, A: float = 2, B: float = 5):
+    def __init__(self, N: int, T: int, phi: float, p: float, b: np.ndarray, 
+                 seed: int = None):
         """Init the data generator with hyperparameters and init the rng"""
         self.N = N
         self.T = T
@@ -90,7 +82,7 @@ class JollySeber:
 
         return entry_occasions
 
-    def simulate_z(self, entry_occasions: np.ndarray):
+    def simulate_z(self, entry_occasions: np.ndarray) -> np.ndarray:
         """Simulate discrete latent state, alive and entered, for jolly-seber
 
         Args: 
