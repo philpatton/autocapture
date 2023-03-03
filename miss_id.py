@@ -1,10 +1,29 @@
+"""Add misidentification errors to a true capture history.
 
-from utils import softmax, first_nonzero
+Errors only occur on recaptures. Three types of errors are possible: false 
+accepts, mark changes, and ghosts. False accepts result from confusing one 
+individual with another. These errors are more likely to happen to occur between
+similar animals. Similarity scores are simulated with a right-skewed Beta.
+
+Mark changes mistakenly split a capture history in two, simulating a case where 
+the animal changed during the study. Ghosts refer to accidentally attributing a 
+single recapture to a new individual, simulating a one-off error. Ghosts and 
+mark changes are two forms of false rejects.
+
+Typical usage example:
+
+    alpha = 0.025; beta = 0.025; gamma = 0.01
+    mi = MissID(alpha, beta, gamma)
+    
+    true_history = np.random.default_rng().binomial(1, 0.5, (10, 5))
+    capture_history = mi.simulate_capture_history(true_history)
+"""
 
 import numpy as np
+from utils import softmax, first_nonzero
 
 class MissID:
-    """Data simulator for jolly seber models.
+    """Muddies capture histories with misidentification errors. 
     
     Attributes:
         alpha: the proportion of recaptures resulting in ghosts 
@@ -167,6 +186,18 @@ class MissID:
         
         return wrong_animal
 
+    def simulate_similarity(self, animal_count):
+        """Simulates similarity scores between each animal from a beta dist."""
+        # similutate similarity 
+        similarity = self.rng.beta(self.A, self.B, (animal_count, animal_count))
+
+        # ensure sim[i,j] == sim[j,i], and sim[i,i] = 0
+        similarity = np.triu(similarity, 1)
+        i_lower = np.tril_indices(animal_count, -1)
+        similarity[i_lower] = similarity.T[i_lower]
+
+        return similarity
+
     def mark_change_process(self, recapture_history, flag_dict, capture_history):
 
         # create ghost histories for every changed animal
@@ -235,18 +266,6 @@ class MissID:
             mark_change_history[i, next_occasion:] = post_change
 
         return mark_change_history
-
-    def simulate_similarity(self, animal_count):
-        """Simulates similarity scores between each animal from a beta dist."""
-        # similutate similarity 
-        similarity = self.rng.beta(self.A, self.B, (animal_count, animal_count))
-
-        # ensure sim[i,j] == sim[j,i], and sim[i,i] = 0
-        similarity = np.triu(similarity, 1)
-        i_lower = np.tril_indices(animal_count, -1)
-        similarity[i_lower] = similarity.T[i_lower]
-
-        return similarity
 
     def ghost_process(self, recapture_history, flag_dict, capture_history):
 

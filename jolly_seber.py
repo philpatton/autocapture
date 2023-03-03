@@ -1,12 +1,15 @@
 
-"""Simulate data for a Jolly-Seber model. 
+"""Data simulator for a Jolly-Seber-Schwarz-Arnason model.
 
-This code was adapted from Kery and Schaub (2011) BPA, Chapter 10. This is the 
-POPAN or JSSA (Jolly-Seber-Schwarz-Arnason) version.
+This code was adapted from Kery and Schaub (2011) BPA, Chapter 10. For now, the
+model only accepts scalers for phi and p, and a vector for b, the entrance 
+probabilities.
 
 Typical usage example:
 
-    js = JollySeber(N=N, PHI=PHI, P=P, b=b)
+    N = 100; T = 4; phi = 0.9; p = 0.5;
+    b = np.array([0.4, 0.2, 0.2, 0.2])
+    js = JollySeber(N=N, T=T, phi=phi, p=p, b=b)
     results = js.simulate_data()
     print(results['capture_history'][:5])
 """
