@@ -26,7 +26,9 @@ def summarize_json():
         trial_count = cfg.trial_count
 
         summary_dir = f'results/{args.scenario}/summaries/{catalog}/'
-        if not os.path.isdir(summary_dir):
+        if os.path.isdir(summary_dir):
+            continue
+        else:
             os.makedirs(summary_dir)
 
         i = 0
