@@ -81,7 +81,7 @@ def analyze_catalog(scenario, catalog, no_jax=False):
          SAMPLE_KWARGS = {
             'draws': draws,
             'tune': tune,
-            'progress_bar': False
+            'progressbar': False
         }     
 
     logging.info(f'Sample kwargs:\n{SAMPLE_KWARGS}')
