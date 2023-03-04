@@ -80,5 +80,3 @@ def test_main():
     ps = POPANSimulator(N=N, T=T, phi=phi, p=p, b=b, seed=seed)
 
     sim = ps.simulate()
-
-    pass
