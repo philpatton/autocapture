@@ -38,11 +38,10 @@ def main():
 
     else:
         for catalog in catalog_ids:
-            # pass on catalog if we've already analyzed it 
+
+            # create dir for results if not there
             results_dir =  f'results/{args.scenario}/{catalog}'
-            if os.path.isdir(results_dir):
-                continue
-            else:
+            if not os.path.isdir(results_dir):
                 os.makedirs(results_dir)
 
             analyze_catalog(args.scenario, catalog, args.no_jax)
@@ -81,10 +80,24 @@ def analyze_catalog(scenario, catalog, no_jax=False):
             'progressbar': False
         }     
 
-    logging.info(f'Sample kwargs:\n{SAMPLE_KWARGS}')
-    print(f'Sample kwargs:\n{SAMPLE_KWARGS}')
+    # logic to determine which trials need to be completed  
+    results_dir = f'results/{scenario}/{catalog}/'
+    completed_paths = [i for i in os.listdir(results_dir) 
+                       if i.endswith('.json')]    
 
-    for trial in tqdm(range(cfg.trial_count)):
+    if not completed_paths:
+        remaining_trials = range(cfg.trial_count)
+    else: 
+        completed_trials = [extract_trial_number(p) for p in completed_paths]
+        all_trials = range(cfg.trial_count)
+        remaining_trials = [t for t in all_trials if t not in completed_trials]
+
+        print(f'Remaing trials for {catalog} are {remaining_trials}')
+
+    if not remaining_trials:
+        return print(f'All trials for {catalog} already completed.')
+
+    for trial in remaining_trials:
 
         print(f'Sampling for trial {trial} of {scenario}...')
         start = time.time()
@@ -103,13 +116,13 @@ def analyze_catalog(scenario, catalog, no_jax=False):
         idata = sample_model(js_model, SAMPLE_KWARGS, no_jax=no_jax)
 
         # dump results to json
-        out_file = f'results/{scenario}/{catalog}/trial_{trial}.json'
-        idata.to_json(out_file)
+        path = f'{results_dir}/trial_{trial}.json'
+        idata.to_json(path)
 
         stop = time.time()
         duration = stop-start
         logging.info(f'Trial {trial} lasted {duration}')
-        print(f'Trial {trial} lasted {duration}')
+        print(f'Trial {trial} lasted {duration:.0f} seconds')
 
     return None
 
@@ -237,6 +250,14 @@ def sample_model(model, SAMPLE_KWARGS, no_jax=False):
             idata = pm.sampling_jax.sample_numpyro_nuts(**SAMPLE_KWARGS)
     
     return idata
+
+
+def extract_trial_number(path):
+    """Extracts trial integer from 'resuts/test/beluga-0/trial_17.json'"""
+    number_extension = path.split('trial_')[1]
+    number = int(number_extension.split('.')[0])
+    return number
+
 
 if __name__ == '__main__':
     main()
