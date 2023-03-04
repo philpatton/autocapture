@@ -1,6 +1,5 @@
 import numpy as np 
 import scipy as sp
-import arviz as az
 import pymc as pm
 import pymc.sampling_jax
 
@@ -9,9 +8,7 @@ import json
 import argparse
 import os 
 import logging
-import pandas as pd
 
-from tqdm import tqdm
 from config import load_config, Config
 from utils import summarize_individual_history
 from pymc.distributions.dist_math import factln
