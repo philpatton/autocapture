@@ -17,7 +17,7 @@ def test_JollySeber():
     beta = 0.1
     gamma = 0.1
 
-    js = JollySeber(alpha=alpha, beta=beta, gamma=gamma, **debug_kwargs)
+    js = JollySeber(**debug_kwargs)
 
     assert js.N == N 
 
