@@ -9,10 +9,11 @@ import argparse
 import os 
 import logging
 
-from config import load_config, Config
-from utils import summarize_individual_history
 from pymc.distributions.dist_math import factln
 from pytensor import tensor as pt
+
+from src.config import load_config, Config
+from src.utils import summarize_individual_history
 
 def parse():
     parser = argparse.ArgumentParser(description="Estimating Jolly-Seber")

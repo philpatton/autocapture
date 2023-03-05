@@ -20,7 +20,7 @@ Typical usage example:
 """
 
 import numpy as np
-from utils import softmax, first_nonzero
+from src.utils import softmax, first_nonzero
 
 class MissID:
     """Muddies capture histories with misidentification errors. 

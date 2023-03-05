@@ -1,5 +1,5 @@
 import numpy as np
-from miss_id import MissID
+from src.miss_id import MissID
 
 debug_kwargs = {
     'alpha': 0.2,

@@ -1,5 +1,5 @@
 import numpy as np
-from jolly_seber import JollySeber
+from src.jolly_seber import JollySeber
 
 debug_kwargs = {
     'N': 2,

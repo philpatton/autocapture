@@ -12,9 +12,9 @@ import numpy as np
 import pandas as pd
 
 from tqdm import tqdm
-from jolly_seber import JollySeber
-from miss_id import MissID
-from config import Config, load_config
+from src.jolly_seber import JollySeber
+from src.miss_id import MissID
+from src.config import Config, load_config
 
 def parse():
     parser = argparse.ArgumentParser(description="Simulating scenario")
