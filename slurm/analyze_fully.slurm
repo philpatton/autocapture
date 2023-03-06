@@ -1,13 +1,13 @@
 #!/bin/bash
-#SBATCH --job-name=fully
+#SBATCH --job-name=analyze_fully
 #SBATCH --partition=exclusive
 #SBATCH --time=3-00:00:00
 
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=96000
+#SBATCH --mem=128000
 
-#SBATCH --error=results/fully-%A.err 
-#SBATCH --output=results/fully-%A.log
+#SBATCH --error=results/analyze_fully-%A.err 
+#SBATCH --output=results/analyze_fully-%A.log
 
 ## Useful for remote notification
 #SBATCH --mail-type=BEGIN,END,FAIL,REQUEUE,TIME_LIMIT_80
@@ -19,4 +19,4 @@ module load lang/Anaconda3
 
 source activate mc
 
-python -m estimate --scenario fully
+python -m analyze --scenario fully

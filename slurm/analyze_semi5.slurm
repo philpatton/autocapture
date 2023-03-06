@@ -1,13 +1,13 @@
 #!/bin/bash
-#SBATCH --job-name=semi5
+#SBATCH --job-name=analyze_semi5
 #SBATCH --partition=exclusive
 #SBATCH --time=3-00:00:00
 
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=128000
 
-#SBATCH --error=results/semi5-%A.err 
-#SBATCH --output=results/semi5-%A.log
+#SBATCH --error=results/analyze_semi5-%A.err 
+#SBATCH --output=results/analyze_semi5-%A.log
 
 ## Useful for remote notification
 #SBATCH --mail-type=BEGIN,END,FAIL,REQUEUE,TIME_LIMIT_80
@@ -19,4 +19,4 @@ module load lang/Anaconda3
 
 source activate mc
 
-python -m estimate --scenario semi5 
+python -m analyze --scenario semi5
