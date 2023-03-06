@@ -1,13 +1,13 @@
 #!/bin/bash
-#SBATCH --job-name=fully
-#SBATCH --partition=exclusive
+#SBATCH --job-name=test
+#SBATCH --partition=shared
 #SBATCH --time=3-00:00:00
 
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=96000
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=128000
 
-#SBATCH --error=results/fully-%A.err 
-#SBATCH --output=results/fully-%A.log
+#SBATCH --error=results/test-%A.err 
+#SBATCH --output=results/test-%A.log
 
 ## Useful for remote notification
 #SBATCH --mail-type=BEGIN,END,FAIL,REQUEUE,TIME_LIMIT_80
@@ -19,4 +19,4 @@ module load lang/Anaconda3
 
 source activate mc
 
-python -m estimate --scenario fully
+python -m estimate --scenario test 
