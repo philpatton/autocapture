@@ -15,6 +15,7 @@ notebooks/
 results/
 writing/
 sim_data/
+slurm/
 
 # unnecessary file types
 *.pyc
