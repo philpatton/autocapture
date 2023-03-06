@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=test
 #SBATCH --partition=shared
-#SBATCH --time=1-00:00:00
+#SBATCH --time=3-00:00:00
 
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=16000
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=128000
 
 #SBATCH --error=results/test-%A.err 
 #SBATCH --output=results/test-%A.log
@@ -18,7 +18,5 @@ echo This is job $SLURM_JOB_ID running on $HOSTNAME
 module load lang/Anaconda3
 
 source activate mc
-
-## python -m simulate --scenario test
 
 python -m estimate --scenario test 
