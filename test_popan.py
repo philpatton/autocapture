@@ -1,5 +1,5 @@
 import numpy as np
-from popan import POPANSimulator
+from src.popan import POPANSimulator
 
 debug_kwargs = {
     'N': 2,

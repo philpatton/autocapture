@@ -4,7 +4,7 @@ import arviz as az
 import argparse
 import os
 
-from config import load_config, Config
+from src.config import load_config, Config
 
 def parse():
     parser = argparse.ArgumentParser(description="Analyzing results")
