@@ -1,5 +1,5 @@
 import numpy as np
-from jolly_seber import JollySeber
+from popan import POPANSimulator
 
 debug_kwargs = {
     'N': 2,
@@ -10,51 +10,46 @@ debug_kwargs = {
     'seed': 42
 }
 
-def test_JollySeber(): 
+def test_POPANSimulator(): 
 
-    N = 2
-    alpha = 0.1
-    beta = 0.1
-    gamma = 0.1
+    ps = POPANSimulator(**debug_kwargs)
 
-    js = JollySeber(**debug_kwargs)
-
-    assert js.N == N 
+    assert ps.N == debug_kwargs['N'] 
 
 def test_simulate_capture():
 
-    js = JollySeber(**debug_kwargs)
+    ps = POPANSimulator(**debug_kwargs)
 
-    capture = js.simulate_capture()
+    capture = ps.simulate_capture()
     should_be = np.array([[1, 0], [1, 1]])
 
     assert np.array_equal(capture, should_be)
 
 def test_simulate_z():
 
-    js = JollySeber(**debug_kwargs)
+    ps = POPANSimulator(**debug_kwargs)
 
-    entry_occasions = js.simulate_entry()
+    entry_occasions = ps.simulate_entry()
 
-    Z = js.simulate_z(entry_occasions)
+    Z = ps.simulate_z(entry_occasions)
     should_be = np.array([[1, 1], [0, 1]])
 
     assert np.array_equal(Z, should_be)
 
 def test_simulate_entry():
 
-    js = JollySeber(**debug_kwargs)
+    ps = POPANSimulator(**debug_kwargs)
 
-    entry_occasions = js.simulate_entry()
+    entry_occasions = ps.simulate_entry()
     should_be = np.array([0, 1])
 
     assert np.array_equal(entry_occasions, should_be)
 
 def test_simulate():
 
-    js = JollySeber(**debug_kwargs)   
+    ps = POPANSimulator(**debug_kwargs)   
 
-    results = js.simulate()
+    results = ps.simulate()
 
     ch_should_be = np.array([[0, 1], [0, 1]])
     B_should_be = np.array([1, 1])
@@ -82,8 +77,6 @@ def test_main():
 
     seed = 42
 
-    js = JollySeber(N=N, T=T, phi=phi, p=p, b=b, seed=seed)
+    ps = POPANSimulator(N=N, T=T, phi=phi, p=p, b=b, seed=seed)
 
-    sim = js.simulate()
-
-    pass
+    sim = ps.simulate()

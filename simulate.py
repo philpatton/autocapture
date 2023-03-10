@@ -11,8 +11,7 @@ import logging
 import numpy as np
 import pandas as pd
 
-from tqdm import tqdm
-from jolly_seber import JollySeber
+from popan import POPANSimulator
 from miss_id import MissID
 from config import Config, load_config
 
@@ -73,15 +72,15 @@ def simulate_catalog(scenario, catalog):
     beta = cfg.beta 
     gamma = cfg.gamma  
 
-    js = JollySeber(N=cfg.N, T=cfg.T, phi=cfg.phi, p=cfg.p, b=b)
+    ps = POPANSimulator(N=cfg.N, T=cfg.T, phi=cfg.phi, p=cfg.p, b=b)
     mi = MissID(alpha=alpha, beta=beta, gamma=gamma)
 
     logging.debug(f'Simulating data for catalog: {catalog}')
 
-    for trial in tqdm(range(cfg.trial_count)):
+    for trial in range(cfg.trial_count):
 
         # conduct the simulation
-        sim_results = js.simulate() 
+        sim_results = ps.simulate() 
         true_history = sim_results['capture_history']
         capture_history = mi.simulate_capture_history(true_history)
 

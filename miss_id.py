@@ -46,7 +46,7 @@ class MissID:
         self.A = A
         self.B = B
 
-    def simulate_capture_history(self, true_history):
+    def simulate_capture_history(self, true_history: np.ndarray) -> np.ndarray:
         """Simulates misidentification errors for a capture history.
         
         The misidentification errors can be false rejects, with or without mark
@@ -91,7 +91,8 @@ class MissID:
 
         return capture_history
 
-    def create_recapture_history(self, capture_history):
+    def create_recapture_history(self, capture_history: np.ndarray
+                                 ) -> np.ndarray:
         """Sets initial captures in capture_history to zero"""
 
         # zero out the first capture occasion to get the recapture history 
@@ -102,8 +103,8 @@ class MissID:
 
         return recapture_history
 
-    def flag_errors(self, recapture_history):
-        """Flag recaptures as ghosts, mark changes, false accepts."""
+    def flag_errors(self, recapture_history: np.ndarray) -> dict:
+        """Randomly flag recaptures as ghosts, mark changes, false accepts."""
 
         # draw random uniform for classifying each recapture
         recapture_count = recapture_history.sum()
@@ -126,10 +127,12 @@ class MissID:
 
         return flag_dict
 
-    def false_accept_process(self, recapture_history, flag_dict, 
-                             capture_history):
+    def false_accept_process(self, recapture_history: np.ndarray, 
+                             flag_dict: dict, capture_history: np.ndarray
+                             ) -> np.ndarray:
+        """Move recaptures to other animals. """
 
-        # copy recaptures to        
+        # find the animals for erroneously allocating recaptures    
         false_accept_indices = self.get_error_indices(
             recapture_history,
             flag_dict['false_accept']
@@ -199,7 +202,7 @@ class MissID:
         return similarity
 
     def mark_change_process(self, recapture_history, flag_dict, capture_history):
-
+        """Split an animal's capture history in two."""
         # create ghost histories for every changed animal
         mark_change_indices = self.get_error_indices(
             recapture_history,
@@ -227,12 +230,7 @@ class MissID:
         return capture_history
 
     def create_ghost_history(self, ghost_indices, T):
-        """Create capture histories for false rejects.
-        
-        If there are mark changes, recaptures will be allocated to the ghost 
-        history. Otherwise, there will only be one capture for each ghost 
-        history. 
-        """
+        """Create capture histories for false rejects (ghosts or mark change)"""
         _, ghost_occasion = ghost_indices
         
         # create ghost histories
@@ -268,7 +266,7 @@ class MissID:
         return mark_change_history
 
     def ghost_process(self, recapture_history, flag_dict, capture_history):
-
+        """Add a recapture to a a new fake history."""
         # create ghost histories for non-mark-changes
         ghost_indices = self.get_error_indices(
             recapture_history,
