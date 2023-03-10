@@ -50,13 +50,11 @@ def write_config():
     # hyperparameters for configs 
     MARK_CHANGE_RATE = 0.2
 
-    P_MAX = 0.66
-    P_MIN = 0.33
+    P_MAX = 0.8
+    P_MIN = 0.4
     B0 = 0.35
     T = 10
     PHI = 0.9
-
-    N_INFLATION = 1.2
 
     INPUT_DIR = 'input'
 
@@ -77,12 +75,12 @@ def write_config():
     beta = (false_reject_rate * MARK_CHANGE_RATE).tolist()
     gamma = error_rates['FP'].to_list()
 
-    # superpopulation size 
-    N = (error_rates['id_count'] * N_INFLATION).astype(int).to_list()
-
     # translate number of training images per id to scale (P_MIN, P_MAX)
     train_img_per_id = error_rates['train_img_per_id'].to_numpy()
     p = scale_p(train_img_per_id, P_MAX, P_MIN).tolist()
+
+    # superpopulation size 
+    N = (error_rates['id_count'] / p).astype(int).to_list()
 
     # entrance probabilities 
     b = np.zeros(T)
@@ -109,7 +107,7 @@ def write_config():
         if SCENARIO == 'test':
             scenario_dict['tune'] = 1000
             scenario_dict['draws'] = 5000
-            scenario_dict['trial_count'] = 100
+            scenario_dict['trial_count'] = 25
 
 
         with open(yaml_path, 'w') as outfile:

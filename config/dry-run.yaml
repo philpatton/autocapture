@@ -1,6 +1,0 @@
-# experimental hyperparameters
-trial_count: 100
-
-# mcmc parameters
-draws: 10000
-tune: 10000
