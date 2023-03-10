@@ -23,7 +23,7 @@ Typical usage example:
 import numpy as np
 import scipy as sp
 import pymc as pm
-import pytensor as pt
+from pytensor import tensor as pt
 
 from pymc.distributions.dist_math import factln
 from src.utils import summarize_individual_history

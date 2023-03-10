@@ -8,7 +8,7 @@ import argparse
 import os 
 import logging
 
-from config import load_config, Config
+from src.config import load_config, Config
 from src.popan import POPANEstimator
 
 def parse():
@@ -20,6 +20,9 @@ def parse():
 def main():
 
     args = parse()
+
+    if not os.path.isdir('results'):
+        os.mkdir('results')
 
     # TODO: Figure out logging 
     logging.basicConfig(filename=f'results/{args.scenario}.log')
