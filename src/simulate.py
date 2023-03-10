@@ -11,9 +11,9 @@ import logging
 import numpy as np
 import pandas as pd
 
-from popan import POPANSimulator
-from miss_id import MissID
-from config import Config, load_config
+from src.popan import POPANSimulator
+from src.miss_id import MissID
+from src.config import Config, load_config
 
 def parse():
     parser = argparse.ArgumentParser(description="Simulating scenario")

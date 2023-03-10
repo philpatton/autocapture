@@ -9,7 +9,7 @@ import os
 import logging
 
 from config import load_config, Config
-from popan import POPANEstimator
+from src.popan import POPANEstimator
 
 def parse():
     parser = argparse.ArgumentParser(description="Estimating Jolly-Seber")

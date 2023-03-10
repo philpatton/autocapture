@@ -26,7 +26,7 @@ import pymc as pm
 import pytensor as pt
 
 from pymc.distributions.dist_math import factln
-from utils import summarize_individual_history
+from src.utils import summarize_individual_history
 
 class POPANSimulator:
     """Data simulator for Jolly-Seber models.
