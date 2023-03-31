@@ -1,7 +1,15 @@
 # Code for EURING (2023) presentation
 
-## TODO items 
+Simulate data for both scenarios.
 
-1. Write tests for estimate
-2. Get top 10 preds for third scenario
-3. Write configs for top 10
+```
+python -m src.simulate --scenario fully
+python -m src.simulate --scenario semi5
+```
+
+Estimate parameters and save results for both scenrarios. 
+
+```
+python -m src.estimate --scenario fully
+python -m src.estimate --scenario semi5
+```
