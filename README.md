@@ -15,3 +15,10 @@ python -m src.estimate --scenario semi5
 ```
 
 `src.estimate` uses `src.popan.POPANEstimator` for model fitting, based on a PyMC model adapted from [Austin Rochford](https://austinrochford.com/posts/2018-01-31-capture-recapture.html) 
+
+You may need to write the configs before anything else. To do so, use `src.config` script.
+
+```
+python -m src.config --scenario fully
+python -m src.config --scenario semi5
+```
