@@ -10,10 +10,12 @@ import logging
 
 from src.config import load_config, Config
 from src.popan import POPANEstimator
+from src.cjs import CJSEstimator
 
 def parse():
     parser = argparse.ArgumentParser(description="Estimating Jolly-Seber")
     parser.add_argument("--scenario", default="debug")
+    parser.add_argument("--estimator", default="popan")
     parser.add_argument('--no_jax', action=argparse.BooleanOptionalAction)
     return parser.parse_args()
 
@@ -44,11 +46,11 @@ def main():
             if not os.path.isdir(results_dir):
                 os.makedirs(results_dir)
 
-            analyze_catalog(args.scenario, catalog, args.no_jax)
+            analyze_catalog(args.scenario, catalog, args.estimator, args.no_jax)
 
     return None
 
-def analyze_catalog(scenario, catalog, no_jax=False):
+def analyze_catalog(scenario, catalog, estimator, no_jax=False):
 
     logging.info(f'Analyzing {catalog}...')
     print(f'Analyzing {catalog}...')
@@ -64,29 +66,29 @@ def analyze_catalog(scenario, catalog, no_jax=False):
         e = f'{data_dir} missing data for each trial in {cfg.trial_count}'
         raise OSError(e)
 
-    draws = cfg.draws
-    tune = cfg.tune
-
     if no_jax:
         SAMPLE_KWARGS = {
-            'draws': draws,
-            'tune': tune,
+            'draws': cfg.draws,
+            'tune': cfg.tune,
             'progressbar': False
         }
     else: 
          SAMPLE_KWARGS = {
-            'draws': draws,
-            'tune': tune,
+            'draws': cfg.draws,
+            'tune': cfg.tune,
             'progressbar': False
         }     
 
-    # logic to determine which trials need to be completed  
+    # find paths to trials that have already been completed 
     results_dir = f'results/{scenario}/{catalog}/'
     completed_paths = [i for i in os.listdir(results_dir) 
                        if i.endswith('.json')]    
 
+    # run all trials if there are no completed paths
     if not completed_paths:
         remaining_trials = range(cfg.trial_count)
+
+    # otherwise, run trials 
     else: 
         completed_trials = [extract_trial_number(p) for p in completed_paths]
         all_trials = range(cfg.trial_count)
@@ -111,9 +113,15 @@ def analyze_catalog(scenario, catalog, no_jax=False):
         capture_history = np.asarray(trial_results["capture_history"])
 
         # estimate N, p, phi, and b from capture history 
-        pe = POPANEstimator(capture_history)
-        popan = pe.compile()
-        idata = sample_model(popan, SAMPLE_KWARGS, no_jax=no_jax)
+        if estimator == 'popan':
+            e = POPANEstimator(capture_history)
+        elif estimator == 'cjs':
+            e = CJSEstimator(capture_history)
+        else:
+            raise ValueError('estimator must be "popan" or "cjs"')
+        
+        model = e.compile()
+        idata = sample_model(model, SAMPLE_KWARGS, no_jax=no_jax)
 
         # dump results to json
         path = f'{results_dir}/trial_{trial}.json'
