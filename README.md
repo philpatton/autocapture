@@ -6,9 +6,9 @@ Code to recreate analysis in Patton et al. (TBD) *Mitigating downstream effects 
 
 The simulation proceeds in three general steps.
 
-1. Simulate true histories using a POPAN model of population dynamics (see `src.popan.POPANSimulator`).
-2. Simulate capture histories by corrupting true histories with misidentification errors (see `src.miss_id.MissID`).
-3. Estimate demographic parameters by training capture-recapture models (see `src.popan.POPANEstimator` or `src.cjs.CJSEstimator`).
+1. Simulate true histories using a POPAN model of population dynamics (`src.popan.POPANSimulator`).
+2. Simulate capture histories by corrupting true histories with misidentification errors (`src.miss_id.MissID`).
+3. Estimate demographic parameters by training capture-recapture models (`src.popan.POPANEstimator`; `src.cjs.CJSEstimator`).
 
 ### Configuration
 
