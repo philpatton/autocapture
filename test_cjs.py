@@ -5,12 +5,17 @@ import arviz as az
 from src.cjs import CJSEstimator
 from src.popan import POPANSimulator
 
+T = 10
+b0 = 0.4
+bb = np.repeat((1 - b0) / (T - 1), T - 1)
+b = np.concatenate((b0, bb))
+
 debug_kwargs = {
-    'N': 50,
-    'T': 5,
+    'N': 500,
+    'T': T,
     'phi': 0.5,
     'p': 0.8,
-    'b': np.array([0.6, 0.1, 0.1, 0.1, 0.1]),
+    'b': b,
     'seed': 17
 }
 
@@ -23,11 +28,8 @@ def test_cjs_estimator():
     model = e.compile()
 
     with  model:
-        idata = pm.sample(e)
+        idata = pm.sample()
 
-    summary = az.summarize(idata, var_names='phi')
+    summary = az.summary(idata, var_names='phi')
 
     phi_hat = summary.mean
-
-if __name__ == '__main__':
-    test_cjs_estimator()
