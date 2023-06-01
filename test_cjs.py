@@ -8,10 +8,10 @@ from src.popan import POPANSimulator
 T = 10
 b0 = 0.4
 bb = np.repeat((1 - b0) / (T - 1), T - 1)
-b = np.concatenate((b0, bb))
+b = np.insert(bb, 0, b0)
 
 debug_kwargs = {
-    'N': 500,
+    'N': 1000,
     'T': T,
     'phi': 0.5,
     'p': 0.8,
@@ -32,4 +32,15 @@ def test_cjs_estimator():
 
     summary = az.summary(idata, var_names='phi')
 
-    phi_hat = summary.mean
+    phi_true = debug_kwargs['phi']
+
+    # check coverage
+    phi_low = summary['hdi_3%']
+    phi_high = summary['hdi_97%']
+    is_between = (phi_true > phi_low) & (phi_true < phi_high)
+    assert all(is_between)
+
+    # check bias
+    abs_bias = (phi_true - summary['mean']).abs()
+
+    assert all(abs_bias < 0.1)
