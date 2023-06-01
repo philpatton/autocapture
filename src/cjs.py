@@ -39,7 +39,7 @@ class CJSEstimator:
 
         with pm.Model() as cjs:
             p = pm.Uniform('p', 0., 1.)
-            phi = pm.Uniform('phi', 0., 1., shape=occasion_count)
+            phi = pm.Uniform('phi', 0., 1., shape=interval_count)
 
             p_alive = pt.triu(
                 pt.cumprod(
