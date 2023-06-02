@@ -2,7 +2,7 @@ import numpy as np
 import pymc as pm
 import arviz as az
 
-from src.cjs import CJSEstimator
+from src.cjs import BayesEstimator
 from src.popan import POPANSimulator
 
 T = 10
@@ -19,12 +19,12 @@ debug_kwargs = {
     'seed': 17
 }
 
-def test_cjs_estimator():
+def test_bayes_estimator():
 
     ps = POPANSimulator(**debug_kwargs)   
     results = ps.simulate()
 
-    e = CJSEstimator(results['capture_history'])
+    e = BayesEstimator(results['capture_history'])
     model = e.compile()
 
     with  model:

@@ -6,7 +6,7 @@ from pytensor import tensor as pt
 
 from src.utils import summarize_individual_history
 
-class CJSEstimator:
+class BayesEstimator:
     """Bayesian formulation of the CJS model.
     
     For speed, this is formulated in aggregated counts, rather than the state
