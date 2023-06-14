@@ -6,6 +6,62 @@ from pytensor import tensor as pt
 
 from src.utils import summarize_individual_history
 
+class Simulator:
+    """Simulator for a CJS model.
+    
+    Code was adapted from Kery and Schaub (2011).
+
+    Attributes:
+        T: integer indicating the number of marking occasions
+        marked: integer for the count of released animals on each occasion
+        phi: float indicating the probability of apparent survival
+        p: float indicating the probability of recapture
+        seed: integer for the rng
+        rng: np.random.Generator
+    """
+    def __init__(self, T: int, marked: int, phi, p: float, seed: int) -> None:
+        self.T = T
+        self.marked = np.repeat(marked, T - 1)
+        self.phi = np.repeat(phi, T - 1)
+        self.p = np.repeat(p, T - 1)
+        self.seed = seed
+        self.rng = np.random.default_rng(seed)
+
+    def simulate(self) -> dict:
+        """Simulates a capture history from a CJS model."""
+
+        # capture_history is a binary matrix indicating capture
+        total_marked = self.marked.sum()
+        capture_history = np.zeros((total_marked, self.T))
+
+        # vector indicating the occasion of capture for each animal 
+        mark_occasion = np.repeat(np.arange(self.T - 1), self.marked)
+
+        # initialize and fill the capture history 
+        for animal in range(total_marked):
+            capture_history[animal, mark_occasion[animal]] = 1 
+
+            # animals, of course, survive and are captured on first occasion
+            if mark_occasion[animal] == self.T: 
+                continue
+
+            # capture and survival process for previously marked animals
+            for t in range(mark_occasion[animal] + 1, self.T):
+            
+                death_probability = 1 - self.phi[t - 1]
+                died = self.rng.binomial(1, death_probability, 1)
+
+                # dead animals are no longer recaptured
+                if died: 
+                    break 
+
+                # Bernoulli trial: is individual recaptured?
+                recaptured = self.rng.binomial(1, self.p[t - 1], 1)
+                if recaptured: 
+                    capture_history[animal, t] = 1
+
+        return {'capture_history': capture_history}
+
 class BayesEstimator:
     """Bayesian formulation of the CJS model.
     
