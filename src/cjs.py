@@ -218,13 +218,15 @@ class MLE:
         return likhood
     
     def estimate(self):
-
+        '''Estimates the likelihood.'''
+        
         # theta_start = np.repeat(0.5, dipper.nj + 1)
         theta_start = np.repeat(0.5, 2)
 
         res = minimize(self.loglik, theta_start, method='BFGS')
-
         se = np.sqrt(np.diag(res.hess_inv))
+
+        # put results in a dataframe
         results = pd.DataFrame({'est_logit':res['x'],'se':se})
 
         return results
