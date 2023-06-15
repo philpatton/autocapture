@@ -1,8 +1,10 @@
 
 import numpy as np
-import scipy as sp
 import pymc as pm
+import pandas as pd
+
 from pytensor import tensor as pt
+from scipy.optimize import minimize
 
 from src.utils import summarize_individual_history
 
@@ -156,3 +158,73 @@ class BayesEstimator:
 
 def fill_lower_diag_ones(x):
     return pt.triu(x) + pt.tril(pt.ones_like(x), k=-1)
+
+class MLE:
+    """Maximum likelihood esimator for a CJS model.
+    
+    Translated from the  online supplement for McCrea and Morgan (2014), Ch. 4
+    https://www.capturerecapture.co.uk/capturerecapture.txt
+
+    Attributes:
+        data: np.array representing the m-array
+        T: int for the number of occassions
+        ni: int for number of release occasions
+        nj: int for the number of recovery occasions
+    
+    """
+    def __init__(self, data: np.array, T: int, ) -> None:
+        self.data = data
+        self.T = T
+        self.ni = T - 1
+
+    def loglik(self, theta):
+
+        # initialize real valued parameters for surivival and catchability
+        phi = np.zeros(self.nj)
+        p = np.zeros(self.nj + 1)
+        pbar = np.zeros(self.nj + 1)
+        
+        def expit(x):
+            return 1 / (1 + np.exp(-x))
+
+        p[1:] = expit(theta[0])
+        phi[:] = expit(theta[1])
+        pbar = 1 - p
+        
+        # q defines the multinomial cell probabilities
+        q = np.zeros((self.ni, self.nj + 1))
+
+        # fill the diagonal elemens 
+        diag_indices = np.diag_indices(self.ni)
+        q[diag_indices] = phi * p[1:]
+        
+        # and the off diagonal elements
+        for i in range(self.ni - 1):
+            for j in range(i + 1, self.nj):
+                q[i, j] = np.prod(phi[i:j+1]) * np.prod(pbar[i+1:j+1]) * p[j + 1]
+
+        # Calculate the disappearing animal probabilities
+        for i in range(self.ni):
+            q[i, self.nj] = 1 - np.sum(q[i, i:self.nj])
+
+        # Calculate the likelihood function
+        likhood = 0
+        for i in range(self.ni):
+            for j in range(i, self.nj + 1):
+                likhood += self.data[i, j] * np.log(q[i, j])
+
+        # Output the negative loglikelihood value
+        likhood = -likhood
+        return likhood
+    
+    def estimate(self):
+
+        # theta_start = np.repeat(0.5, dipper.nj + 1)
+        theta_start = np.repeat(0.5, 2)
+
+        res = minimize(self.loglik, theta_start, method='BFGS')
+
+        se = np.sqrt(np.diag(res.hess_inv))
+        results = pd.DataFrame({'est_logit':res['x'],'se':se})
+
+        return results
