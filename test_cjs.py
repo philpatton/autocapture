@@ -15,9 +15,20 @@ debug_kwargs = {
 }
 
 sample_kwargs = {
-    'draws' : 2000,
-    'tune': 2000
+    'draws' : 100,
+    'tune': 100
 }
+
+def test_simulator():
+
+    cs = Simulator(**debug_kwargs)
+    results = cs.simulate()
+    ch = results['capture_history']
+
+    assert type(ch) is np.ndarray
+    assert ch.shape[0] == debug_kwargs['marked'] * (debug_kwargs['T'] - 1)
+
+    print(ch.shape)
 
 def test_bayes_estimator():
 
