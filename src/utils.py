@@ -122,3 +122,6 @@ def create_m_array(history):
         M_array[occasion, ind] = count
         
     return M_array.astype(np.int64)
+
+def expit(x):
+    return 1 / (1 + np.exp(-x))
