@@ -6,12 +6,12 @@ import pandas as pd
 from pytensor import tensor as pt
 from scipy.optimize import minimize
 
-from src.utils import summarize_individual_history
+from src.utils import summarize_individual_history, expit
 
 class Simulator:
     """Simulator for a CJS model.
     
-    Code was adapted from Kery and Schaub (2011).
+    Code was adapted from Kery and Schaub (2011) Ch. 7.
 
     Attributes:
         T: integer indicating the number of marking occasions
@@ -114,7 +114,11 @@ class BayesEstimator:
             # priors for catchability and survival 
             p = pm.Uniform('p', 0., 1.)
             phi = pm.Uniform('phi', 0., 1., shape=interval_count)
-            
+
+            # fill irrelevant portion of m-array with ones
+            def fill_lower_diag_ones(x):
+                return pt.triu(x) + pt.tril(pt.ones_like(x), k=-1)
+
             # p_alive: probability of surviving between i and j in the m-array 
             phi_mat = pt.ones_like(M[:, 1:]) * phi
             p_alive = pt.triu(
@@ -156,9 +160,6 @@ class BayesEstimator:
 
         return cjs
 
-def fill_lower_diag_ones(x):
-    return pt.triu(x) + pt.tril(pt.ones_like(x), k=-1)
-
 class MLE:
     """Maximum likelihood esimator for a CJS model.
     
@@ -172,50 +173,65 @@ class MLE:
         nj: int for the number of recovery occasions
     
     """
-    def __init__(self, data: np.array, T: int, ) -> None:
+    def __init__(self, data: np.array) -> None:
         self.data = data
-        self.T = T
-        self.ni = T - 1
 
     def loglik(self, theta):
 
-        # initialize real valued parameters for surivival and catchability
-        phi = np.zeros(self.nj)
-        p = np.zeros(self.nj + 1)
-        pbar = np.zeros(self.nj + 1)
-        
-        def expit(x):
-            return 1 / (1 + np.exp(-x))
+        # extract the data 
+        m_array = self.data[:,:-1]
+        never_recaptured = self.data[:,-1]
 
-        p[1:] = expit(theta[0])
+        # utility vectors for creating arrays and array indices
+        interval_count, _ = m_array.shape
+        intervals = np.arange(interval_count)
+        
+        # generate indices for the m_array  
+        row_indices = np.reshape(intervals, (interval_count, 1))
+        col_indices = np.reshape(intervals, (1, interval_count))
+        
+        # matrix indicating the number of intervals between sampling occassions
+        intervals_between = np.clip(col_indices - row_indices, 0, np.inf)
+        
+        # initialize the survival and catchability vectors
+        phi = np.zeros(interval_count)
+        p = np.zeros(interval_count)
+
+        # tranform theta to real valued parameters 
+        p[:] = expit(theta[0])
         phi[:] = expit(theta[1])
-        pbar = 1 - p
+
+        # fill irrelevant portion of m-array with ones
+        def fill_lower_diag_ones(x):
+            return np.triu(x) + np.tril(np.ones_like(x), k=-1)
+
+        # p_alive: probability of surviving between i and j in the m-array 
+        phi_mat = np.ones_like(m_array) * phi
+        p_alive = np.triu(
+            np.cumprod(fill_lower_diag_ones(phi_mat), axis=1)
+        )
+
+        # probability the animal hasn't been captured until now 
+        p_not_cap = np.triu((1 - p) ** intervals_between)
+
+        # probabilities for each cell in the m-array 
+        nu = p_alive * p_not_cap * p
+
+        # convert the m_array to a vector
+        upper_triangle_indices = np.triu_indices_from(m_array)
+        m_vector = m_array[upper_triangle_indices]    
         
-        # q defines the multinomial cell probabilities
-        q = np.zeros((self.ni, self.nj + 1))
+        # associated probabilities
+        m_vector_probs = nu[upper_triangle_indices]
 
-        # fill the diagonal elemens 
-        diag_indices = np.diag_indices(self.ni)
-        q[diag_indices] = phi * p[1:]
+        # probability for the never recaptured animals 
+        chi = 1 - nu.sum(axis=1)
         
-        # and the off diagonal elements
-        for i in range(self.ni - 1):
-            for j in range(i + 1, self.nj):
-                q[i, j] = np.prod(phi[i:j+1]) * np.prod(pbar[i+1:j+1]) * p[j + 1]
-
-        # Calculate the disappearing animal probabilities
-        for i in range(self.ni):
-            q[i, self.nj] = 1 - np.sum(q[i, i:self.nj])
-
-        # Calculate the likelihood function
-        likhood = 0
-        for i in range(self.ni):
-            for j in range(i, self.nj + 1):
-                likhood += self.data[i, j] * np.log(q[i, j])
-
-        # Output the negative loglikelihood value
-        likhood = -likhood
-        return likhood
+        # calculate the multinomial likelihood of nu, chi given the data
+        likhood = (m_vector * np.log(m_vector_probs)).sum()
+        likhood += (never_recaptured * np.log(chi)).sum()
+        
+        return -likhood 
     
     def estimate(self):
         '''Estimates the likelihood.'''
