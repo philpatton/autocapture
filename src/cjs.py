@@ -104,10 +104,16 @@ class BayesEstimator:
         # number of animals that were never recaptured
         never_recaptured_counts = R - M.sum(axis=1)
 
-        # sequences defining the intervals and occassions
-        interval_count, occasion_count = M.shape
+        # utility vectors for creating arrays and array indices
+        interval_count, _ = M.shape
         intervals = np.arange(interval_count)
-        occasions = np.arange(occasion_count)
+        
+        # generate indices for the m_array  
+        row_indices = np.reshape(intervals, (interval_count, 1))
+        col_indices = np.reshape(intervals, (1, interval_count))
+        
+        # matrix indicating the number of intervals between sampling occassions
+        intervals_between = np.clip(col_indices - row_indices, 0, np.inf)
 
         with pm.Model() as cjs:
 
@@ -125,31 +131,28 @@ class BayesEstimator:
                 pt.cumprod(fill_lower_diag_ones(phi_mat), axis=1)
             )
    
-            # create upper triangle matrix indicating time steps between cells 
-            i = np.reshape(intervals, (interval_count, 1))
-            j = np.reshape(occasions, (1, occasion_count))
-            not_cap_visits = np.clip(j - i - 1, 0, np.inf)[:, 1:]
-
             # p_not_cap: probability of not being captured between i and j
-            p_not_cap = pt.triu((1 - p) ** not_cap_visits)
+            p_not_cap = pt.triu((1 - p) ** intervals_between)
 
-            # probability of being recaptured at a later time step 
+            # nu: probabilities associated with each cell in the m-array
             nu = p_alive * p_not_cap * p
 
-            # vectorize the recapture counts and probabilities 
+            # convert the m_array to a vector
             upper_triangle_indices = np.triu_indices_from(M[:, 1:])
-            recapture_counts = M[:, 1:][upper_triangle_indices]
-            recapture_probabilities = nu[upper_triangle_indices]
+            m_vector = M[:, 1:][upper_triangle_indices]    
+            
+            # associated probabilities
+            m_vector_probs = nu[upper_triangle_indices]
 
-            # distribution for the recaptures 
+            # distribution for the m-array 
             recaptured = pm.Binomial(
                 'recaptured', 
-                n=recapture_counts, 
-                p=recapture_probabilities,
-                observed=recapture_counts
+                n=m_vector, 
+                p=m_vector_probs,
+                observed=m_vector
             )
 
-            # distribution for the observed animals who were never recaptured
+            # distribution for the animals that were never recaptured
             chi = 1 - nu.sum(axis=1)
             never_recaptured_rv = pm.Binomial(
                 'never_recaptured', 
