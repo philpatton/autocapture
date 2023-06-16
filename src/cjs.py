@@ -79,33 +79,24 @@ class BayesEstimator:
         capture_history: A np.ndarray where 1 indicates capture.
     """
 
-    def __init__(self, capture_history: np.ndarray) -> None:
-        self.capture_history = capture_history
+    def __init__(self, data: np.ndarray) -> None:
+        self.data = data
         """Initializes the estimator.
         
         Args:
           capture_history: 1 indicates individual i was captured on occassion t
-        
+          
         """
 
     def compile(self) -> pm.Model:
         """Creates the pymc model object that can be sampled from."""
-        
-        capture_summary = summarize_individual_history(self.capture_history)
 
-        # number released at each occasion (last count is irrelevant for CJS)
-        R = capture_summary['number_released']
-        R = R[:-1]
-
-        # M array (add zero row to for compatability below)
-        M = capture_summary['m_array']
-        M = np.insert(M, 0, 0, axis=1)
-
-        # number of animals that were never recaptured
-        never_recaptured_counts = R - M.sum(axis=1)
+        # extract the data 
+        m_array = self.data[:,:-1]
+        never_recaptured = self.data[:,-1]
 
         # utility vectors for creating arrays and array indices
-        interval_count, _ = M.shape
+        interval_count, _ = m_array.shape
         intervals = np.arange(interval_count)
         
         # generate indices for the m_array  
@@ -126,7 +117,7 @@ class BayesEstimator:
                 return pt.triu(x) + pt.tril(pt.ones_like(x), k=-1)
 
             # p_alive: probability of surviving between i and j in the m-array 
-            phi_mat = pt.ones_like(M[:, 1:]) * phi
+            phi_mat = pt.ones_like(m_array) * phi
             p_alive = pt.triu(
                 pt.cumprod(fill_lower_diag_ones(phi_mat), axis=1)
             )
@@ -138,8 +129,8 @@ class BayesEstimator:
             nu = p_alive * p_not_cap * p
 
             # convert the m_array to a vector
-            upper_triangle_indices = np.triu_indices_from(M[:, 1:])
-            m_vector = M[:, 1:][upper_triangle_indices]    
+            upper_triangle_indices = np.triu_indices_from(m_array)
+            m_vector = m_array[upper_triangle_indices]    
             
             # associated probabilities
             m_vector_probs = nu[upper_triangle_indices]
@@ -156,9 +147,9 @@ class BayesEstimator:
             chi = 1 - nu.sum(axis=1)
             never_recaptured_rv = pm.Binomial(
                 'never_recaptured', 
-                n=never_recaptured_counts, 
+                n=never_recaptured, 
                 p=chi, 
-                observed=never_recaptured_counts
+                observed=never_recaptured
             )
 
         return cjs
