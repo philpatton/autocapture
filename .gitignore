@@ -17,6 +17,9 @@ writing/
 sim_data/
 slurm/
 
+# notebooks
+*.ipynb
+
 # unnecessary file types
 *.pyc
 *.DS_Store
