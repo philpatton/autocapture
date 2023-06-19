@@ -1,5 +1,5 @@
 import numpy as np
-from src.popan import POPANSimulator
+from src.popan import SimulatorPOPAN
 
 debug_kwargs = {
     'N': 2,
@@ -10,15 +10,15 @@ debug_kwargs = {
     'seed': 42
 }
 
-def test_POPANSimulator(): 
+def test_simulator(): 
 
-    ps = POPANSimulator(**debug_kwargs)
+    ps = SimulatorPOPAN(**debug_kwargs)
 
     assert ps.N == debug_kwargs['N'] 
 
 def test_simulate_capture():
 
-    ps = POPANSimulator(**debug_kwargs)
+    ps = SimulatorPOPAN(**debug_kwargs)
 
     capture = ps.simulate_capture()
     should_be = np.array([[1, 0], [1, 1]])
@@ -27,7 +27,7 @@ def test_simulate_capture():
 
 def test_simulate_z():
 
-    ps = POPANSimulator(**debug_kwargs)
+    ps = SimulatorPOPAN(**debug_kwargs)
 
     entry_occasions = ps.simulate_entry()
 
@@ -38,7 +38,7 @@ def test_simulate_z():
 
 def test_simulate_entry():
 
-    ps = POPANSimulator(**debug_kwargs)
+    ps = SimulatorPOPAN(**debug_kwargs)
 
     entry_occasions = ps.simulate_entry()
     should_be = np.array([0, 1])
@@ -47,7 +47,7 @@ def test_simulate_entry():
 
 def test_simulate():
 
-    ps = POPANSimulator(**debug_kwargs)   
+    ps = SimulatorPOPAN(**debug_kwargs)   
 
     results = ps.simulate()
 
@@ -77,6 +77,6 @@ def test_main():
 
     seed = 42
 
-    ps = POPANSimulator(N=N, T=T, phi=phi, p=p, b=b, seed=seed)
+    ps = SimulatorPOPAN(N=N, T=T, phi=phi, p=p, b=b, seed=seed)
 
     sim = ps.simulate()
