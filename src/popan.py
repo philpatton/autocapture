@@ -28,7 +28,7 @@ from pytensor import tensor as pt
 from pymc.distributions.dist_math import factln
 from src.utils import summarize_individual_history
 
-class POPANSimulator:
+class SimulatorPOPAN:
     """Data simulator for Jolly-Seber models.
     
     Attributes:
@@ -149,12 +149,12 @@ class POPANSimulator:
 
         return capture
 
-class POPANEstimator:
+class BayesPOPAN:
     """PyMC model for esimating parameters in a Jolly-Seber model
     
     Attributes:
         capture_history: detected animals count by occasion count np.ndarray 
-        indicating capture (1) or otherwise (0)
+          indicating capture (1) or otherwise (0)
     """
     def __init__(self, capture_history: np.ndarray) -> None:
         self.capture_history = capture_history
