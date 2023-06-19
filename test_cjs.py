@@ -2,12 +2,12 @@ import numpy as np
 import pymc as pm
 import arviz as az
 
-from src.cjs import Simulator, BayesEstimator, MLE
+from src.cjs import CJS
 
 from src.utils import expit
 
 debug_kwargs = {
-    'marked': 25,
+    'released_count': 25,
     'T': 10,
     'phi': 0.9,
     'p': 0.25,
@@ -19,18 +19,9 @@ sample_kwargs = {
     'tune': 1000
 }
 
-def test_simulator():
+def test_estimate_mle():
 
-    cs = Simulator(**debug_kwargs)
-    results = cs.simulate()
-    ch = results['capture_history']
-
-    assert type(ch) is np.ndarray
-    assert ch.shape[0] == debug_kwargs['marked'] * (debug_kwargs['T'] - 1)
-
-    print(ch.shape)
-
-def test_mle():
+    cjs = CJS()
 
     data = np.array(
         [[11, 2 , 0  ,0  ,0  ,0 , 9 ],
@@ -39,11 +30,9 @@ def test_mle():
         [0 , 0 , 0  ,45 ,1  ,2 , 32],
         [0 , 0 , 0  ,0  ,51 ,0 , 37],
         [0 , 0 , 0  ,0  ,0  ,52, 46]]
-    )
+    )   
 
-    mle = MLE(data)
-
-    results = mle.estimate()
+    results = cjs.estimate_mle(data)
 
     reals = expit(results.est_logit.values)
 
@@ -53,23 +42,20 @@ def test_mle():
 
     assert np.allclose(standard_errors, [0.325, 0.102], rtol=0.01)
 
-def test_bayes_estimator():
+def test_estimate_bayes():
 
-    data = np.array([
-        [11, 2 , 0  ,0  ,0  ,0 , 9 ],
+    cjs = CJS()
+
+    data = np.array(
+        [[11, 2 , 0  ,0  ,0  ,0 , 9 ],
         [0 , 24, 1  ,0  ,0  ,0 , 35],
         [0 , 0 , 34 ,2  ,0  ,0 , 42],
         [0 , 0 , 0  ,45 ,1  ,2 , 32],
         [0 , 0 , 0  ,0  ,51 ,0 , 37],
-        [0 , 0 , 0  ,0  ,0  ,52, 46]
-    ])    
+        [0 , 0 , 0  ,0  ,0  ,52, 46]]
+    )   
 
-    be = BayesEstimator(data)
-    model = be.compile()
-
-    with  model:
-        idata = pm.sample(**sample_kwargs)
-
+    idata = cjs.estimate_bayes(data) 
     summary = az.summary(idata)
 
     phi_summary = summary.loc[summary.index.str.contains('phi')]
@@ -83,3 +69,12 @@ def test_bayes_estimator():
     phi_high = phi_summary['hdi_97%']
     is_between = (phi_mle > phi_low) & (phi_mle < phi_high)
     assert all(is_between)
+
+def test_simulate():
+
+    cjs = CJS()
+    results = cjs.simulate(**debug_kwargs)
+    ch = results['capture_history']
+
+    assert type(ch) is np.ndarray
+    assert ch.shape[0] == debug_kwargs['released_count'] * (debug_kwargs['T'] - 1)
