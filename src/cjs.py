@@ -43,7 +43,7 @@ class Simulator:
         for animal in range(total_marked):
             capture_history[animal, mark_occasion[animal]] = 1 
 
-            # animals, of course, survive and are captured on first occasion
+            # survival and capture process irrelevant on first occasion
             if mark_occasion[animal] == self.T: 
                 continue
 
@@ -57,7 +57,7 @@ class Simulator:
                 if died: 
                     break 
 
-                # Bernoulli trial: is individual recaptured?
+                # alive animals are recaptured with probability p 
                 recaptured = self.rng.binomial(1, self.p[t - 1], 1)
                 if recaptured: 
                     capture_history[animal, t] = 1
@@ -67,16 +67,24 @@ class Simulator:
 class BayesEstimator:
     """Bayesian formulation of the CJS model.
     
-    For speed, this is formulated in aggregated counts, rather than the state
-    space version (Royle and Dorazio, 2008).
+    For speed, this is formulated in aggregated counts, i.e., the m-array 
+    version, rather than the state space version.
     
     Following McCrea and Morgan (2014), the likelihood is formulated in terms 
-    of nu and chi.  Chi is a recursively defined probability for individuals 
-    that are never recaptured after a certain timestep. Nu defines the 
-    probability for individuals that are recaptured later on.
+    of nu and chi. Nu represents the probabilities of the cells in the m-array,
+    i.e., the number of animals captured at occasion i, not seen again until 
+    occasion j. Chi represents the probabilities for animals captured at 
+    occasion i, and never seen again.
+
+    This code is adapted from Austin Rochford. The major differences are 
+    updates related to converting from PyMC3 to PyMC, as well as simplifying 
+    the likelihood, i.e., joint modeling of chi and nu via a Multinomial.
+    https://austinrochford.com/posts/2018-01-31-capture-recapture.html
 
     Attributes:
-        capture_history: A np.ndarray where 1 indicates capture.
+        data: A np.ndarray with shape (n_intervals, n_occasions). The last 
+          column is the number of animals released on occasion i that were never
+          seen again. The other columns correspond to the m-array.
     """
 
     def __init__(self, data: np.ndarray) -> None:
@@ -84,7 +92,7 @@ class BayesEstimator:
         """Initializes the estimator.
         
         Args:
-          capture_history: 1 indicates individual i was captured on occassion t
+            data: Dataset 
           
         """
 
@@ -93,7 +101,7 @@ class BayesEstimator:
 
         # extract the data 
         m_array = self.data[:,:-1]
-        never_recaptured = self.data[:,-1]
+        r = self.data.sum(axis=1)
 
         # utility vectors for creating arrays and array indices
         interval_count, _ = m_array.shape
@@ -128,28 +136,19 @@ class BayesEstimator:
             # nu: probabilities associated with each cell in the m-array
             nu = p_alive * p_not_cap * p
 
-            # convert the m_array to a vector
-            upper_triangle_indices = np.triu_indices_from(m_array)
-            m_vector = m_array[upper_triangle_indices]    
-            
-            # associated probabilities
-            m_vector_probs = nu[upper_triangle_indices]
-
-            # distribution for the m-array 
-            recaptured = pm.Binomial(
-                'recaptured', 
-                n=m_vector, 
-                p=m_vector_probs,
-                observed=m_vector
-            )
-
-            # distribution for the animals that were never recaptured
+            # probability for the animals that were never recaptured
             chi = 1 - nu.sum(axis=1)
-            never_recaptured_rv = pm.Binomial(
-                'never_recaptured', 
-                n=never_recaptured, 
-                p=chi, 
-                observed=never_recaptured
+
+            # combine the probabilities into a matrix
+            chi = pt.reshape(chi, (interval_count, 1))
+            marr_probs = pt.horizontal_stack(nu, chi)
+
+            # distribution of the m-array 
+            marr = pm.Multinomial(
+                'marr',
+                n=r,
+                p=marr_probs,
+                observed=self.data
             )
 
         return cjs
@@ -222,8 +221,8 @@ class MLE:
         chi = 1 - nu.sum(axis=1)
         
         # calculate the multinomial likelihood of nu, chi given the data
-        likhood = (m_vector * np.log(m_vector_probs)).sum()
-        likhood += (never_recaptured * np.log(chi)).sum()
+        likhood = sum(m_vector * np.log(m_vector_probs))
+        likhood += sum(never_recaptured * np.log(chi))
         
         return -likhood 
     
