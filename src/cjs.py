@@ -10,7 +10,7 @@ from scipy.optimize import minimize
 from src.utils import summarize_individual_history, expit
 
 class CJS:
-    
+    #TODO: CJS takes full capture history
     def __init__(self) -> None:
         pass
 
