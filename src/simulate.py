@@ -11,7 +11,7 @@ import logging
 import numpy as np
 import pandas as pd
 
-from src.popan import POPANSimulator
+from src.popan import SimulatorPOPAN, POPAN
 from src.miss_id import MissID
 from src.config import Config, load_config
 
@@ -67,20 +67,18 @@ def simulate_catalog(scenario, catalog):
     b[0] = cfg.b0
     b[1:] = (1 - b[0]) / (len(b) - 1) # ensure sums to one 
 
-    # false reject, false accept, mark change rates; superpopulation size 
-    alpha = cfg.alpha 
-    beta = cfg.beta 
-    gamma = cfg.gamma  
-
-    ps = POPANSimulator(N=cfg.N, T=cfg.T, phi=cfg.phi, p=cfg.p, b=b)
-    mi = MissID(alpha=alpha, beta=beta, gamma=gamma)
+    # ps = SimulatorPOPAN(N=cfg.N, T=cfg.T, phi=cfg.phi, p=cfg.p, b=b)
+    popan = POPAN()
+    mi = MissID(alpha=cfg.alpha, beta=cfg.beta, gamma=cfg.gamma)
 
     logging.debug(f'Simulating data for catalog: {catalog}')
 
     for trial in range(cfg.trial_count):
 
         # conduct the simulation
-        sim_results = ps.simulate() 
+        sim_results = popan.simulate(N=cfg.N, T=cfg.T, phi=cfg.phi, p=cfg.p, 
+                                     b=b)
+        # sim_results = ps.simulate() 
         true_history = sim_results['capture_history']
         capture_history = mi.simulate_capture_history(true_history)
 
@@ -98,7 +96,7 @@ def simulate_catalog(scenario, catalog):
             json.dump(dumped, f)
 
     settings = {'N': cfg.N, 'b': b, 'phi': cfg.phi, 'p': cfg.p, 
-                'alpha': alpha, 'beta':beta, 'gamma':gamma}
+                'alpha': cfg.alpha, 'beta': cfg.beta, 'gamma': cfg.gamma}
                 
     dumped = json.dumps(settings, cls=NumpyEncoder)
     
