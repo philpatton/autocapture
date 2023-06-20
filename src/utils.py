@@ -104,7 +104,7 @@ def create_m_array(history):
     
     Args:
         history: Matrix of shape (n_animals_captured, n_occasions) where 1 
-        indicates that the animal was captured at occasion
+          indicates that the animal was captured at occasion
     """
     occasion_count = history.shape[1]
     
@@ -122,6 +122,21 @@ def create_m_array(history):
         M_array[occasion, ind] = count
         
     return M_array.astype(np.int64)
+
+def create_full_array(history):
+
+    number_released = history.sum(axis=0)
+    number_released = number_released[:-1]
+    
+    m_array = create_m_array(history)
+    never_recaptured = number_released - m_array.sum(axis=1)
+
+    # combine the probabilities into array
+    interval_count, _ = m_array.shape
+    never_recaptured = np.reshape(never_recaptured, (interval_count, 1))
+    full_array = np.hstack((m_array, never_recaptured))
+
+    return full_array
 
 def expit(x):
     return 1 / (1 + np.exp(-x))
