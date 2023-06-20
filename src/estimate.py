@@ -9,8 +9,9 @@ import os
 import logging
 
 from src.config import load_config, Config
-from src.popan import POPANEstimator
-from src.cjs import CJSEstimator
+from src.popan import BayesPOPAN, POPAN
+from src.cjs import CJS
+from src.utils import create_full_array
 
 def parse():
     parser = argparse.ArgumentParser(description="Estimating Jolly-Seber")
@@ -36,7 +37,7 @@ def main():
 
         results_dir =  'results/debug/debug'
         os.makedirs(results_dir, exist_ok=True)
-        analyze_catalog('debug', 'debug', args.no_jax)
+        analyze_catalog('debug', 'debug', args.estimator, args.no_jax)
 
     else:
         for catalog in catalog_ids:
@@ -111,16 +112,18 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=False):
 
         # summarize history for js model
         capture_history = np.asarray(trial_results["capture_history"])
+        full_array = create_full_array(capture_history)
 
         # estimate N, p, phi, and b from capture history 
         if estimator == 'popan':
-            e = POPANEstimator(capture_history)
+            popan = POPAN()
+            model = popan.compile_pymc_model(capture_history)
         elif estimator == 'cjs':
-            e = CJSEstimator(capture_history)
+            cjs = CJS()
+            model = cjs.compile_pymc_model(full_array)
         else:
             raise ValueError('estimator must be "popan" or "cjs"')
         
-        model = e.compile()
         idata = sample_model(model, SAMPLE_KWARGS, no_jax=no_jax)
 
         # dump results to json
