@@ -20,6 +20,9 @@ slurm/
 # notebooks
 *.ipynb
 
+# config stuff
+config/
+
 # unnecessary file types
 *.pyc
 *.DS_Store
