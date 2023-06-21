@@ -7,7 +7,7 @@ import arviz as az
 from pytensor import tensor as pt
 from scipy.optimize import minimize
 
-from src.utils import summarize_individual_history, expit
+from src.utils import expit, freeman_tukey, fill_lower_diag_ones
 
 class CJS:
     #TODO: CJS takes full capture history
@@ -200,6 +200,93 @@ class CJS:
             )
 
         return cjs
+    
+    def check(self, idata: az.InferenceData, data: np.ndarray, 
+              seed=None) -> dict:
+        '''Conduct a posterior predictive check.
+        
+        The test statistic is the Freeman-Tukey statistic, measuring the 
+        discrepancy between the observed (or predicted) and expected counts in 
+        the m-array.
+
+        Currently takes idata object but alternatively could be constructed with 
+        samples of phi and p. 
+
+        Args:
+            idata: inference data object from PyMC sampling 
+            data: summarized capture history consisting of m-array, where the 
+              last column is the number of never recaptured animals 
+        
+        '''
+        # M array (add zero row to for compatability below)
+        m_array = data[:,:-1]
+        r = data.sum(axis=1)
+
+        # utility vectors for creating arrays and array indices
+        interval_count, _ = m_array.shape
+        intervals = np.arange(interval_count)
+
+        # generate indices for the m_array  
+        row_indices = intervals[..., None]
+        col_indices = intervals[None, ...]
+
+        # matrix indicating the number of intervals between sampling occassions
+        intervals_between = np.clip(col_indices - row_indices, 0, np.inf)
+
+        # extract numpy arrays from the idata object
+        stacked = az.extract(idata)
+        p_samples = stacked.p.values
+        phi_samples = stacked.phi.values
+
+        # rng for drawing from the posterior predictive distribution
+        rng = np.random.default_rng(seed=seed)
+
+        # freeman-tukey statistics for each draw 
+        freeman_tukey_observed = []
+        freeman_tukey_new = []
+
+        # loop over samples
+        # TODO: vectorize 
+        for i in range(len(p_samples)):
+
+            p = np.repeat(p_samples[i], interval_count)
+            phi = phi_samples[:, i]
+
+            # p_alive: probability of surviving between i and j in the m-array 
+            phi_mat = np.ones_like(m_array) * phi
+            p_alive = np.triu(
+                np.cumprod(fill_lower_diag_ones(phi_mat), axis=1)
+            )
+
+            # p_not_cap: probability of not being captured between i and j
+            p_not_cap = np.triu((1 - p) ** intervals_between)
+
+            # nu: probabilities associated with each cell in the m-array
+            nu = p_alive * p_not_cap * p
+
+            # probability for the animals that were never recaptured
+            chi = 1 - nu.sum(axis=1)
+
+            # combine the probabilities into a matrix
+            chi = np.reshape(chi, (interval_count, 1))
+            full_array_probs = np.hstack((nu, chi))
+            
+            # expected values for the m_array 
+            expected_counts = (full_array_probs.T * r).T
+
+            # freeman-tukey statistic for the observed data
+            D_obs = freeman_tukey(data, expected_counts)
+            freeman_tukey_observed.append(D_obs)
+            
+            m_new = rng.multinomial(r, full_array_probs)
+            D_new = freeman_tukey(m_new, expected_counts)  
+            freeman_tukey_new.append(D_new)
+
+        freeman_tukey_observed = np.array(freeman_tukey_observed)
+        freeman_tukey_new = np.array(freeman_tukey_new)
+
+        return {'freeman_tukey_observed': freeman_tukey_observed, 
+                'freeman_tukey_new': freeman_tukey_new}
 
     def simulate(self, released_count: np.ndarray, T: int, 
                  phi: np.ndarray, p: np.ndarray, seed: int = None):
@@ -256,3 +343,4 @@ class CJS:
                     capture_history[animal, t] = 1
 
         return {'capture_history': capture_history}
+    
