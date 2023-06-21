@@ -15,8 +15,8 @@ from src.utils import create_full_array
 
 def parse():
     parser = argparse.ArgumentParser(description="Estimating Jolly-Seber")
-    parser.add_argument("--scenario", default="debug")
-    parser.add_argument("--estimator", default="popan")
+    parser.add_argument('-s', "--scenario", default="debug")
+    parser.add_argument('-e', "--estimator", default="popan")
     parser.add_argument('--no_jax', action=argparse.BooleanOptionalAction)
     return parser.parse_args()
 
