@@ -16,6 +16,7 @@ results/
 writing/
 sim_data/
 slurm/
+r/ 
 
 # notebooks
 *.ipynb
