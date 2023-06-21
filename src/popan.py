@@ -67,12 +67,17 @@ class POPAN:
             # priors for detection, survival, and pent
             p = pm.Uniform('p', 0., 1.)
             phi = pm.Uniform('phi', 0., 1.)
-            beta = pm.Dirichlet(
-                'beta', 
-                np.ones(occasion_count), 
-                shape=(occasion_count)
-            )
+            # beta = pm.Dirichlet(
+            #     'beta', 
+            #     np.ones(occasion_count), 
+            #     shape=(occasion_count)
+            # )
 
+            b0 = pm.Uniform('b0', 0., 1.)
+            b_other = (1 - b0) / (interval_count)
+            beta = pt.concatenate(
+                ([b0], pt.repeat(b_other, interval_count))
+            )
             # improper flat prior for N
             flat_dist = pm.Flat.dist()
             N = pm.Truncated("N", flat_dist, lower=u.sum())

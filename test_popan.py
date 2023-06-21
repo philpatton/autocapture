@@ -69,21 +69,21 @@ class TestEstimator:
             idata = pm.sample()
 
         summary = az.summary(idata)
-        reals = summary.loc[['p','phi'], 'mean'].values
+        reals = summary.loc[['p','phi', 'b0'], 'mean'].values
 
-        mles = [0.90, 0.56]
+        mles = np.array([0.90, 0.56, 0.08])
 
-        assert np.allclose(reals, mles, rtol=0.02)
+        assert np.allclose(reals, mles, atol=0.01)
 
         bayes_n = summary.loc['N', 'mean']
         mle_n = 310
 
         assert np.isclose(bayes_n, mle_n, rtol=5)
 
-        b_reals = summary.loc[summary.index.str.contains('beta'), 'mean'].values
-        mle_b = np.array([0.08, 0.17, 0.18, 0.15, 0.14, 0.16, 0.13])
+        # b_reals = summary.loc[summary.index.str.contains('beta'), 'mean'].values
+        # mle_b = np.array([0.08, 0.17, 0.18, 0.15, 0.14, 0.16, 0.13])
 
-        assert np.allclose(b_reals, mle_b, rtol=0.03)
+        # assert np.allclose(b_reals, mle_b, rtol=0.03)
 
 # debug_kwargs = {
 #     'N': 2,
