@@ -140,3 +140,15 @@ def create_full_array(history):
 
 def expit(x):
     return 1 / (1 + np.exp(-x))
+
+def freeman_tukey(observed, expected) -> float:
+    '''Calculate the Freeman '''
+    D = np.power(np.sqrt(observed) - np.sqrt(expected), 2).sum()
+    return D
+
+def fill_lower_diag_ones(x: np.ndarray) -> np.ndarray:
+    '''Utility function to set the lower diag to one'''
+    return np.triu(x) + np.tril(np.ones_like(x), k=-1)
+
+def bayesian_p_value(replicate, observed) -> float:
+    return (replicate >= observed).mean()
