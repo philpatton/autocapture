@@ -74,11 +74,13 @@ class POPAN:
             #     shape=(occasion_count)
             # )
 
+            # only estimate first beta, others constant
             b0 = pm.Uniform('b0', 0., 1.)
             b_other = (1 - b0) / (interval_count)
             beta = pt.concatenate(
                 ([b0], pt.repeat(b_other, interval_count))
             )
+
             # improper flat prior for N
             flat_dist = pm.Flat.dist()
             N = pm.Truncated("N", flat_dist, lower=u.sum())
