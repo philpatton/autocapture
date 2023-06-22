@@ -3,12 +3,16 @@ import arviz as az
 
 import argparse
 import os
+import json
 
 from src.config import load_config, Config
+from src.cjs import CJS
+from src.popan import POPAN
 
 def parse():
     parser = argparse.ArgumentParser(description="Analyzing results")
-    parser.add_argument("--scenario", default="test")
+    parser.add_argument('-s', "--scenario", default="test")
+    parser.add_argument('-e', "--estimator", default="popan")
     return parser.parse_args()
 
 def summarize_json():
@@ -20,6 +24,7 @@ def summarize_json():
     for catalog in catalog_ids:
 
         results_dir = f'results/{args.scenario}/{catalog}'
+        data_dir = f'sim_data/{args.scenario}/{catalog}'
 
         config_path = f'config/{args.scenario}/{catalog}.yaml'
         cfg = load_config(config_path, "config/default.yaml")
@@ -41,8 +46,33 @@ def summarize_json():
                 print(f'{path} is missing')
                 i += 1
                 continue
-
+            
+            # calculate summary statistics 
             summary = az.summary(idata)
+
+            # add the p value to the summary, after selecting  method
+            if args.estimator == 'popan':
+                method = POPAN()
+            elif args.estimator == 'cjs':
+                method = CJS()
+
+            # load in data 
+            data_path = f'{data_dir}/trial_{trial}.json'
+            with open(data_path, 'r') as f:
+                data = json.loads(json.load(f))
+            
+            # perform check 
+            ch = np.array(data['capture_history'])
+            check_results = method.check(idata, ch)
+
+            # calculate p value
+            ft_obs = check_results['freeman_tukey_observed']
+            ft_new = check_results['freeman_tukey_new']
+            p_val = (ft_new > ft_obs).mean()
+
+            summary['p_val'] = p_val
+            
+            # export file 
             out_file = f'{summary_dir}/trial_{trial}.csv'
             summary.to_csv(out_file)
 

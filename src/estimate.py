@@ -9,13 +9,14 @@ import os
 import logging
 
 from src.config import load_config, Config
-from src.popan import POPANEstimator
-from src.cjs import CJSEstimator
+from src.popan import POPAN
+from src.cjs import CJS
+from src.utils import create_full_array
 
 def parse():
     parser = argparse.ArgumentParser(description="Estimating Jolly-Seber")
-    parser.add_argument("--scenario", default="debug")
-    parser.add_argument("--estimator", default="popan")
+    parser.add_argument('-s', "--scenario", default="debug")
+    parser.add_argument('-e', "--estimator", default="popan")
     parser.add_argument('--no_jax', action=argparse.BooleanOptionalAction)
     return parser.parse_args()
 
@@ -36,10 +37,13 @@ def main():
 
         results_dir =  'results/debug/debug'
         os.makedirs(results_dir, exist_ok=True)
-        analyze_catalog('debug', 'debug', args.no_jax)
+        analyze_catalog('debug', 'debug', args.estimator, args.no_jax)
 
     else:
         for catalog in catalog_ids:
+
+            # if catalog == 'beluga-1':
+            #     break
 
             # create dir for results if not there
             results_dir =  f'results/{args.scenario}/{catalog}'
@@ -50,7 +54,7 @@ def main():
 
     return None
 
-def analyze_catalog(scenario, catalog, estimator, no_jax=False):
+def analyze_catalog(scenario, catalog, estimator, no_jax=True):
 
     logging.info(f'Analyzing {catalog}...')
     print(f'Analyzing {catalog}...')
@@ -114,14 +118,17 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=False):
 
         # estimate N, p, phi, and b from capture history 
         if estimator == 'popan':
-            e = POPANEstimator(capture_history)
+            popan = POPAN()
+            model = popan.compile_pymc_model(capture_history)
         elif estimator == 'cjs':
-            e = CJSEstimator(capture_history)
+            cjs = CJS()
+            model = cjs.compile_pymc_model(capture_history)
         else:
             raise ValueError('estimator must be "popan" or "cjs"')
-        
-        model = e.compile()
-        idata = sample_model(model, SAMPLE_KWARGS, no_jax=no_jax)
+
+        # sample from model
+        with model:
+            idata = pm.sample(**SAMPLE_KWARGS)
 
         # dump results to json
         path = f'{results_dir}/trial_{trial}.json'
@@ -130,18 +137,19 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=False):
         stop = time.time()
         duration = stop-start
         logging.info(f'Trial {trial} lasted {duration}')
-        print(f'Trial {trial} lasted {duration:.0f} seconds')
+        print(f'Trial {trial} of {catalog} lasted {duration:.0f} seconds')
 
     return None
 
-def sample_model(model, SAMPLE_KWARGS, no_jax=False):
+def sample_model(model, SAMPLE_KWARGS, no_jax=True):
 
     with model:
+        idata = pm.sample(**SAMPLE_KWARGS)
 
-        if no_jax:
-            idata = pm.sample(**SAMPLE_KWARGS)
-        else:
-            idata = pm.sampling_jax.sample_numpyro_nuts(**SAMPLE_KWARGS)
+        # if no_jax:
+        #     idata = pm.sample(**SAMPLE_KWARGS)
+        # else:
+        #     idata = pm.sampling_jax.sample_numpyro_nuts(**SAMPLE_KWARGS)
     
     return idata
 

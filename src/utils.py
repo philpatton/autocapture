@@ -104,21 +104,55 @@ def create_m_array(history):
     
     Args:
         history: Matrix of shape (n_animals_captured, n_occasions) where 1 
-        indicates that the animal was captured at occasion
+          indicates that the animal was captured at occasion
     """
-    occasion_count = history.shape[1]
-    
-    M_array = np.zeros((occasion_count - 1, occasion_count - 1))
+    _, occasion_count = history.shape
+    interval_count = occasion_count - 1
+
+    M_array = np.zeros((interval_count, interval_count), int)
     for occasion in range(occasion_count - 1):
 
+        # which individuals, captured at t, were later recaptured?
         captured_this_time = history[:, occasion] == 1
         captured_later = (history[:, (occasion + 1):] > 0).any(axis=1)
         now_and_later = captured_this_time & captured_later
         
+        # when were they next recaptured? 
         remaining_history = history[now_and_later, (occasion + 1):]
         next_capture_occasion = (remaining_history.argmax(axis=1)) + occasion 
 
+        # how many of them were there?
         ind, count = np.unique(next_capture_occasion, return_counts=True)
         M_array[occasion, ind] = count
         
-    return M_array.astype(np.int64)
+    return M_array
+
+def create_full_array(history):
+    
+    number_released = history.sum(axis=0)
+    number_released = number_released[:-1]
+    
+    m_array = create_m_array(history)
+    never_recaptured = number_released - m_array.sum(axis=1)
+
+    # combine the probabilities into array
+    interval_count, _ = m_array.shape
+    never_recaptured = np.reshape(never_recaptured, (interval_count, 1))
+    full_array = np.hstack((m_array, never_recaptured))
+
+    return full_array
+
+def expit(x):
+    return 1 / (1 + np.exp(-x))
+
+def freeman_tukey(observed, expected) -> float:
+    '''Calculate the Freeman '''
+    D = np.power(np.sqrt(observed) - np.sqrt(expected), 2).sum()
+    return D
+
+def fill_lower_diag_ones(x: np.ndarray) -> np.ndarray:
+    '''Utility function to set the lower diag to one'''
+    return np.triu(x) + np.tril(np.ones_like(x), k=-1)
+
+def bayesian_p_value(replicate, observed) -> float:
+    return (replicate >= observed).mean()

@@ -1,95 +1,80 @@
 import numpy as np 
 import pymc as pm
 import arviz as az
+import pandas as pd
 
-from src.cjs import Simulator, BayesEstimator
+from src.cjs import CJS
 
-from src.utils import summarize_individual_history
+from src.utils import expit
 
 debug_kwargs = {
-    'marked': 25,
+    'released_count': 25,
     'T': 10,
     'phi': 0.9,
-    'p': 0.5,
+    'p': 0.25,
     'seed': 17
 }
 
 sample_kwargs = {
-    'draws' : 100,
-    'tune': 100
+    'draws' : 1000,
+    'tune': 1000
 }
 
-def test_simulator():
+class TestCJS:
 
-    cs = Simulator(**debug_kwargs)
-    results = cs.simulate()
-    ch = results['capture_history']
+    cjs = CJS()
 
-    assert type(ch) is np.ndarray
-    assert ch.shape[0] == debug_kwargs['marked'] * (debug_kwargs['T'] - 1)
+    dipper = pd.read_csv('input/dipper.csv').values
 
-    print(ch.shape)
-
-def test_bayes_estimator():
-
-    cs = Simulator(**debug_kwargs)   
-    results = cs.simulate()
-
-    be = BayesEstimator(results['capture_history'])
-    model = be.compile()
-
-    with  model:
+    model = cjs.compile_pymc_model(dipper)
+    with model:
         idata = pm.sample()
 
-    summary = az.summary(idata, var_names='phi')
+    def test_estimate_mle(self):
 
-    phi_true = debug_kwargs['phi']
+        results = self.cjs.estimate_mle(self.dipper)
 
-    # check coverage
-    phi_low = summary['hdi_3%']
-    phi_high = summary['hdi_97%']
-    is_between = (phi_true > phi_low) & (phi_true < phi_high)
-    assert all(is_between)
+        reals = expit(results.est_logit.values)
 
-    # check bias
-    abs_bias = (phi_true - summary['mean']).abs()
+        assert np.allclose(reals, [0.9, 0.56], rtol=0.1)
 
-    assert all(abs_bias < 0.1)
+        standard_errors = results.se.values
 
-    # compute tukey-statistic
+        assert np.allclose(standard_errors, [0.325, 0.102], rtol=0.01)
 
-    # expected values of cells 
-    T = debug_kwargs['T']
-    occasion_count = T
-    interval_count = T - 1
+    def test_estimate_bayes(self):
 
-    intervals = np.arange(interval_count)
-    occasions = np.arange(occasion_count)
+        summary = az.summary(self.idata)
 
-    i = np.reshape(intervals, (interval_count, 1))
-    j = np.reshape(occasions, (1, occasion_count))
-    not_cap_visits = np.clip(j - i - 1, 0, np.inf)[:, 1:]
+        phi_summary = summary.loc[summary.index.str.contains('phi')]
 
-    # p_not_cap = np.triu((1 - p) ** not_cap_visits)
+        phi_mle = np.array([0.626, 0.454, 0.478, 0.624, 0.608, 0.583])
+        phi_posterior_mean = phi_summary['mean'].values
+        assert np.allclose(phi_mle, phi_posterior_mean, rtol=0.05)
 
-    # with model:
-    #     pm.sample_posterior_predictive(idata, extend_inferencedata=True)
+        # check coverage
+        phi_low = phi_summary['hdi_3%']
+        phi_high = phi_summary['hdi_97%']
+        is_between = (phi_mle > phi_low) & (phi_mle < phi_high)
+        assert all(is_between)
+    
+    def test_check(self):
 
-    # idata.posterior_predictive
+        ppc_results = self.cjs.check(self.idata, self.dipper)
 
-    stacked = az.extract(idata)
+        d_new = ppc_results['freeman_tukey_new']
+        d_obs = ppc_results['freeman_tukey_observed']
 
-    sum = summarize_individual_history(results['capture_history'])
+        p_val = np.mean(d_new > d_obs)
+        should_be = 0.09
 
-    # M array (add zero row to for compatability below)
-    M = sum['m_array']
-    M = np.insert(M, 0, 0, axis=1)
+        assert np.isclose(should_be, p_val, atol=0.025)
 
-    # vectorize the recapture counts and probabilities 
-    upper_triangle_indices = np.triu_indices_from(M[:, 1:])
-    recapture_counts = M[:, 1:][upper_triangle_indices]
-    # recapture_probabilities = nu[upper_triangle_indices]
+    def test_simulate(self):
 
-    p = stacked.p.values
-    phi = stacked.phi.values
+        results = self.cjs.simulate(**debug_kwargs)
+        ch = results['capture_history']
+        interval_count = (debug_kwargs['T'] - 1)
 
+        assert type(ch) is np.ndarray
+        assert ch.shape[0] == debug_kwargs['released_count'] * interval_count 
