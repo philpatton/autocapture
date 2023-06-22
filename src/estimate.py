@@ -9,7 +9,7 @@ import os
 import logging
 
 from src.config import load_config, Config
-from src.popan import BayesPOPAN, POPAN
+from src.popan import POPAN
 from src.cjs import CJS
 from src.utils import create_full_array
 
@@ -42,6 +42,9 @@ def main():
     else:
         for catalog in catalog_ids:
 
+            # if catalog == 'beluga-1':
+            #     break
+
             # create dir for results if not there
             results_dir =  f'results/{args.scenario}/{catalog}'
             if not os.path.isdir(results_dir):
@@ -51,7 +54,7 @@ def main():
 
     return None
 
-def analyze_catalog(scenario, catalog, estimator, no_jax=False):
+def analyze_catalog(scenario, catalog, estimator, no_jax=True):
 
     logging.info(f'Analyzing {catalog}...')
     print(f'Analyzing {catalog}...')
@@ -123,8 +126,10 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=False):
             model = cjs.compile_pymc_model(full_array)
         else:
             raise ValueError('estimator must be "popan" or "cjs"')
-        
-        idata = sample_model(model, SAMPLE_KWARGS, no_jax=no_jax)
+
+        # sample from model
+        with model:
+            idata = pm.sample(**SAMPLE_KWARGS)
 
         # dump results to json
         path = f'{results_dir}/trial_{trial}.json'
@@ -133,18 +138,19 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=False):
         stop = time.time()
         duration = stop-start
         logging.info(f'Trial {trial} lasted {duration}')
-        print(f'Trial {trial} lasted {duration:.0f} seconds')
+        print(f'Trial {trial} of {catalog} lasted {duration:.0f} seconds')
 
     return None
 
-def sample_model(model, SAMPLE_KWARGS, no_jax=False):
+def sample_model(model, SAMPLE_KWARGS, no_jax=True):
 
     with model:
+        idata = pm.sample(**SAMPLE_KWARGS)
 
-        if no_jax:
-            idata = pm.sample(**SAMPLE_KWARGS)
-        else:
-            idata = pm.sampling_jax.sample_numpyro_nuts(**SAMPLE_KWARGS)
+        # if no_jax:
+        #     idata = pm.sample(**SAMPLE_KWARGS)
+        # else:
+        #     idata = pm.sampling_jax.sample_numpyro_nuts(**SAMPLE_KWARGS)
     
     return idata
 
