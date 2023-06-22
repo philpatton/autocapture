@@ -115,7 +115,6 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=True):
 
         # summarize history for js model
         capture_history = np.asarray(trial_results["capture_history"])
-        full_array = create_full_array(capture_history)
 
         # estimate N, p, phi, and b from capture history 
         if estimator == 'popan':
@@ -123,7 +122,7 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=True):
             model = popan.compile_pymc_model(capture_history)
         elif estimator == 'cjs':
             cjs = CJS()
-            model = cjs.compile_pymc_model(full_array)
+            model = cjs.compile_pymc_model(capture_history)
         else:
             raise ValueError('estimator must be "popan" or "cjs"')
 
