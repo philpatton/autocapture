@@ -7,7 +7,7 @@ import arviz as az
 from pytensor import tensor as pt
 from scipy.optimize import minimize
 
-from src.utils import expit, fill_lower_diag_ones, freeman_tukey, create_full_array
+from src.utils import expit, freeman_tukey, create_full_array
 
 class CJS:
     #TODO: CJS takes full capture history
@@ -189,9 +189,14 @@ class CJS:
 
             # priors for catchability and survival 
             p = pm.Uniform('p', 0., 1.)
+
+            # phi ~ t
             phi = pm.Uniform('phi', 0., 1., shape=interval_count)
+
+            # phi ~ 1
             # phi = pm.Uniform('phi', 0., 1.)
             
+            # logit(phi) = beta_int + beta_year * year 
             # beta_int = pm.Normal('beta_int', 0., 2.25)
             # beta_year = pm.Normal('beta_year', 0., 2.25)
             # logit_phi = beta_int + beta_year * intervals
@@ -294,6 +299,9 @@ class CJS:
             phi = phi_samples[:, i]
             # phi = np.repeat(phi_samples[i], interval_count)
 
+            def fill_lower_diag_ones(x):
+                return np.triu(x) + np.tril(np.ones_like(x), k=-1)
+
             # p_alive: probability of surviving between i and j in the m-array 
             phi_mat = np.ones_like(m_array) * phi
             p_alive = np.triu(
@@ -314,6 +322,7 @@ class CJS:
             full_array_probs = np.hstack((nu, chi))
             
             # expected values for the m_array 
+            # the two .T allow for proper broadcasting
             expected_counts = (full_array_probs.T * r).T
 
             # freeman-tukey statistic for the observed data
