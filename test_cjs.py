@@ -1,6 +1,7 @@
 import numpy as np 
 import pymc as pm
 import arviz as az
+import pandas as pd
 
 from src.cjs import CJS
 
@@ -23,20 +24,15 @@ class TestCJS:
 
     cjs = CJS()
 
-    data = np.array(
-            [[11, 2 , 0  ,0  ,0  ,0 , 9 ],
-            [0 , 24, 1  ,0  ,0  ,0 , 35],
-            [0 , 0 , 34 ,2  ,0  ,0 , 42],
-            [0 , 0 , 0  ,45 ,1  ,2 , 32],
-            [0 , 0 , 0  ,0  ,51 ,0 , 37],
-            [0 , 0 , 0  ,0  ,0  ,52, 46]]
-        ) 
+    dipper = pd.read_csv('input/dipper.csv').values
 
-    idata = cjs.estimate_bayes(data) 
+    model = cjs.compile_pymc_model(dipper)
+    with model:
+        idata = pm.sample()
 
     def test_estimate_mle(self):
 
-        results = self.cjs.estimate_mle(self.data)
+        results = self.cjs.estimate_mle(self.dipper)
 
         reals = expit(results.est_logit.values)
 
@@ -64,7 +60,7 @@ class TestCJS:
     
     def test_check(self):
 
-        ppc_results = self.cjs.check(self.idata, self.data)
+        ppc_results = self.cjs.check(self.idata, self.dipper)
 
         d_new = ppc_results['freeman_tukey_new']
         d_obs = ppc_results['freeman_tukey_observed']

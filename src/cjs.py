@@ -7,14 +7,14 @@ import arviz as az
 from pytensor import tensor as pt
 from scipy.optimize import minimize
 
-from src.utils import expit, freeman_tukey, fill_lower_diag_ones
+from src.utils import expit, fill_lower_diag_ones, freeman_tukey, create_full_array
 
 class CJS:
     #TODO: CJS takes full capture history
     def __init__(self) -> None:
         pass
 
-    def estimate_mle(self, full_array) -> pd.DataFrame:
+    def estimate_mle(self, capture_history: np.ndarray) -> pd.DataFrame:
         """Esimate the MLE for a CJS model.
 
         Args:
@@ -26,6 +26,8 @@ class CJS:
         """
         # theta_start = np.repeat(0.5, dipper.nj + 1)
         theta_start = np.repeat(0.5, 2)
+
+        full_array = create_full_array(capture_history)
 
         res = minimize(self.loglik, theta_start, method='BFGS', args=full_array)
         se = np.sqrt(np.diag(res.hess_inv))
@@ -107,8 +109,44 @@ class CJS:
                 
         return -likhood 
 
-    def estimate_bayes(self, full_array, sample_kwargs: dict = None, 
-                       return_idata: bool = True):
+    # def estimate_bayes(self, full_array, sample_kwargs: dict = None, 
+    #                    return_idata: bool = True):
+    #     """Bayesian formulation of the CJS model.
+        
+    #     For speed, this is formulated in aggregated counts, i.e., the m-array 
+    #     version, rather than the state space version.
+        
+    #     Following McCrea and Morgan (2014), the likelihood is formulated in terms 
+    #     of nu and chi. Nu represents the probabilities of the cells in the m-array,
+    #     i.e., the number of animals captured at occasion i, not seen again until 
+    #     occasion j. Chi represents the probabilities for animals captured at 
+    #     occasion i, and never seen again.
+
+    #     This code is adapted from Austin Rochford. The major differences are 
+    #     updates related to converting from PyMC3 to PyMC, as well as simplifying 
+    #     the likelihood, i.e., joint modeling of chi and nu via a Multinomial.
+    #     https://austinrochford.com/posts/2018-01-31-capture-recapture.html
+
+    #     Attributes:
+    #         data: A np.ndarray with shape (n_intervals, n_occasions). The last 
+    #         column is the number of animals released on occasion i that were never
+    #         seen again. The other columns correspond to the m-array.
+    #     """
+
+    #     model = self.compile_pymc_model(full_array)
+
+    #     with  model:
+    #         if sample_kwargs:
+    #             idata = pm.sample(**sample_kwargs)
+    #         else:
+    #             idata = pm.sample()
+
+    #     if return_idata:
+    #         return idata
+    #     else:
+    #         return az.summary(idata)
+
+    def compile_pymc_model(self, capture_history: np.ndarray=None) -> pm.Model:
         """Bayesian formulation of the CJS model.
         
         For speed, this is formulated in aggregated counts, i.e., the m-array 
@@ -131,23 +169,8 @@ class CJS:
             seen again. The other columns correspond to the m-array.
         """
 
-        model = self.compile_pymc_model(full_array)
-
-        with  model:
-            if sample_kwargs:
-                idata = pm.sample(**sample_kwargs)
-            else:
-                idata = pm.sample()
-
-        if return_idata:
-            return idata
-        else:
-            return az.summary(idata)
-
-    def compile_pymc_model(self, full_array: np.ndarray) -> pm.Model:
-        """Creates the pymc model object that can be sampled from."""
-
-        # extract the data 
+        # summarize the data 
+        full_array = create_full_array(capture_history)
         m_array = full_array[:,:-1]
         r = full_array.sum(axis=1)
 
@@ -167,6 +190,12 @@ class CJS:
             # priors for catchability and survival 
             p = pm.Uniform('p', 0., 1.)
             phi = pm.Uniform('phi', 0., 1., shape=interval_count)
+            # phi = pm.Uniform('phi', 0., 1.)
+            
+            # beta_int = pm.Normal('beta_int', 0., 2.25)
+            # beta_year = pm.Normal('beta_year', 0., 2.25)
+            # logit_phi = beta_int + beta_year * intervals
+            # phi = expit(logit_phi)
 
             # fill irrelevant portion of m-array with ones
             def fill_lower_diag_ones(x):
@@ -201,8 +230,8 @@ class CJS:
 
         return cjs
     
-    def check(self, idata: az.InferenceData, data: np.ndarray, 
-              seed=None) -> dict:
+    def check(self, idata: az.InferenceData, capture_history: np.ndarray, 
+              model=None, seed=None) -> dict:
         '''Conduct a posterior predictive check.
         
         The test statistic is the Freeman-Tukey statistic, measuring the 
@@ -219,8 +248,9 @@ class CJS:
         
         '''
         # M array (add zero row to for compatability below)
-        m_array = data[:,:-1]
-        r = data.sum(axis=1)
+        full_array = create_full_array(capture_history)
+        m_array = full_array[:,:-1]
+        r = full_array.sum(axis=1)
 
         # utility vectors for creating arrays and array indices
         interval_count, _ = m_array.shape
@@ -238,8 +268,19 @@ class CJS:
         p_samples = stacked.p.values
         phi_samples = stacked.phi.values
 
+        # b0_samples = stacked.beta_int.values
+        # b1_samples = stacked.beta_year.values
+        # logit_phi = b0_samples[:, np.newaxis] + b1_samples[:, np.newaxis] * intervals
+        # phi_samples = expit(logit_phi).T
+
         # rng for drawing from the posterior predictive distribution
         rng = np.random.default_rng(seed=seed)
+
+        if model:
+            with model:
+                pm.sample_posterior_predictive(idata, extend_inferencedata=True)
+                stacked = az.extract(idata.posterior_predictive)
+                m_samples = stacked.marr.values
 
         # freeman-tukey statistics for each draw 
         freeman_tukey_observed = []
@@ -251,6 +292,7 @@ class CJS:
 
             p = np.repeat(p_samples[i], interval_count)
             phi = phi_samples[:, i]
+            # phi = np.repeat(phi_samples[i], interval_count)
 
             # p_alive: probability of surviving between i and j in the m-array 
             phi_mat = np.ones_like(m_array) * phi
@@ -275,10 +317,14 @@ class CJS:
             expected_counts = (full_array_probs.T * r).T
 
             # freeman-tukey statistic for the observed data
-            D_obs = freeman_tukey(data, expected_counts)
+            D_obs = freeman_tukey(full_array, expected_counts)
             freeman_tukey_observed.append(D_obs)
             
-            m_new = rng.multinomial(r, full_array_probs)
+            if not model:
+                m_new = rng.multinomial(r, full_array_probs)
+            else:
+                m_new = m_samples[:,:,i]
+
             D_new = freeman_tukey(m_new, expected_counts)  
             freeman_tukey_new.append(D_new)
 
@@ -314,7 +360,7 @@ class CJS:
 
         # capture_history is a binary matrix indicating capture
         total_marked = released_count.sum()
-        capture_history = np.zeros((total_marked, T))
+        capture_history = np.zeros((total_marked, T), dtype=int)
 
         # vector indicating the occasion of capture for each animal 
         mark_occasion = np.repeat(np.arange(T - 1), released_count)
@@ -343,4 +389,3 @@ class CJS:
                     capture_history[animal, t] = 1
 
         return {'capture_history': capture_history}
-    
