@@ -106,25 +106,29 @@ def create_m_array(history):
         history: Matrix of shape (n_animals_captured, n_occasions) where 1 
           indicates that the animal was captured at occasion
     """
-    occasion_count = history.shape[1]
-    
-    M_array = np.zeros((occasion_count - 1, occasion_count - 1))
+    _, occasion_count = history.shape
+    interval_count = occasion_count - 1
+
+    M_array = np.zeros((interval_count, interval_count), int)
     for occasion in range(occasion_count - 1):
 
+        # which individuals, captured at t, were later recaptured?
         captured_this_time = history[:, occasion] == 1
         captured_later = (history[:, (occasion + 1):] > 0).any(axis=1)
         now_and_later = captured_this_time & captured_later
         
+        # when were they next recaptured? 
         remaining_history = history[now_and_later, (occasion + 1):]
         next_capture_occasion = (remaining_history.argmax(axis=1)) + occasion 
 
+        # how many of them were there?
         ind, count = np.unique(next_capture_occasion, return_counts=True)
         M_array[occasion, ind] = count
         
-    return M_array.astype(np.int64)
+    return M_array
 
 def create_full_array(history):
-
+    
     number_released = history.sum(axis=0)
     number_released = number_released[:-1]
     
