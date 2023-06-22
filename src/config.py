@@ -9,7 +9,7 @@ import pandas as pd
 
 def parse():
     parser = argparse.ArgumentParser(description="Writing config files")
-    parser.add_argument("--scenario", default="semi")
+    parser.add_argument('-s', "--scenario")
     return parser.parse_args()
 
 class Config(dict):
@@ -55,6 +55,7 @@ def write_config():
     B0 = 0.35
     T = 10
     PHI = 0.9
+    RELEASED_COUNT = 25
 
     INPUT_DIR = 'input'
 
@@ -99,6 +100,7 @@ def write_config():
             'phi': PHI,
             'b': b,
             'p': p[i],
+            'released_count': RELEASED_COUNT,
             'alpha': alpha[i],
             'beta': beta[i],
             'gamma': gamma[i]
@@ -106,7 +108,7 @@ def write_config():
 
         if SCENARIO == 'test':
             scenario_dict['tune'] = 1000
-            scenario_dict['draws'] = 5000
+            scenario_dict['draws'] = 1000
             scenario_dict['trial_count'] = 25
 
 
