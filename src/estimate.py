@@ -1,6 +1,6 @@
 import numpy as np 
 import pymc as pm
-import pymc.sampling_jax
+# import pymc.sampling_jax
 
 import time
 import json 
