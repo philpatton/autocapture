@@ -1,5 +1,6 @@
 import numpy as np
 import arviz as az
+import pandas as pd
 
 import argparse
 import os
@@ -21,6 +22,7 @@ def summarize_json():
 
     catalog_ids = np.load('input/catalog_ids.npy', allow_pickle=True)
 
+    catalog_list = []
     for catalog in catalog_ids:
 
         results_dir = f'results/{args.scenario}/{catalog}'
@@ -30,13 +32,14 @@ def summarize_json():
         cfg = load_config(config_path, "config/default.yaml")
         trial_count = cfg.trial_count
 
-        summary_dir = f'results/{args.scenario}/summaries/{catalog}/'
-        if os.path.isdir(summary_dir):
-            continue
-        else:
-            os.makedirs(summary_dir)
+        # summary_dir = f'results/{args.scenario}/summaries/{catalog}/'
+        # if os.path.isdir(summary_dir):
+        #     continue
+        # else:
+        #     os.makedirs(summary_dir)
 
         i = 0
+        trial_list = []
         for trial in range(trial_count):
 
             path = f'{results_dir}/trial_{trial}.json'
@@ -71,15 +74,48 @@ def summarize_json():
             p_val = (ft_new > ft_obs).mean()
 
             summary['p_val'] = p_val
+
+            # add additional information
+            summary['trial'] = trial
+            summary['catalog'] = catalog
             
+            trial_list.append(summary)
+
             # export file 
-            out_file = f'{summary_dir}/trial_{trial}.csv'
-            summary.to_csv(out_file)
+            # out_file = f'{summary_dir}/trial_{trial}.csv'
+            # summary.to_csv(out_file)
 
         if i != 0:
             print(f'{catalog} had {i} missing json files')
 
+        # concatenate results and return truth
+        catalog_results = pd.concat(trial_list)
+        truth = get_truth(cfg)
+        catalog_results = catalog_results.merge(truth)
+
+        catalog_list.append(catalog_results)
+
+    scenario_results = pd.concat(catalog_list)
+
+    # out_file = f'{summary_dir}/trial_{trial}.csv'
+    scenario_results.to_csv(f'results/{args.scenario}/summary.csv')
+
     return None
+
+def get_truth(config):
+    """Returns a dataframe with true values of p, phi, b0, N from config."""
+    # get true parameter values from config
+    parms = ['p', 'phi', 'N']
+    vals = [config[k] for k in parms]
+    
+    # insert b0 values 
+    b = config['b']
+    vals.insert(2, b[0])
+    parms.insert(2, 'b0')
+
+    truth = pd.DataFrame({'Unnamed: 0': parms, 'truth': vals})
+
+    return truth
 
 if __name__ == '__main__':
     summarize_json()
