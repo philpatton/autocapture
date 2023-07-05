@@ -51,7 +51,7 @@ def summarize_json():
                 continue
             
             # calculate summary statistics 
-            summary = az.summary(idata)
+            summary = az.summary(idata).reset_index(names='parameter')
 
             # add the p value to the summary, after selecting  method
             if args.estimator == 'popan':
@@ -113,7 +113,7 @@ def get_truth(config):
     vals.insert(2, b[0])
     parms.insert(2, 'b0')
 
-    truth = pd.DataFrame({'Unnamed: 0': parms, 'truth': vals})
+    truth = pd.DataFrame({'parameter': parms, 'truth': vals})
 
     return truth
 
