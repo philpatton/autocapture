@@ -13,6 +13,8 @@ def main():
 
     SCENARIO = args.scenario
     
+    SEMI_FALSE_ACCEPT_RATE = 0.02
+
     # directories
     base_dir = '/Users/philtpatton'
     onedrive = f'{base_dir}//OneDrive - hawaii.edu'
@@ -44,13 +46,18 @@ def main():
     if args.scenario == 'test':
         error_rates['FP'] = 0
         error_rates['FN'] = 0
+    
+    if args.scenario == 'semi5':
+        error_rates['FP'] = SEMI_FALSE_ACCEPT_RATE
+        error_rates = norm_rates(error_rates)
 
     # export to csv 
-    path = f'{onedrive}/projects/automated-cmr/input/{SCENARIO}-rates.csv'        
+    repo_dir =  '/Users/philtpatton/source/repos/autocapture/'
+    path = f'{repo_dir}/input/{SCENARIO}-rates.csv'        
     error_rates.to_csv(path, index=False)
 
     # export catalog ids
-    path = f'{onedrive}/projects/automated-cmr/input/catalog_ids.npy' 
+    path = f'{repo_dir}/input/catalog_ids.npy' 
     np.save(path, error_rates.catalog_id.to_numpy(), allow_pickle=True)       
 
     return None
@@ -212,6 +219,25 @@ def get_catalog_ids(species_list):
     catalog_ids = [item for sublist in tmp for item in sublist]
     
     return catalog_ids
+
+def norm_rates(error_rates): 
+
+    tp = error_rates['TP']
+    tn = error_rates['TN']
+    fp = error_rates['FP']
+    fn = error_rates['FN']
+
+    tp = tp / (tp + tn + fp + fn)
+    tn = tn / (tp + tn + fp + fn)
+    fp = fp / (tp + tn + fp + fn)
+    fn = fn / (tp + tn + fp + fn)
+
+    error_rates['TP'] = tp
+    error_rates['TN'] = tn
+    error_rates['FP'] = fp
+    error_rates['FN'] = fn
     
+    return error_rates
+
 if __name__ == '__main__':
     main()

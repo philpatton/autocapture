@@ -48,7 +48,7 @@ def write_config():
     SCENARIO = args.scenario
 
     # hyperparameters for configs 
-    MARK_CHANGE_RATE = 0.2
+    MARK_CHANGE_RATE = 0.5
 
     P_MAX = 0.8
     P_MIN = 0.4
