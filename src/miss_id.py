@@ -116,8 +116,8 @@ class MissID:
         
         # classify errors
         ghost_flag = (abg > dummy_randoms) & (dummy_randoms > bg)
-        mark_change_flag = (bg > dummy_randoms) & (dummy_randoms > self.beta)
-        false_accept_flag = dummy_randoms < self.beta
+        mark_change_flag = (bg > dummy_randoms) & (dummy_randoms > self.gamma)
+        false_accept_flag = dummy_randoms < self.gamma
         
         flag_dict = {
             'ghost':ghost_flag,
