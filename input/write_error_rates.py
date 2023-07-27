@@ -47,9 +47,9 @@ def main():
         error_rates['FP'] = 0
         error_rates['FN'] = 0
     
-    if args.scenario == 'semi5':
-        error_rates['FP'] = SEMI_FALSE_ACCEPT_RATE
-        error_rates = norm_rates(error_rates)
+    # if args.scenario == 'semi5':
+    #     error_rates['FP'] = SEMI_FALSE_ACCEPT_RATE
+    #     error_rates = norm_rates(error_rates)
 
     # export to csv 
     repo_dir =  '/Users/philtpatton/source/repos/autocapture/'
@@ -158,19 +158,22 @@ def class_pred_fully(pred, label):
 def class_pred_semi(preds, label):
     """Classify predictions as TP, FP, TN, FN."""
 
-    coin_flip = np.random.default_rng().binomial(1, 0.01)
+    rng = np.random.default_rng()
+    coin_flip = rng.binomial(1, 0.0)
 
-    if label == 'new_individual':
-        pred_class = 'TN'
-    else:
-        if label in preds:
-            pred_class = 'TP'
-        elif coin_flip == 1:
-            pred_class = 'FP'
+    if label in preds:
+        if coin_flip:
+            return 'FP'
         else:
-            pred_class = 'FN'
-        
-    return pred_class
+            if label == 'new_individual':
+                return 'TN'
+            else:
+                return 'TP'
+    else:
+        if 'new_individual' in preds:
+            return 'FN'
+        else:
+            return 'FP'
 
 def get_folder_specs(mapping):
 
