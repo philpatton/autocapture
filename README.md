@@ -28,7 +28,7 @@ python -m src.simulate --scenario fully
 python -m src.simulate --scenario semi5
 ```
 
-The script calls `src.popan.POPANSimulator` (task #1) and `src.miss_id.MissID` (task #2) for a given trial, simulating 100 trials for each of the 40 catalogs in a given scenario. 
+The script calls `src.popan.POPAN()` (task #1) and `src.miss_id.MissID()` (task #2) for a given trial, simulating 100 trials for each of the 40 catalogs in a given scenario. 
 
 ### Estimating demographic parameters
 
