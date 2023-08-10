@@ -53,6 +53,11 @@ def summarize_json():
             # calculate summary statistics 
             summary = az.summary(idata).reset_index(names='parameter')
 
+            # report number of divergent transitions
+            divergent = idata["diverging"]
+            divergences = divergent.nonzero()[0].size
+            summary['divergences'] = divergences
+
             # add the p value to the summary, after selecting  method
             if args.estimator == 'popan':
                 method = POPAN()
