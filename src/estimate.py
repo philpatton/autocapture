@@ -56,6 +56,8 @@ def main():
 
 def analyze_catalog(scenario, catalog, estimator, no_jax=True):
 
+    MAX_ATTEMPTS = 5
+
     logging.info(f'Analyzing {catalog}...')
     print(f'Analyzing {catalog}...')
 
@@ -128,7 +130,26 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=True):
 
         # sample from model
         with model:
-            idata = pm.sample(**SAMPLE_KWARGS)
+
+            # PyMC sometimes fails to sample. In these cases, it often works
+            # if tried again, perhaps for the stochastic nature of the sampler.
+            # Below, we work in that 'retry' code, noting when a trial has a 
+            # failure. 
+
+            atts = []
+            for attempt in range(MAX_ATTEMPTS):
+                try:
+                    idata = pm.sample(**SAMPLE_KWARGS)
+                except ValueError:
+                    atts.append(attempt)
+                else:
+                    if len(atts):
+                        m = f'{catalog}: trial {trial} had {len(atts)} failures'
+                        print(m)
+                    break
+            else:
+                m = f'{catalog}: trial {trial} failed {MAX_ATTEMPTS} times, exceeding MAX_ATTEMPTS'
+                raise ValueError(m)
 
         # dump results to json
         path = f'{results_dir}/trial_{trial}.json'
