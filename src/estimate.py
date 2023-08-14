@@ -76,13 +76,13 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=True):
         SAMPLE_KWARGS = {
             'draws': cfg.draws,
             'tune': cfg.tune,
-            'progressbar': False
+            'progressbar': True
         }
     else: 
          SAMPLE_KWARGS = {
             'draws': cfg.draws,
             'tune': cfg.tune,
-            'progressbar': False
+            'progressbar': True
         }     
 
     # find paths to trials that have already been completed 
