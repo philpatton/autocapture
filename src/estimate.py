@@ -140,7 +140,7 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=True):
             for attempt in range(MAX_ATTEMPTS):
                 try:
                     idata = pm.sample(**SAMPLE_KWARGS)
-                except ValueError:
+                except AssertionError:
                     atts.append(attempt)
                 else:
                     if len(atts):
