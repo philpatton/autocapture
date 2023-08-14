@@ -41,7 +41,7 @@ def main():
 
     # only simulate debug catalog in debug scenario
     if args.scenario == 'debug':
-        simulate_catalog(args.scenario, catalog='debug')
+        simulate_catalog(args.estimator, args.scenario, catalog='debug')
 
     # otherwise, simulate all the other catalogs
     else:
