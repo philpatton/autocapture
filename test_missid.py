@@ -32,7 +32,7 @@ def test_flag_errors():
     ef = mi.flag_errors(rh)
 
     assert ef['ghost'].sum() == 7
-    assert ef['mark_change'].sum() == 5
+    assert ef['mark_change'].sum() == 7
     assert ef['false_accept'].sum() == 4
 
 def test_get_error_indices():
@@ -51,8 +51,8 @@ def test_get_error_indices():
     ei_false = mi.get_error_indices(rh, ef['false_accept'])
 
     assert np.array_equal(ei_ghost[0], np.array([ 3,  4,  8, 12, 12, 15, 17]))
-    assert np.array_equal(ei_mark[0], np.array([ 1,  3,  6,  8, 19]))
-    assert np.array_equal(ei_false[0], np.array([ 4,  9, 15, 16]))
+    assert np.array_equal(ei_mark[0], np.array([ 0,  2,  2,  10, 11, 12, 13]))
+    assert np.array_equal(ei_false[0], np.array([ 0,  1, 4, 10]))
 
 def test_create_ghost_history():
 
@@ -138,7 +138,7 @@ def test_simulate_capture_history():
     error_history = mi_error.simulate_capture_history(true_history)
 
     # assert np.array_equal(error_dict)
-    assert error_history.shape == (4, 4)
+    assert error_history.shape == (5, 4)
 
 class TestErrorProcesses():
 

@@ -108,21 +108,22 @@ class MissID:
 
         # draw random uniform for classifying each recapture
         recapture_count = recapture_history.sum()
-        dummy_randoms = self.rng.uniform(size=recapture_count)
 
-        # cutoffs for errors 
-        abg = self.alpha + self.beta + self.gamma
-        bg = self.beta + self.gamma 
+        # probability of correct classification
+        p_correct = 1 - self.alpha - self.beta - self.gamma
         
-        # classify errors
-        ghost_flag = (abg > dummy_randoms) & (dummy_randoms > bg)
-        mark_change_flag = (bg > dummy_randoms) & (dummy_randoms > self.gamma)
-        false_accept_flag = dummy_randoms < self.gamma
-        
+        # categorical draw 
+        classification = self.rng.choice(
+            a=['correct_id', 'ghost', 'mark_change', 'false_accept'],
+            size=recapture_count,
+            p=[p_correct, self.alpha, self.beta, self.gamma]
+        )
+
+        # dictionary of boolean vectors, indicating the error class
         flag_dict = {
-            'ghost':ghost_flag,
-            'mark_change':mark_change_flag,
-            'false_accept':false_accept_flag
+            'ghost':classification=='ghost',
+            'mark_change':classification=='mark_change',
+            'false_accept':classification=='false_accept'
         }
 
         return flag_dict
