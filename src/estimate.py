@@ -7,6 +7,7 @@ import json
 import argparse
 import os 
 import logging
+import warnings
 
 from src.config import load_config, Config
 from src.popan import POPAN
@@ -56,7 +57,7 @@ def main():
 
 def analyze_catalog(scenario, catalog, estimator, no_jax=True):
 
-    MAX_ATTEMPTS = 5
+    MAX_ATTEMPTS = 10
 
     logging.info(f'Analyzing {catalog}...')
     print(f'Analyzing {catalog}...')
@@ -149,7 +150,7 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=True):
                     break
             else:
                 m = f'{catalog}: trial {trial} failed {MAX_ATTEMPTS} times, exceeding MAX_ATTEMPTS'
-                raise ValueError(m)
+                warnings.warn(m)
 
         # dump results to json
         path = f'{results_dir}/trial_{trial}.json'
