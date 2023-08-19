@@ -137,20 +137,22 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=True):
             # Below, we work in that 'retry' code, noting when a trial has a 
             # failure. 
 
-            atts = []
-            for attempt in range(MAX_ATTEMPTS):
-                try:
-                    idata = pm.sample(**SAMPLE_KWARGS)
-                except:
-                    atts.append(attempt)
-                else:
-                    if len(atts):
-                        m = f'{catalog}: trial {trial} had {len(atts)} failures'
-                        print(m)
-                    break
-            else:
-                m = f'{catalog}: trial {trial} failed {MAX_ATTEMPTS} times, exceeding MAX_ATTEMPTS'
-                warnings.warn(m)
+            idata = pm.sample(**SAMPLE_KWARGS)
+
+            # atts = []
+            # for attempt in range(MAX_ATTEMPTS):
+            #     try:
+            #         idata = pm.sample(**SAMPLE_KWARGS)
+            #     except:
+            #         atts.append(attempt)
+            #     else:
+            #         if len(atts):
+            #             m = f'{catalog}: trial {trial} had {len(atts)} failures'
+            #             print(m)
+            #         break
+            # else:
+            #     m = f'{catalog}: trial {trial} failed {MAX_ATTEMPTS} times, exceeding MAX_ATTEMPTS'
+            #     warnings.warn(m)
 
         # dump results to json
         path = f'{results_dir}/trial_{trial}.json'
