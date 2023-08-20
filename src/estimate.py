@@ -119,40 +119,7 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=True):
         # summarize history for js model
         capture_history = np.asarray(trial_results["capture_history"])
 
-        # estimate N, p, phi, and b from capture history 
-        if estimator == 'popan':
-            popan = POPAN()
-            model = popan.compile_pymc_model(capture_history)
-        elif estimator == 'cjs':
-            cjs = CJS()
-            model = cjs.compile_pymc_model(capture_history)
-        else:
-            raise ValueError('estimator must be "popan" or "cjs"')
-
-        # sample from model
-        with model:
-
-            # PyMC sometimes fails to sample. In these cases, it often works
-            # if tried again, perhaps for the stochastic nature of the sampler.
-            # Below, we work in that 'retry' code, noting when a trial has a 
-            # failure. 
-
-            idata = pm.sample(**SAMPLE_KWARGS)
-
-            # atts = []
-            # for attempt in range(MAX_ATTEMPTS):
-            #     try:
-            #         idata = pm.sample(**SAMPLE_KWARGS)
-            #     except:
-            #         atts.append(attempt)
-            #     else:
-            #         if len(atts):
-            #             m = f'{catalog}: trial {trial} had {len(atts)} failures'
-            #             print(m)
-            #         break
-            # else:
-            #     m = f'{catalog}: trial {trial} failed {MAX_ATTEMPTS} times, exceeding MAX_ATTEMPTS'
-            #     warnings.warn(m)
+        idata = sample_model(estimator, capture_history, SAMPLE_KWARGS)
 
         # dump results to json
         path = f'{results_dir}/trial_{trial}.json'
@@ -165,15 +132,42 @@ def analyze_catalog(scenario, catalog, estimator, no_jax=True):
 
     return None
 
-def sample_model(model, SAMPLE_KWARGS, no_jax=True):
+def sample_model(estimator, capture_history, SAMPLE_KWARGS):
 
+    # estimate N, p, phi, and b from capture history 
+    if estimator == 'popan':
+        popan = POPAN()
+        model = popan.compile_pymc_model(capture_history)
+    elif estimator == 'cjs':
+        cjs = CJS()
+        model = cjs.compile_pymc_model(capture_history)
+    else:
+        raise ValueError('estimator must be "popan" or "cjs"')
+
+    # sample from model
     with model:
+
+        # PyMC sometimes fails to sample. In these cases, it often works
+        # if tried again, perhaps for the stochastic nature of the sampler.
+        # Below, we work in that 'retry' code, noting when a trial has a 
+        # failure. 
+
         idata = pm.sample(**SAMPLE_KWARGS)
 
-        # if no_jax:
-        #     idata = pm.sample(**SAMPLE_KWARGS)
+        # atts = []
+        # for attempt in range(MAX_ATTEMPTS):
+        #     try:
+        #         idata = pm.sample(**SAMPLE_KWARGS)
+        #     except:
+        #         atts.append(attempt)
+        #     else:
+        #         if len(atts):
+        #             m = f'{catalog}: trial {trial} had {len(atts)} failures'
+        #             print(m)
+        #         break
         # else:
-        #     idata = pm.sampling_jax.sample_numpyro_nuts(**SAMPLE_KWARGS)
+        #     m = f'{catalog}: trial {trial} failed {MAX_ATTEMPTS} times, exceeding MAX_ATTEMPTS'
+        #     warnings.warn(m)
     
     return idata
 
