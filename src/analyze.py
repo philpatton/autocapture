@@ -54,8 +54,7 @@ def summarize_json():
             summary = az.summary(idata).reset_index(names='parameter')
 
             # report number of divergent transitions
-            divergent = idata["diverging"]
-            divergences = divergent.nonzero()[0].size
+            divergences = idata.sample_stats.diverging.to_numpy().sum()
             summary['divergences'] = divergences
 
             # add the p value to the summary, after selecting  method
