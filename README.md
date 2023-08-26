@@ -6,9 +6,9 @@ Code to recreate analysis in Patton et al. (TBD) *Mitigating downstream effects 
 
 The simulation proceeds in three general steps.
 
-1. Simulate true histories using a POPAN model of population dynamics (`src.popan.POPANSimulator`).
+1. Simulate true histories using a POPAN model of population dynamics (`src.popan.POPAN().simulate()`).
 2. Simulate capture histories by corrupting true histories with misidentification errors (`src.miss_id.MissID`).
-3. Estimate demographic parameters by training capture-recapture models (`src.popan.POPANEstimator`; `src.cjs.CJSEstimator`).
+3. Estimate demographic parameters by training capture-recapture models (`src.popan.POPAN().estimate()`).
 
 ### Configuration
 
@@ -28,11 +28,11 @@ python -m src.simulate --scenario fully
 python -m src.simulate --scenario semi5
 ```
 
-The script calls `src.popan.POPAN()` (task #1) and `src.miss_id.MissID()` (task #2) for a given trial, simulating 100 trials for each of the 40 catalogs in a given scenario. 
+The script uses the `src.popan.POPAN` class and its `simulate()` function for task #1. For task #2, it uses the `src.miss_id.MissID` class. By default, simulates 100 replicates for each of the 39 catalogs in a given scenario. 
 
 ### Estimating demographic parameters
 
-The `src.estimate` script accomplishes task #3 above for a given scenario and model. There are two possible models: POPAN (`src.popan.POPANEstimator`) and CJS (`src.cjs.CJSEstimator`).
+The `src.estimate` script accomplishes task #3 above for a given scenario and model. It relies on the `src.popan.POPAN()` class and its `estimate()` function. 
 
 ```
 python -m src.estimate --scenario fully --model cjs
