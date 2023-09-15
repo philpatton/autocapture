@@ -8,6 +8,7 @@ import argparse
 import os 
 import logging
 import warnings
+from multiprocessing import Pool, cpu_count
 
 from src.config import load_config, Config
 from src.popan import POPAN
@@ -36,102 +37,105 @@ def main():
 
     if args.scenario == 'debug':
 
+        catalog = Catalog('debug', scenario='debug', estimator=args.estimator)
         results_dir =  'results/debug/debug'
         os.makedirs(results_dir, exist_ok=True)
-        analyze_catalog('debug', 'debug', args.estimator, args.no_jax)
+        catalog.analyze()
 
     else:
         for catalog in catalog_ids:
-
-            # if catalog == 'beluga-1':
-            #     break
 
             # create dir for results if not there
             results_dir =  f'results/{args.scenario}/{catalog}'
             if not os.path.isdir(results_dir):
                 os.makedirs(results_dir)
 
-            analyze_catalog(args.scenario, catalog, args.estimator, args.no_jax)
+            cat = Catalog(catalog, scenario=args.scenario, 
+                          estimator=args.estimator)
+            cat.analyze()
+
+            # if catalog == 'beluga-1':
+            #     break
 
     return None
 
-def analyze_catalog(scenario, catalog, estimator, no_jax=True):
+class Catalog:
 
-    MAX_ATTEMPTS = 10
+    def __init__(self, catalog, scenario, estimator) -> None:
+        self.estimator = estimator
+        self.scenario = scenario
+        self.catalog = catalog
+        self.data_dir = f'sim_data/{scenario}/{catalog}'
+        self.results_dir = f'results/{scenario}/{catalog}/'
+        self.config_path  = f'config/{scenario}/{catalog}.yaml'
+    
+    def analyze(self): 
 
-    logging.info(f'Analyzing {catalog}...')
-    print(f'Analyzing {catalog}...')
+        logging.info(f'Analyzing {self.catalog}...')
+        print(f'Analyzing {self.catalog}...')
 
-    config_path = f'config/{scenario}/{catalog}.yaml'
-    cfg = load_config(config_path, "config/default.yaml")
+        cfg = load_config(self.config_path, "config/default.yaml")
 
-    # check to see theres a json file for each trial in trial_count
-    data_dir = f'sim_data/{scenario}/{catalog}'
-    files = [f'{data_dir}/trial_{t}.json' for t in range(cfg.trial_count)]
-    file_existence = [os.path.isfile(f) for f in files]
-    if not all(file_existence):
-        e = f'{data_dir} missing data for each trial in {cfg.trial_count}'
-        raise OSError(e)
+        # check to see theres a json file for each trial in trial_count
+        files = [f'{self.data_dir}/trial_{t}.json' for t in range(cfg.trial_count)]
+        file_existence = [os.path.isfile(f) for f in files]
+        if not all(file_existence):
+            e = f'{self.ata_dir} missing data for each trial in {cfg.trial_count}'
+            raise OSError(e) 
 
-    if no_jax:
-        SAMPLE_KWARGS = {
+        # find paths to trials that have already been completed 
+        completed_paths = [i for i in os.listdir(self.results_dir) 
+                           if i.endswith('.json')]    
+
+        # run all trials if there are no completed paths
+        if not completed_paths:
+            remaining_trials = range(cfg.trial_count)
+
+        # otherwise, run remaining trials 
+        else: 
+            completed_trials = [extract_trial_number(p) for p in completed_paths]
+            all_trials = range(cfg.trial_count)
+            remaining_trials = [t for t in all_trials if t not in completed_trials]
+
+            print(f'Remaing trials for {self.catalog} are {remaining_trials}')
+
+        if not remaining_trials:
+            return print(f'All trials for {self.atalog} already completed.')  
+
+        # arguments for mcmc sampler
+        self.sample_kwargs = {
             'draws': cfg.draws,
             'tune': cfg.tune,
-            'progressbar': True
-        }
-    else: 
-         SAMPLE_KWARGS = {
-            'draws': cfg.draws,
-            'tune': cfg.tune,
-            'progressbar': True
-        }     
+            'progressbar': True,
+            'chains': 4,
+            'cores': 1
+        } 
 
-    # find paths to trials that have already been completed 
-    results_dir = f'results/{scenario}/{catalog}/'
-    completed_paths = [i for i in os.listdir(results_dir) 
-                       if i.endswith('.json')]    
+        counts = cpu_count() - 2
+        with Pool(counts) as p:
+            p.map(self.run_trial, range(remaining_trials))
 
-    # run all trials if there are no completed paths
-    if not completed_paths:
-        remaining_trials = range(cfg.trial_count)
+        return None
 
-    # otherwise, run trials 
-    else: 
-        completed_trials = [extract_trial_number(p) for p in completed_paths]
-        all_trials = range(cfg.trial_count)
-        remaining_trials = [t for t in all_trials if t not in completed_trials]
-
-        print(f'Remaing trials for {catalog} are {remaining_trials}')
-
-    if not remaining_trials:
-        return print(f'All trials for {catalog} already completed.')
-
-    for trial in remaining_trials:
-
-        print(f'Sampling for trial {trial} of {scenario}...')
-        start = time.time()
+    def run_trial(self, trial):
+        
+        print(f'Sampling for trial {trial} of {self.scenario}...')
 
         # load in capture history
-        trial_path = f'{data_dir}/trial_{trial}.json'
+        trial_path = f'{self.data_dir}/trial_{trial}.json'
         with open(trial_path, 'r') as f:
             trial_results = json.loads(json.load(f))
 
         # summarize history for js model
         capture_history = np.asarray(trial_results["capture_history"])
 
-        idata = sample_model(estimator, capture_history, SAMPLE_KWARGS)
+        # mcmc sampling 
+        idata = sample_model(self.estimator, capture_history, self.sample_kwargs)
 
         # dump results to json
-        path = f'{results_dir}/trial_{trial}.json'
+        path = f'{self.results_dir}/trial_{trial}.json'
         idata.to_json(path)
-
-        stop = time.time()
-        duration = stop-start
-        logging.info(f'Trial {trial} lasted {duration}')
-        print(f'Trial {trial} of {catalog} lasted {duration:.0f} seconds')
-
-    return None
-
+    
 def sample_model(estimator, capture_history, SAMPLE_KWARGS):
 
     # estimate N, p, phi, and b from capture history 
@@ -146,28 +150,7 @@ def sample_model(estimator, capture_history, SAMPLE_KWARGS):
 
     # sample from model
     with model:
-
-        # PyMC sometimes fails to sample. In these cases, it often works
-        # if tried again, perhaps for the stochastic nature of the sampler.
-        # Below, we work in that 'retry' code, noting when a trial has a 
-        # failure. 
-
         idata = pm.sample(**SAMPLE_KWARGS)
-
-        # atts = []
-        # for attempt in range(MAX_ATTEMPTS):
-        #     try:
-        #         idata = pm.sample(**SAMPLE_KWARGS)
-        #     except:
-        #         atts.append(attempt)
-        #     else:
-        #         if len(atts):
-        #             m = f'{catalog}: trial {trial} had {len(atts)} failures'
-        #             print(m)
-        #         break
-        # else:
-        #     m = f'{catalog}: trial {trial} failed {MAX_ATTEMPTS} times, exceeding MAX_ATTEMPTS'
-        #     warnings.warn(m)
     
     return idata
 
