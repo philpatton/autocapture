@@ -9,7 +9,6 @@ import json
 import os
 import logging
 import numpy as np
-import pandas as pd
 
 from src.popan import POPAN
 from src.cjs import CJS
@@ -18,10 +17,8 @@ from src.config import Config, load_config
 
 def parse():
     parser = argparse.ArgumentParser(description="Simulating scenario")
-    # parser.add_argument("--sim_data_dir", default="sim_data")
     parser.add_argument('-s', "--scenario", default="debug")
     parser.add_argument('-e', '--estimator', default='popan')
-    # parser.add_argument("--config_path", default="config/debug.yaml")
     return parser.parse_args()
 
 class NumpyEncoder(json.JSONEncoder):
@@ -65,7 +62,7 @@ def simulate_catalog(estimator, scenario, catalog):
     else:
         os.makedirs(catalog_dir)
 
-    # TODO: Figure out better logging
+    # TODO: improve logging
     logging.basicConfig(filename=f'{catalog_dir}/test.log', level=logging.DEBUG)
     logging.debug(f'Simulating data for catalog: {catalog}')
 

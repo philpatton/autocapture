@@ -1,25 +1,20 @@
 import numpy as np 
 import pymc as pm
-# import pymc.sampling_jax
 
-import time
 import json 
 import argparse
 import os 
 import logging
-import warnings
 from multiprocessing import Pool, cpu_count
 
 from src.config import load_config, Config
 from src.popan import POPAN
 from src.cjs import CJS
-from src.utils import create_full_array
 
 def parse():
     parser = argparse.ArgumentParser(description="Estimating Jolly-Seber")
     parser.add_argument('-s', "--scenario", default="debug")
     parser.add_argument('-e', "--estimator", default="popan")
-    parser.add_argument('--no_jax', action=argparse.BooleanOptionalAction)
     return parser.parse_args()
 
 def main():

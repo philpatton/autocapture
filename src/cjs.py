@@ -10,7 +10,6 @@ from scipy.optimize import minimize
 from src.utils import expit, freeman_tukey, create_full_array
 
 class CJS:
-    #TODO: CJS takes full capture history
     def __init__(self) -> None:
         pass
 
@@ -108,43 +107,6 @@ class CJS:
         likhood += (never_recaptured * np.log(chi)).sum()
                 
         return -likhood 
-
-    # def estimate_bayes(self, full_array, sample_kwargs: dict = None, 
-    #                    return_idata: bool = True):
-    #     """Bayesian formulation of the CJS model.
-        
-    #     For speed, this is formulated in aggregated counts, i.e., the m-array 
-    #     version, rather than the state space version.
-        
-    #     Following McCrea and Morgan (2014), the likelihood is formulated in terms 
-    #     of nu and chi. Nu represents the probabilities of the cells in the m-array,
-    #     i.e., the number of animals captured at occasion i, not seen again until 
-    #     occasion j. Chi represents the probabilities for animals captured at 
-    #     occasion i, and never seen again.
-
-    #     This code is adapted from Austin Rochford. The major differences are 
-    #     updates related to converting from PyMC3 to PyMC, as well as simplifying 
-    #     the likelihood, i.e., joint modeling of chi and nu via a Multinomial.
-    #     https://austinrochford.com/posts/2018-01-31-capture-recapture.html
-
-    #     Attributes:
-    #         data: A np.ndarray with shape (n_intervals, n_occasions). The last 
-    #         column is the number of animals released on occasion i that were never
-    #         seen again. The other columns correspond to the m-array.
-    #     """
-
-    #     model = self.compile_pymc_model(full_array)
-
-    #     with  model:
-    #         if sample_kwargs:
-    #             idata = pm.sample(**sample_kwargs)
-    #         else:
-    #             idata = pm.sample()
-
-    #     if return_idata:
-    #         return idata
-    #     else:
-    #         return az.summary(idata)
 
     def compile_pymc_model(self, capture_history: np.ndarray=None) -> pm.Model:
         """Bayesian formulation of the CJS model.

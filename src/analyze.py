@@ -32,12 +32,6 @@ def summarize_json():
         cfg = load_config(config_path, "config/default.yaml")
         trial_count = cfg.trial_count
 
-        # summary_dir = f'results/{args.scenario}/summaries/{catalog}/'
-        # if os.path.isdir(summary_dir):
-        #     continue
-        # else:
-        #     os.makedirs(summary_dir)
-
         i = 0
         trial_list = []
         for trial in range(trial_count):
@@ -84,10 +78,6 @@ def summarize_json():
             summary['catalog'] = catalog
             
             trial_list.append(summary)
-
-            # export file 
-            # out_file = f'{summary_dir}/trial_{trial}.csv'
-            # summary.to_csv(out_file)
 
         if i != 0:
             print(f'{catalog} had {i} missing json files')
