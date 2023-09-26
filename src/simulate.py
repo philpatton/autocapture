@@ -9,6 +9,7 @@ import json
 import os
 import logging
 import numpy as np
+import pandas as pd
 
 from src.popan import POPAN
 from src.cjs import CJS
@@ -35,6 +36,9 @@ def main():
     # names of the catalogs
     id_path = ('input/catalog_ids.npy')
     catalog_ids = np.load(id_path, allow_pickle=True)
+
+    rates = pd.read_csv('input/rates.csv')
+    catalog_ids = rates.catalog_id.unique()
 
     # only simulate debug catalog in debug scenario
     if args.scenario == 'debug':
