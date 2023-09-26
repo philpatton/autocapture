@@ -2,67 +2,66 @@ import pandas as pd
 import numpy as np
 import argparse
 
+from pathlib import Path
+
 def parse():
     parser = argparse.ArgumentParser(description="Writing error rates to csv")
-    parser.add_argument("--scenario", default="semi")
+    parser.add_argument("--scenario")
     return parser.parse_args()
 
 def main():
     
     args = parse()
-
     SCENARIO = args.scenario
-    
-    SEMI_FALSE_ACCEPT_RATE = 0.02
+    PRED_COUNT = np.insert(np.arange(5, 26, 5), 0, 1)
+    P_MAX = 0.8
+    P_MIN = 0.4
 
     # directories
-    base_dir = '/Users/philtpatton'
-    onedrive = f'{base_dir}//OneDrive - hawaii.edu'
+    base_dir = Path.home()
 
     # read in the mapping file 
     map_path = f'{base_dir}/datasets/hw/raw_data/full_file_mapping.csv'
     mapping = read_mapping(map_path)
 
     # add in the submission results
-    sub_path = f'{onedrive}/projects/happy-whale/pds_submission_b7.csv'
-    results = get_results(sub_path, mapping, SCENARIO)
+    submission_path = f'input/submissions/rist-100.csv'
+    submission = pd.read_csv(submission_path)
 
-    # calculate the rates of TP, FP, TN, FN
-    error_rates = pd.crosstab(results.folder, results.pred_class, 
-                              margins=False, normalize='index').reset_index()
+    rates = get_rates(submission, mapping, PRED_COUNT)
 
-    # combine rates and metadata
-    folder_specs = get_folder_specs(mapping)
-    error_rates = folder_specs.merge(error_rates)
+    # # calculate the rates of TP, FP, TN, FN
+    # error_rates = pd.crosstab(results.folder, results.pred_class, 
+    #                           margins=False, normalize='index').reset_index()
+
+    # get metadata
+    folder_specs = get_folder_specs(mapping, p_max=P_MAX, p_min=P_MIN)
 
     # add in ids for catalog
-    catalog_ids = get_catalog_ids(error_rates.species.to_numpy())
-    error_rates.insert(0, 'catalog_id', catalog_ids)
+    id_mapping = mapping[['species', 'folder']].drop_duplicates().sort_values(['species', 'folder'])
+    id_mapping.rename(columns={'folder':'catalog'}, inplace=True)
+    id_mapping['catalog_id'] = get_catalog_ids(id_mapping.species)
 
-    # filter frasers
-    error_rates = error_rates.loc[error_rates.species != 'frasiers_dolphin']
+    # add rates to metadata
+    rates = id_mapping.merge(folder_specs).merge(rates)
 
     # add zeros for test cases
     if args.scenario == 'test':
-        error_rates['FP'] = 0
-        error_rates['FN'] = 0
-    
-    # if args.scenario == 'semi5':
-    #     error_rates['FP'] = SEMI_FALSE_ACCEPT_RATE
-    #     error_rates = norm_rates(error_rates)
+        rates['FP'] = 0
+        rates['FN'] = 0
 
     # export to csv 
-    repo_dir =  '/Users/philtpatton/source/repos/autocapture/'
-    path = f'{repo_dir}/input/{SCENARIO}-rates.csv'        
-    error_rates.to_csv(path, index=False)
+    path = 'input/rates.csv'        
+    rates.to_csv(path, index=False)
 
-    # export catalog ids
-    path = f'{repo_dir}/input/catalog_ids.npy' 
-    np.save(path, error_rates.catalog_id.to_numpy(), allow_pickle=True)       
+    # # export catalog ids
+    # path = f'input/catalog_ids.npy' 
+    # np.save(path, np.array(catalog_ids), allow_pickle=True)       
 
     return None
 
 def read_mapping(map_path):
+    """read in the mapping data and correct known errors."""
 
     # read in the full file mapping, correcting the known species errors
     mapping = pd.read_csv(map_path, dtype='string')
@@ -76,38 +75,98 @@ def read_mapping(map_path):
     # correct the bottlenose/spinner error
     is_under = mapping['folder'] == 'Botlenose-Dolphin-Underwater'
     mapping.loc[is_under, 'species'] = 'spinner_dolphin'
-    
+
+    mapping = mapping.loc[mapping.folder != 'AET-Frasiers Dolphin']
+    mapping = mapping.loc[mapping.folder != 'Bottlenose-Dolphin-NDD']
+
     return mapping
 
-def get_results(sub_path, mapping, scenario):
-    
-    # left join the model predictions from the submission to the file mapping, 
-    submission = pd.read_csv(sub_path, dtype='string')
+def get_rates(submission, mapping, pred_count):
+    """calculate error rates for each folder"""
 
-    # merge the submission with the mapping 
-    results = submission.merge(mapping, left_on='image', 
-                               right_on='img_name_new')
-    results['new_individual_id'] = replace_bad_ids(results)
+    # rename and subset columns for easy merging
+    submission.columns = ['image', 'predictions']
+    results = mapping[['folder', 'img_name_new', 'new_individual_id']]
+    results.columns = ['catalog', 'image', 'id']
 
-    # add in the precision for each prediction
-    preds = results.predictions.str.split(' ').to_list()
-    labs = results.new_individual_id.to_list()
-    results['precision'] = [map_per_image(l, p) for l, p in zip(labs, preds)]
+    # merge
+    results = results.merge(submission)
+
+    # results['new_individual_id'] = replace_bad_ids(results)
+
+    # calculate error rate based on counts checked
+    ctl = []
+    for count in pred_count:
         
-    if 'semi' in scenario:
-        pred_class = [class_pred_semi(p, l) for p, l in zip(preds, labs)]
-
-    # classify predicitions as (true + false) x (positive + negative) 
-    top_pred = [pred[0] for pred in preds]
-    if scenario == 'fully' or scenario == 'test':
-        pred_class = [class_pred_fully(p, l) for p, l in zip(top_pred, labs)]
-
-    if scenario == 'test':
-        pred_class = np.where(np.array(top_pred) == np.array(labs), 'TP', 'TN')
-        
-    results['pred_class'] = pred_class
+        # select labels top count predictions from submission 
+        preds = results.predictions.str.split(' ')
+        preds = [p[:count] for p in preds]
+        labs = results.id
     
-    return results 
+        # classify each test image's predictions as TR, TA, FR, FA
+        pred_class = [classify_prediction(p, l) for p, l in zip(preds, labs)]
+    
+        # name the column 
+        nm = f'pred_class_{count}'
+        results[nm] = pred_class
+    
+        # calculate the rates of each error
+        cross_tab = pd.crosstab(
+            results['catalog'],
+            results[nm],
+            margins=False, 
+            normalize='index'
+        )
+    
+        # for higher pred counts there are no false accepts, add column in
+        if not 'FA' in cross_tab.columns:
+            cross_tab['FA'] = 0.
+    
+        # subset the results
+        df = cross_tab[['FR', 'FA']].reset_index()
+        df['matches_checked'] = count 
+        
+        # add to list to be concatenated
+        ctl.append(df)
+    
+    # concatenate data frames
+    rates = (
+        pd.concat(ctl)[['catalog','matches_checked','FR','FA']]
+          .sort_values(['catalog', 'matches_checked'])
+          .reset_index(drop=True)
+    )
+    
+    return rates 
+
+# def get_results(sub_path, mapping, scenario): 
+    
+#     # left join the model predictions from the submission to the file mapping, 
+#     submission = pd.read_csv(sub_path, dtype='string')
+
+#     # merge the submission with the mapping 
+#     results = submission.merge(mapping, left_on='image', 
+#                                right_on='img_name_new')
+#     results['new_individual_id'] = replace_bad_ids(results)
+
+#     # add in the precision for each prediction
+#     preds = results.predictions.str.split(' ').to_list()
+#     labs = results.new_individual_id.to_list()
+#     results['precision'] = [map_per_image(l, p) for l, p in zip(labs, preds)]
+        
+#     if 'semi' in scenario:
+#         pred_class = [class_pred_semi(p, l) for p, l in zip(preds, labs)]
+
+#     # classify predicitions as (true + false) x (positive + negative) 
+#     top_pred = [pred[0] for pred in preds]
+#     if scenario == 'fully' or scenario == 'test':
+#         pred_class = [class_pred_fully(p, l) for p, l in zip(top_pred, labs)]
+
+#     if scenario == 'test':
+#         pred_class = np.where(np.array(top_pred) == np.array(labs), 'TP', 'TN')
+        
+#     results['pred_class'] = pred_class
+    
+#     return results 
 
 def replace_bad_ids(results):
     
@@ -139,79 +198,63 @@ def map_per_image(label, predictions):
     except ValueError:
         return 0.0
 
-def class_pred_fully(pred, label):
-    """Classify predictions as TP, FP, TN, FN."""
-
-    if pred == 'new_individual':
-        if pred == label:
-            pred_class = 'TN'
-        else:
-            pred_class = 'FN'
-    else:
-        if pred == label:
-            pred_class = 'TP'
-        else:
-            pred_class = 'FP'
-        
-    return pred_class
-
-def class_pred_semi(preds, label):
-    """Classify predictions as TP, FP, TN, FN."""
-
-    rng = np.random.default_rng()
-    coin_flip = rng.binomial(1, 0.0)
+def classify_prediction(preds, label):
+    """Classify predictions as (true, false) x (reject, accept)"""
 
     if label in preds:
-        if coin_flip:
-            return 'FP'
+        if label == 'new_individual':
+            return 'TR'
         else:
-            if label == 'new_individual':
-                return 'TN'
-            else:
-                return 'TP'
+            return 'TA'
     else:
         if 'new_individual' in preds:
-            return 'FN'
+            return 'FR'
         else:
-            return 'FP'
+            return 'FA'
 
-def get_folder_specs(mapping):
+def get_folder_specs(mapping, p_max=0.8, p_min=0.4):
+    """get specs that are needed to build configs"""
 
-    train = mapping.loc[mapping.Usage == 'Train']
-    is_test = (mapping.Usage == 'Private') | (mapping.Usage == 'Public')
-    test = mapping.loc[is_test]
-
-    train_specs = (
-        train.groupby('folder')
-          .agg({'new_individual_id':pd.Series.nunique,
-                'img_name_new':pd.Series.count})
-          .rename(columns={'new_individual_id':'id_count',
-                           'img_name_new':'train_img_count'})
-          .reset_index()
-    )
-
+    # number of images per id
     capture_count = (
-        train.groupby('folder')['new_individual_id']
+        mapping.groupby('folder')['new_individual_id']
           .value_counts()
-          .rename('train_img_per_id')
+          .rename('img_per_id')
           .groupby('folder')
           .mean()
           .reset_index()
     )
 
-    species_map = (
+    # number of ids in the training set (test set ids are ambiguous)
+    train = mapping.loc[mapping.Usage == 'Train']
+    id_count = (
+        train.groupby('folder')
+        .new_individual_id
+        .nunique()
+        .rename('id_count')
+        .reset_index()
+    )
+
+    # add in species 
+    species_maping = (
         mapping[['species', 'folder']]
           .drop_duplicates()
           .sort_values('species')
     )
     
-    folder_specs = species_map.merge(train_specs).merge(capture_count)
+    folder_specs = species_maping.merge(capture_count).merge(id_count)
+    folder_specs = folder_specs.rename(columns={'folder':'catalog'})
     
+    folder_specs['p'] = scale_p(folder_specs.img_per_id, p_max, p_min)
+    folder_specs['N'] = (folder_specs['id_count'] / folder_specs['p']).astype(int)
+
+    # optionally drop metadata 
+    folder_specs.drop(columns=['id_count', 'img_per_id'], inplace=True)
+
     return folder_specs
 
 def get_catalog_ids(species_list):
-    
-    # here is some ugly code to get [beluga_0, beluga_1, ..., killer_whale_0]
+    '''change folder names to [beluga_0, beluga_1, ..., killer_whale_0, ...] '''
     values, counts = np.unique(species_list, return_counts=True)
     
     tmp = []
@@ -223,24 +266,12 @@ def get_catalog_ids(species_list):
     
     return catalog_ids
 
-def norm_rates(error_rates): 
+def scale_p(mean, p_max, p_min):
 
-    tp = error_rates['TP']
-    tn = error_rates['TN']
-    fp = error_rates['FP']
-    fn = error_rates['FN']
-
-    tp = tp / (tp + tn + fp + fn)
-    tn = tn / (tp + tn + fp + fn)
-    fp = fp / (tp + tn + fp + fn)
-    fn = fn / (tp + tn + fp + fn)
-
-    error_rates['TP'] = tp
-    error_rates['TN'] = tn
-    error_rates['FP'] = fp
-    error_rates['FN'] = fn
+    scaled = ((p_max - p_min) * (mean - min(mean)) / 
+            (max(mean) - min(mean))) + p_min
     
-    return error_rates
+    return scaled
 
 if __name__ == '__main__':
     main()
