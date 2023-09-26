@@ -20,8 +20,9 @@ def summarize_json():
 
     args = parse()
 
-    catalog_ids = np.load('input/catalog_ids.npy', allow_pickle=True)
-
+    rates = pd.read_csv('input/rates.csv')
+    catalog_ids = rates.catalog_id.unique()
+    
     catalog_list = []
     for catalog in catalog_ids:
 

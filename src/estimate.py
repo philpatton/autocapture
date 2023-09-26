@@ -1,5 +1,6 @@
 import numpy as np 
 import pymc as pm
+import pandas as pd
 
 import json 
 import argparse
