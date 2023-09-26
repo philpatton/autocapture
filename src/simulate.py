@@ -13,7 +13,7 @@ import numpy as np
 from src.popan import POPAN
 from src.cjs import CJS
 from src.miss_id import MissID
-from src.config import Config, load_config
+from config.config import Config, load_config
 
 def parse():
     parser = argparse.ArgumentParser(description="Simulating scenario")
@@ -43,6 +43,7 @@ def main():
     # otherwise, simulate all the other catalogs
     else:
         for catalog in catalog_ids:
+            print(f'Simulating {catalog}')
             simulate_catalog(args.estimator, args.scenario, catalog)
 
     return None
@@ -51,7 +52,7 @@ def simulate_catalog(estimator, scenario, catalog):
     """Simulate 100 datasets for a given catalog and scenario."""
 
     # load the cfg for the scenario/catalog
-    config_path = f'config/{scenario}/{catalog}.yaml'
+    config_path = f'config/catalogs/{catalog}.yaml'
     cfg = load_config(config_path, "config/default.yaml")
 
     # don't overwrite, unless we're writing the debug scenario 
@@ -67,12 +68,14 @@ def simulate_catalog(estimator, scenario, catalog):
     logging.debug(f'Simulating data for catalog: {catalog}')
 
     # entrance probabilities - constant except for b0 
-    b = np.zeros(cfg.T)
-    b[0] = cfg.b0
-    b[1:] = (1 - b[0]) / (len(b) - 1) # ensure sums to one 
+    b = np.array(cfg.b)
+
+    alpha = cfg[scenario]['alpha']
+    beta = cfg[scenario]['beta']
+    gamma = cfg[scenario]['gamma']
 
     # init the misidentification class 
-    mi = MissID(alpha=cfg.alpha, beta=cfg.beta, gamma=cfg.gamma)
+    mi = MissID(alpha=alpha, beta=beta, gamma=gamma)
 
     for trial in range(cfg.trial_count):
 
@@ -105,7 +108,7 @@ def simulate_catalog(estimator, scenario, catalog):
 
     # save the settings as well (perhaps redundant with config)
     settings = {'N': cfg.N, 'b': b, 'phi': cfg.phi, 'p': cfg.p, 
-                'alpha': cfg.alpha, 'beta': cfg.beta, 'gamma': cfg.gamma}       
+                'alpha': alpha, 'beta': beta, 'gamma': gamma}       
     dumped = json.dumps(settings, cls=NumpyEncoder)
     path = f'sim_data/{scenario}/{catalog}/catalog_settings.json'
     with open(path, 'w') as f:
