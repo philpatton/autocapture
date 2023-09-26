@@ -6,7 +6,7 @@ import argparse
 import os
 import json
 
-from src.config import load_config, Config
+from config.config import load_config, Config
 from src.cjs import CJS
 from src.popan import POPAN
 
