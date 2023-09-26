@@ -13,7 +13,7 @@ from src.cjs import CJS
 
 def parse():
     parser = argparse.ArgumentParser(description="Estimating Jolly-Seber")
-    parser.add_argument('-s', "--scenario", default="debug")
+    parser.add_argument('-s', "--scenario", default="test")
     parser.add_argument('-e', "--estimator", default="popan")
     return parser.parse_args()
 
@@ -35,7 +35,7 @@ def main():
         catalog = Catalog('debug', scenario='debug', estimator=args.estimator)
         results_dir =  'results/debug/debug'
         os.makedirs(results_dir, exist_ok=True)
-        catalog.analyze()
+        catalog.estimate()
 
     else:
         for catalog in catalog_ids:
@@ -47,10 +47,9 @@ def main():
 
             cat = Catalog(catalog, scenario=args.scenario, 
                           estimator=args.estimator)
-            cat.analyze()
+            cat.estimate()
 
-            # if catalog == 'beluga-1':
-            #     break
+            # break
 
     return None
 
@@ -64,10 +63,10 @@ class Catalog:
         self.results_dir = f'results/{scenario}/{catalog}/'
         self.config_path  = f'config/catalogs/{catalog}.yaml'
     
-    def analyze(self): 
+    def estimate(self): 
 
-        logging.info(f'Analyzing {self.catalog}...')
-        print(f'Analyzing {self.catalog}...')
+        logging.info(f'Estimating {self.catalog}...')
+        print(f'Estimating {self.catalog}...')
 
         cfg = load_config(self.config_path, "config/default.yaml")
 
@@ -84,7 +83,7 @@ class Catalog:
 
         # run all trials if there are no completed paths
         if not completed_paths:
-            remaining_trials = range(cfg.trial_count)
+            remaining_trials = [t for t in range(cfg.trial_count)]
 
         # otherwise, run remaining trials 
         else: 
@@ -95,7 +94,7 @@ class Catalog:
             print(f'Remaing trials for {self.catalog} are {remaining_trials}')
 
         if not remaining_trials:
-            return print(f'All trials for {self.atalog} already completed.')  
+            return print(f'All trials for {self.catalog} already completed.')  
 
         # arguments for mcmc sampler
         self.sample_kwargs = {
@@ -108,7 +107,7 @@ class Catalog:
 
         counts = cpu_count() - 2
         with Pool(counts) as p:
-            p.map(self.run_trial, range(remaining_trials))
+            p.map(self.run_trial, remaining_trials)
 
         return None
 
