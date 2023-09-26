@@ -27,8 +27,8 @@ def main():
     # TODO: Figure out logging 
     logging.basicConfig(filename=f'results/{args.scenario}.log')
 
-    id_path = ('input/catalog_ids.npy')
-    catalog_ids = np.load(id_path, allow_pickle=True)
+    rates = pd.read_csv('input/rates.csv')
+    catalog_ids = rates.catalog_id.unique()
 
     if args.scenario == 'debug':
 
