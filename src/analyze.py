@@ -28,7 +28,7 @@ def summarize_json():
         results_dir = f'results/{args.scenario}/{catalog}'
         data_dir = f'sim_data/{args.scenario}/{catalog}'
 
-        config_path = f'config/{args.scenario}/{catalog}.yaml'
+        config_path = f'config/catalogs/{catalog}.yaml'
         cfg = load_config(config_path, "config/default.yaml")
         trial_count = cfg.trial_count
 
