@@ -7,7 +7,7 @@ import os
 import logging
 from multiprocessing import Pool, cpu_count
 
-from src.config import load_config, Config
+from config.config import load_config, Config
 from src.popan import POPAN
 from src.cjs import CJS
 
@@ -62,7 +62,7 @@ class Catalog:
         self.catalog = catalog
         self.data_dir = f'sim_data/{scenario}/{catalog}'
         self.results_dir = f'results/{scenario}/{catalog}/'
-        self.config_path  = f'config/{scenario}/{catalog}.yaml'
+        self.config_path  = f'config/catalogs/{catalog}.yaml'
     
     def analyze(self): 
 

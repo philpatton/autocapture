@@ -3,10 +3,6 @@ N: 1000
 T: 10
 p: 0.4
 phi: 0.9
-b0: 0.34
-alpha: 0
-beta: 0
-gamma: 0
 
 # experimental hyperparameters
 trial_count: 100

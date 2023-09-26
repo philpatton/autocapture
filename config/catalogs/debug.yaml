@@ -1,0 +1,15 @@
+N: 200
+T: 5
+b:
+- 0.2
+- 0.2
+- 0.2
+- 0.2
+- 0.2
+debug:
+  alpha: 0.0
+  beta: 0.0
+  gamma: 0.0
+p: 0.5
+phi: 0.5
+trial_count: 2
