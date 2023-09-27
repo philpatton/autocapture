@@ -5,6 +5,7 @@ import pandas as pd
 import argparse
 import os
 import json
+import time 
 
 from multiprocessing import Pool, cpu_count
 
@@ -71,6 +72,8 @@ class Catalog:
 
     def analyze_trial(self, trial):
 
+        print(f'Summarizing trial {trial} for {self.catalog}')
+
         path = f'{self.results_dir}/trial_{trial}.json'
         idata = az.from_json(path)
         
@@ -91,10 +94,15 @@ class Catalog:
         data_path = f'{self.data_dir}/trial_{trial}.json'
         with open(data_path, 'r') as f:
             data = json.loads(json.load(f))
-        
+                
         # perform check 
+        start_time = time.time()
         ch = np.array(data['capture_history'])
         check_results = method.check(idata, ch)
+        
+        end_time = time.time()
+        duration = end_time - start_time
+        print(f'PPC took {duration} seconds')
 
         # calculate p value
         ft_obs = check_results['freeman_tukey_observed']
