@@ -35,9 +35,10 @@ def analyze_scenario():
         catalog_list.append(catalog_results)
 
     scenario_results = pd.concat(catalog_list)
+    scenario_results['scenario'] = args.scenario
 
-    # out_file = f'{summary_dir}/trial_{trial}.csv'
-    scenario_results.to_csv(f'results/{args.scenario}/summary.csv')
+    out_path = f'results/{args.scenario}/{args.scenario}-summary.csv'
+    scenario_results.to_csv(out_path)
 
     return None
 
