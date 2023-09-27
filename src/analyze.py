@@ -19,7 +19,7 @@ def parse():
     parser.add_argument('-e', "--estimator", default="popan")
     return parser.parse_args()
 
-def summarize_json():
+def analyze_scenario():
 
     args = parse()
 
@@ -50,7 +50,6 @@ class Catalog:
         self.data_dir = f'sim_data/{scenario}/{catalog}'
         self.results_dir = f'results/{scenario}/{catalog}'
         self.config_path  = f'config/catalogs/{catalog}.yaml'
-        self.trial_summary_list = []
     
     def analyze(self):
 
@@ -61,10 +60,10 @@ class Catalog:
             
         counts = cpu_count() - 2
         with Pool(counts) as p:
-            p.map(self.analyze_trial, trials)
+            trial_summary_list = p.map(self.analyze_trial, trials)
 
         # concatenate results and return truth
-        catalog_results = pd.concat(self.trial_summary_list)
+        catalog_results = pd.concat(trial_summary_list)
         truth = get_truth(cfg)
         catalog_results = catalog_results.merge(truth)
 
@@ -96,13 +95,8 @@ class Catalog:
             data = json.loads(json.load(f))
                 
         # perform check 
-        start_time = time.time()
         ch = np.array(data['capture_history'])
         check_results = method.check(idata, ch)
-        
-        end_time = time.time()
-        duration = end_time - start_time
-        print(f'PPC took {duration} seconds')
 
         # calculate p value
         ft_obs = check_results['freeman_tukey_observed']
@@ -115,8 +109,8 @@ class Catalog:
         summary['trial'] = trial
         summary['catalog'] = self.catalog
 
-        self.trial_summary_list.append(summary) 
-
+        return summary
+    
 def get_truth(config):
     """Returns a dataframe with true values of p, phi, b0, N from config."""
     # get true parameter values from config
@@ -133,4 +127,4 @@ def get_truth(config):
     return truth
 
 if __name__ == '__main__':
-    summarize_json()
+    analyze_scenario()
