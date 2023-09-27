@@ -115,7 +115,7 @@ class Catalog:
         summary['trial'] = trial
         summary['catalog'] = self.catalog
 
-        return summary 
+        self.trial_summary_list.append(summary) 
 
 def get_truth(config):
     """Returns a dataframe with true values of p, phi, b0, N from config."""
