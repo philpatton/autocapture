@@ -5,6 +5,9 @@ import pandas as pd
 import argparse
 import os
 import json
+import time 
+
+from multiprocessing import Pool, cpu_count
 
 from config.config import load_config, Config
 from src.cjs import CJS
@@ -16,7 +19,7 @@ def parse():
     parser.add_argument('-e', "--estimator", default="popan")
     return parser.parse_args()
 
-def summarize_json():
+def analyze_scenario():
 
     args = parse()
 
@@ -26,77 +29,89 @@ def summarize_json():
     catalog_list = []
     for catalog in catalog_ids:
 
-        results_dir = f'results/{args.scenario}/{catalog}'
-        data_dir = f'sim_data/{args.scenario}/{catalog}'
-
-        config_path = f'config/catalogs/{catalog}.yaml'
-        cfg = load_config(config_path, "config/default.yaml")
-        trial_count = cfg.trial_count
-
-        i = 0
-        trial_list = []
-        for trial in range(trial_count):
-
-            path = f'{results_dir}/trial_{trial}.json'
-            if os.path.exists(path):
-                idata = az.from_json(path)
-            else:
-                print(f'{path} is missing')
-                i += 1
-                continue
-            
-            # calculate summary statistics 
-            summary = az.summary(idata).reset_index(names='parameter')
-
-            # report number of divergent transitions
-            divergences = idata.sample_stats.diverging.to_numpy().sum()
-            summary['divergences'] = divergences
-
-            # add the p value to the summary, after selecting  method
-            if args.estimator == 'popan':
-                method = POPAN()
-            elif args.estimator == 'cjs':
-                method = CJS()
-
-            # load in data 
-            data_path = f'{data_dir}/trial_{trial}.json'
-            with open(data_path, 'r') as f:
-                data = json.loads(json.load(f))
-            
-            # perform check 
-            ch = np.array(data['capture_history'])
-            check_results = method.check(idata, ch)
-
-            # calculate p value
-            ft_obs = check_results['freeman_tukey_observed']
-            ft_new = check_results['freeman_tukey_new']
-            p_val = (ft_new > ft_obs).mean()
-
-            summary['p_val'] = p_val
-
-            # add additional information
-            summary['trial'] = trial
-            summary['catalog'] = catalog
-            
-            trial_list.append(summary)
-
-        if i != 0:
-            print(f'{catalog} had {i} missing json files')
-
-        # concatenate results and return truth
-        catalog_results = pd.concat(trial_list)
-        truth = get_truth(cfg)
-        catalog_results = catalog_results.merge(truth)
-
+        cat = Catalog(catalog, scenario=args.scenario, estimator=args.estimator)
+        
+        catalog_results = cat.analyze()
         catalog_list.append(catalog_results)
 
     scenario_results = pd.concat(catalog_list)
+    scenario_results['scenario'] = args.scenario
 
-    # out_file = f'{summary_dir}/trial_{trial}.csv'
-    scenario_results.to_csv(f'results/{args.scenario}/summary.csv')
+    out_path = f'results/{args.scenario}/{args.scenario}-summary.csv'
+    scenario_results.to_csv(out_path)
 
     return None
 
+class Catalog:
+
+    def __init__(self, catalog, scenario, estimator) -> None:
+        self.estimator = estimator
+        self.scenario = scenario
+        self.catalog = catalog
+        self.data_dir = f'sim_data/{scenario}/{catalog}'
+        self.results_dir = f'results/{scenario}/{catalog}'
+        self.config_path  = f'config/catalogs/{catalog}.yaml'
+    
+    def analyze(self):
+
+        print(f'Analyzing {self.catalog}...')
+
+        cfg = load_config(self.config_path, "config/default.yaml")
+        trials = [t for t in range(cfg.trial_count)]
+            
+        counts = cpu_count() - 2
+        with Pool(counts) as p:
+            trial_summary_list = p.map(self.analyze_trial, trials)
+
+        # concatenate results and return truth
+        catalog_results = pd.concat(trial_summary_list)
+        truth = get_truth(cfg)
+        catalog_results = catalog_results.merge(truth)
+
+        return catalog_results
+
+    def analyze_trial(self, trial):
+
+        print(f'Summarizing trial {trial} for {self.catalog}')
+
+        path = f'{self.results_dir}/trial_{trial}.json'
+        idata = az.from_json(path)
+        
+        # calculate summary statistics 
+        summary = az.summary(idata).reset_index(names='parameter')
+
+        # report number of divergent transitions
+        divergences = idata.sample_stats.diverging.to_numpy().sum()
+        summary['divergences'] = divergences
+
+        # add the p value to the summary, after selecting  method
+        if self.estimator == 'popan':
+            method = POPAN()
+        elif self.estimator == 'cjs':
+            method = CJS()
+
+        # load in data 
+        data_path = f'{self.data_dir}/trial_{trial}.json'
+        with open(data_path, 'r') as f:
+            data = json.loads(json.load(f))
+                
+        # perform check 
+        ch = np.array(data['capture_history'])
+        check_results = method.check(idata, ch)
+
+        # calculate p value
+        ft_obs = check_results['freeman_tukey_observed']
+        ft_new = check_results['freeman_tukey_new']
+        p_val = (ft_new > ft_obs).mean()
+
+        summary['p_val'] = p_val
+
+        # add additional information
+        summary['trial'] = trial
+        summary['catalog'] = self.catalog
+
+        return summary
+    
 def get_truth(config):
     """Returns a dataframe with true values of p, phi, b0, N from config."""
     # get true parameter values from config
@@ -113,4 +128,4 @@ def get_truth(config):
     return truth
 
 if __name__ == '__main__':
-    summarize_json()
+    analyze_scenario()
