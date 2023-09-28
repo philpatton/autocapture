@@ -12,7 +12,6 @@ def parse():
 def main():
     
     args = parse()
-    SCENARIO = args.scenario
     PRED_COUNT = np.insert(np.arange(5, 26, 5), 0, 1)
     P_MAX = 0.8
     P_MIN = 0.4
@@ -29,10 +28,6 @@ def main():
     submission = pd.read_csv(submission_path)
 
     rates = get_rates(submission, mapping, PRED_COUNT)
-
-    # # calculate the rates of TP, FP, TN, FN
-    # error_rates = pd.crosstab(results.folder, results.pred_class, 
-    #                           margins=False, normalize='index').reset_index()
 
     # get metadata
     folder_specs = get_folder_specs(mapping, p_max=P_MAX, p_min=P_MIN)
@@ -53,10 +48,6 @@ def main():
     # export to csv 
     path = 'input/rates.csv'        
     rates.to_csv(path, index=False)
-
-    # # export catalog ids
-    # path = f'input/catalog_ids.npy' 
-    # np.save(path, np.array(catalog_ids), allow_pickle=True)       
 
     return None
 
@@ -137,36 +128,6 @@ def get_rates(submission, mapping, pred_count):
     )
     
     return rates 
-
-# def get_results(sub_path, mapping, scenario): 
-    
-#     # left join the model predictions from the submission to the file mapping, 
-#     submission = pd.read_csv(sub_path, dtype='string')
-
-#     # merge the submission with the mapping 
-#     results = submission.merge(mapping, left_on='image', 
-#                                right_on='img_name_new')
-#     results['new_individual_id'] = replace_bad_ids(results)
-
-#     # add in the precision for each prediction
-#     preds = results.predictions.str.split(' ').to_list()
-#     labs = results.new_individual_id.to_list()
-#     results['precision'] = [map_per_image(l, p) for l, p in zip(labs, preds)]
-        
-#     if 'semi' in scenario:
-#         pred_class = [class_pred_semi(p, l) for p, l in zip(preds, labs)]
-
-#     # classify predicitions as (true + false) x (positive + negative) 
-#     top_pred = [pred[0] for pred in preds]
-#     if scenario == 'fully' or scenario == 'test':
-#         pred_class = [class_pred_fully(p, l) for p, l in zip(top_pred, labs)]
-
-#     if scenario == 'test':
-#         pred_class = np.where(np.array(top_pred) == np.array(labs), 'TP', 'TN')
-        
-#     results['pred_class'] = pred_class
-    
-#     return results 
 
 def replace_bad_ids(results):
     
