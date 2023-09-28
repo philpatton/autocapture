@@ -4,15 +4,9 @@ import argparse
 
 from pathlib import Path
 
-def parse():
-    parser = argparse.ArgumentParser(description="Writing error rates to csv")
-    parser.add_argument("--scenario")
-    return parser.parse_args()
-
 def main():
     
-    args = parse()
-    PRED_COUNT = np.insert(np.arange(5, 26, 5), 0, 1)
+    PRED_COUNT = np.insert(np.arange(5, 51, 5), 0, 1)
     P_MAX = 0.8
     P_MIN = 0.4
 
@@ -39,11 +33,6 @@ def main():
 
     # add rates to metadata
     rates = id_mapping.merge(folder_specs).merge(rates)
-
-    # add zeros for test cases
-    if args.scenario == 'test':
-        rates['FP'] = 0
-        rates['FN'] = 0
 
     # export to csv 
     path = 'input/rates.csv'        
