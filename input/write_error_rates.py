@@ -137,30 +137,45 @@ def get_rates(results, pred_count):
     return rates 
 
 def get_cost(results, pred_count):
+    '''Calculate the cost of each action for each folder.'''
 
-    # # add in the label indices
+    # add in the label indices
     results['label_idx'] = get_label_index(results)
 
     ll = []
+    # what's the number of ids that we'd have to evaluate for each action?
     for a in pred_count: 
 
+        # the cost of the first action is 0
+        if a == 1:
+            
+            tmp_df = results.catalog.drop_duplicates().to_frame()
+            tmp_df['cost'] = 0
+            tmp_df['matches_checked'] = a
+            
+            ll.append(tmp_df)
+            continue
+        
+        # how many ids would we evaluated? 
         l = np.where(
             results.label_idx < a,
             results.label_idx + 1,
             a
         )
 
+        # create a temporary dataframe to split/apply
         tmp_df = results.copy()
         tmp_df['cost'] = l
         tmp_df['matches_checked'] = a
         
+        # the split/apply step
         tmp_df = tmp_df.groupby(['catalog', 'matches_checked'])['cost'].sum().reset_index()
-        # tmp_df['action'] = a
         ll.append(tmp_df)
 
+    # the combine step
     cost = pd.concat(ll)
 
-    return cost.sort_values(['catalog', 'matches_checked'])
+    return cost.sort_values(['catalog', 'matches_checked']).reset_index(drop=True)
 
 def get_label_index(results):
     '''Extracts the location of the true label in the list of predictions.'''
