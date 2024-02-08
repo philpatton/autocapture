@@ -1,4 +1,7 @@
 
+# files that are too big
+input/submissions/rist-1000.csv
+
 # hidden folders
 .__pycache__/
 .ipynb_checkpoints/
