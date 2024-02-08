@@ -54,13 +54,17 @@ def read_mapping(map_path):
     """read in the mapping data and correct known errors."""
 
     # read in the full file mapping, correcting the known species errors
+    # read in the full file mapping, correcting the known species errors
     mapping = pd.read_csv(map_path, dtype='string')
-    mapping['species'].replace({"globis": "short_finned_pilot_whale",
-                               "pilot_whale": "short_finned_pilot_whale",
-                               "kiler_whale": "killer_whale",
-                               "pantropic_spotted_dolphin": "spotted_dolphin",
-                               "bottlenose_dolpin": "bottlenose_dolphin"}, 
-                               inplace=True)
+    mapping['species'] = (
+        mapping['species'].replace(
+            {"globis": "short_finned_pilot_whale",
+             "pilot_whale": "short_finned_pilot_whale",
+             "kiler_whale": "killer_whale",
+             "pantropic_spotted_dolphin": "spotted_dolphin",
+             "bottlenose_dolpin": "bottlenose_dolphin"}
+        )
+    )
 
     # correct the bottlenose/spinner error
     is_under = mapping['folder'] == 'Botlenose-Dolphin-Underwater'
