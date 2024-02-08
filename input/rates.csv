@@ -1,430 +1,430 @@
-species,catalog,catalog_id,p,N,matches_checked,FR,FA
-beluga,Belugas-Cook-Inlet,beluga-0,0.7206766137978549,109,1,0.0831858407079646,0.17256637168141592
-beluga,Belugas-Cook-Inlet,beluga-0,0.7206766137978549,109,5,0.17876106194690267,0.0
-beluga,Belugas-Cook-Inlet,beluga-0,0.7206766137978549,109,10,0.13716814159292035,0.0
-beluga,Belugas-Cook-Inlet,beluga-0,0.7206766137978549,109,15,0.11415929203539824,0.0
-beluga,Belugas-Cook-Inlet,beluga-0,0.7206766137978549,109,20,0.09823008849557523,0.0
-beluga,Belugas-Cook-Inlet,beluga-0,0.7206766137978549,109,25,0.08761061946902655,0.0
-beluga,Belugas-Cook-Inlet,beluga-0,0.7206766137978549,109,30,0.07699115044247788,0.0
-beluga,Belugas-Cook-Inlet,beluga-0,0.7206766137978549,109,35,0.07256637168141593,0.0
-beluga,Belugas-Cook-Inlet,beluga-0,0.7206766137978549,109,40,0.07079646017699115,0.0
-beluga,Belugas-Cook-Inlet,beluga-0,0.7206766137978549,109,45,0.06460176991150443,0.0
-beluga,Belugas-Cook-Inlet,beluga-0,0.7206766137978549,109,50,0.06283185840707965,0.0
-beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607457612506,2029,1,0.06905210295040803,0.09667294413057125
-beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607457612506,2029,5,0.09573132454488387,0.0
-beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607457612506,2029,10,0.07250470809792843,0.0
-beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607457612506,2029,15,0.061833019460138104,0.0
-beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607457612506,2029,20,0.0549278091650973,0.0
-beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607457612506,2029,25,0.05116133082234777,0.0
-beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607457612506,2029,30,0.0480225988700565,0.0
-beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607457612506,2029,35,0.04519774011299435,0.0
-beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607457612506,2029,40,0.043000627746390456,0.0
-beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607457612506,2029,45,0.04111738857501569,0.0
-beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607457612506,2029,50,0.03954802259887006,0.0
-blue_whale,Blue-Whales-Chile,blue_whale-0,0.4049728671811529,1288,1,0.1721170395869191,0.14974182444061962
-blue_whale,Blue-Whales-Chile,blue_whale-0,0.4049728671811529,1288,5,0.14285714285714285,0.0
-blue_whale,Blue-Whales-Chile,blue_whale-0,0.4049728671811529,1288,10,0.1153184165232358,0.0
-blue_whale,Blue-Whales-Chile,blue_whale-0,0.4049728671811529,1288,15,0.09294320137693632,0.0
-blue_whale,Blue-Whales-Chile,blue_whale-0,0.4049728671811529,1288,20,0.08605851979345955,0.0
-blue_whale,Blue-Whales-Chile,blue_whale-0,0.4049728671811529,1288,25,0.07917383820998279,0.0
-blue_whale,Blue-Whales-Chile,blue_whale-0,0.4049728671811529,1288,30,0.07401032702237521,0.0
-blue_whale,Blue-Whales-Chile,blue_whale-0,0.4049728671811529,1288,35,0.07228915662650602,0.0
-blue_whale,Blue-Whales-Chile,blue_whale-0,0.4049728671811529,1288,40,0.06368330464716007,0.0
-blue_whale,Blue-Whales-Chile,blue_whale-0,0.4049728671811529,1288,45,0.058519793459552494,0.0
-blue_whale,Blue-Whales-Chile,blue_whale-0,0.4049728671811529,1288,50,0.05163511187607573,0.0
-blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.40429857666700186,4516,1,0.1915966386554622,0.11092436974789915
-blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.40429857666700186,4516,5,0.18319327731092436,0.0
-blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.40429857666700186,4516,10,0.1495798319327731,0.0
-blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.40429857666700186,4516,15,0.13445378151260504,0.0
-blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.40429857666700186,4516,20,0.12773109243697478,0.0
-blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.40429857666700186,4516,25,0.1226890756302521,0.0
-blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.40429857666700186,4516,30,0.1226890756302521,0.0
-blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.40429857666700186,4516,35,0.11932773109243698,0.0
-blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.40429857666700186,4516,40,0.11260504201680673,0.0
-blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.40429857666700186,4516,45,0.11260504201680673,0.0
-blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.40429857666700186,4516,50,0.11260504201680673,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.7405143869315813,352,1,0.016246111303145523,0.04701002419633599
-bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.7405143869315813,352,5,0.04044244728655375,0.0003456619426201175
-bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.7405143869315813,352,10,0.03076391289319046,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.7405143869315813,352,15,0.026615969581749048,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.7405143869315813,352,20,0.024196335983408226,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.7405143869315813,352,25,0.023159350155547875,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.7405143869315813,352,30,0.021776702385067404,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.7405143869315813,352,35,0.020394054614586935,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.7405143869315813,352,40,0.0197027307293467,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.7405143869315813,352,45,0.01935706878672658,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.7405143869315813,352,50,0.018665744901486345,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.41249723784171355,193,1,0.059322033898305086,0.025423728813559324
-bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.41249723784171355,193,5,0.03389830508474576,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.41249723784171355,193,10,0.01694915254237288,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.41249723784171355,193,15,0.00847457627118644,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.41249723784171355,193,20,0.00847457627118644,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.41249723784171355,193,25,0.00847457627118644,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.41249723784171355,193,30,0.00847457627118644,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.41249723784171355,193,35,0.0,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.41249723784171355,193,40,0.0,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.41249723784171355,193,45,0.0,0.0
-bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.41249723784171355,193,50,0.0,0.0
-bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.4357564827682858,667,1,0.008333333333333333,0.02638888888888889
-bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.4357564827682858,667,5,0.015277777777777777,0.0
-bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.4357564827682858,667,10,0.013888888888888888,0.0
-bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.4357564827682858,667,15,0.009722222222222222,0.0
-bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.4357564827682858,667,20,0.009722222222222222,0.0
-bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.4357564827682858,667,25,0.009722222222222222,0.0
-bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.4357564827682858,667,30,0.009722222222222222,0.0
-bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.4357564827682858,667,35,0.009722222222222222,0.0
-bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.4357564827682858,667,40,0.009722222222222222,0.0
-bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.4357564827682858,667,45,0.009722222222222222,0.0
-bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.4357564827682858,667,50,0.009722222222222222,0.0
-bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.4296239786174343,519,1,0.011928429423459244,0.04572564612326044
-bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.4296239786174343,519,5,0.013916500994035786,0.0
-bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.4296239786174343,519,10,0.011928429423459244,0.0
-bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.4296239786174343,519,15,0.011928429423459244,0.0
-bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.4296239786174343,519,20,0.011928429423459244,0.0
-bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.4296239786174343,519,25,0.011928429423459244,0.0
-bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.4296239786174343,519,30,0.011928429423459244,0.0
-bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.4296239786174343,519,35,0.011928429423459244,0.0
-bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.4296239786174343,519,40,0.011928429423459244,0.0
-bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.4296239786174343,519,45,0.011928429423459244,0.0
-bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.4296239786174343,519,50,0.011928429423459244,0.0
-brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.4307491411442605,102,1,0.0392156862745098,0.0784313725490196
-brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.4307491411442605,102,5,0.049019607843137254,0.0
-brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.4307491411442605,102,10,0.0392156862745098,0.0
-brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.4307491411442605,102,15,0.0196078431372549,0.0
-brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.4307491411442605,102,20,0.0196078431372549,0.0
-brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.4307491411442605,102,25,0.0196078431372549,0.0
-brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.4307491411442605,102,30,0.0196078431372549,0.0
-brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.4307491411442605,102,35,0.0196078431372549,0.0
-brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.4307491411442605,102,40,0.0196078431372549,0.0
-brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.4307491411442605,102,45,0.0196078431372549,0.0
-brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.4307491411442605,102,50,0.0196078431372549,0.0
-commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.4031210125437037,173,1,0.05128205128205128,0.20512820512820512
-commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.4031210125437037,173,5,0.02564102564102564,0.0
-commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.4031210125437037,173,10,0.01282051282051282,0.0
-commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.4031210125437037,173,15,0.01282051282051282,0.0
-commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.4031210125437037,173,20,0.0,0.0
-commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.4031210125437037,173,25,0.0,0.0
-commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.4031210125437037,173,30,0.0,0.0
-commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.4031210125437037,173,35,0.0,0.0
-commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.4031210125437037,173,40,0.0,0.0
-commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.4031210125437037,173,45,0.0,0.0
-commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.4031210125437037,173,50,0.0,0.0
-common_dolphin,Common-Dolphins,common_dolphin-0,0.49878987403200215,76,1,0.04639175257731959,0.13402061855670103
-common_dolphin,Common-Dolphins,common_dolphin-0,0.49878987403200215,76,5,0.10309278350515463,0.0
-common_dolphin,Common-Dolphins,common_dolphin-0,0.49878987403200215,76,10,0.06701030927835051,0.0
-common_dolphin,Common-Dolphins,common_dolphin-0,0.49878987403200215,76,15,0.061855670103092786,0.0
-common_dolphin,Common-Dolphins,common_dolphin-0,0.49878987403200215,76,20,0.05670103092783505,0.0
-common_dolphin,Common-Dolphins,common_dolphin-0,0.49878987403200215,76,25,0.05670103092783505,0.0
-common_dolphin,Common-Dolphins,common_dolphin-0,0.49878987403200215,76,30,0.05154639175257732,0.0
-common_dolphin,Common-Dolphins,common_dolphin-0,0.49878987403200215,76,35,0.05154639175257732,0.0
-common_dolphin,Common-Dolphins,common_dolphin-0,0.49878987403200215,76,40,0.05154639175257732,0.0
-common_dolphin,Common-Dolphins,common_dolphin-0,0.49878987403200215,76,45,0.04639175257731959,0.0
-common_dolphin,Common-Dolphins,common_dolphin-0,0.49878987403200215,76,50,0.04639175257731959,0.0
-cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.41643491615361067,439,1,0.07969151670951156,0.3341902313624679
-cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.41643491615361067,439,5,0.07455012853470437,0.0
-cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.41643491615361067,439,10,0.04884318766066838,0.0
-cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.41643491615361067,439,15,0.04113110539845758,0.0
-cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.41643491615361067,439,20,0.03598971722365039,0.0
-cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.41643491615361067,439,25,0.030848329048843187,0.0
-cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.41643491615361067,439,30,0.028277634961439587,0.0
-cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.41643491615361067,439,35,0.028277634961439587,0.0
-cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.41643491615361067,439,40,0.02570694087403599,0.0
-cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.41643491615361067,439,45,0.02313624678663239,0.0
-cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.41643491615361067,439,50,0.02313624678663239,0.0
-dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,1,0.08217391304347826,0.14869565217391303
-dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,5,0.06869565217391305,0.0008695652173913044
-dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,10,0.05782608695652174,0.0
-dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,15,0.05173913043478261,0.0
-dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,20,0.04869565217391304,0.0
-dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,25,0.04652173913043478,0.0
-dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,30,0.04521739130434783,0.0
-dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,35,0.043043478260869565,0.0
-dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,40,0.043043478260869565,0.0
-dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,45,0.04217391304347826,0.0
-dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,50,0.04173913043478261,0.0
-false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.4135079861426247,29,1,0.05,0.05
-false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.4135079861426247,29,5,0.05,0.0
-false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.4135079861426247,29,10,0.0,0.0
-false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.4135079861426247,29,15,0.0,0.0
-false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.4135079861426247,29,20,0.0,0.0
-false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.4135079861426247,29,25,0.0,0.0
-false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.4135079861426247,29,30,0.0,0.0
-false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.4135079861426247,29,35,0.0,0.0
-false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.4135079861426247,29,40,0.0,0.0
-false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.4135079861426247,29,45,0.0,0.0
-false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.4135079861426247,29,50,0.0,0.0
-false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,1,0.009499683343888538,0.022165927802406588
-false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,5,0.02786573780873971,0.0
-false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,10,0.025965801139962,0.0
-false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,15,0.024699176694110196,0.0
-false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,20,0.024699176694110196,0.0
-false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,25,0.024699176694110196,0.0
-false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,30,0.024065864471184292,0.0
-false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,35,0.024065864471184292,0.0
-false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,40,0.022799240025332488,0.0
-false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,45,0.022799240025332488,0.0
-false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,50,0.022165927802406588,0.0
-false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.41652529641523256,218,1,0.006802721088435374,0.034013605442176874
-false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.41652529641523256,218,5,0.013605442176870748,0.0
-false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.41652529641523256,218,10,0.006802721088435374,0.0
-false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.41652529641523256,218,15,0.006802721088435374,0.0
-false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.41652529641523256,218,20,0.006802721088435374,0.0
-false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.41652529641523256,218,25,0.006802721088435374,0.0
-false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.41652529641523256,218,30,0.006802721088435374,0.0
-false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.41652529641523256,218,35,0.006802721088435374,0.0
-false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.41652529641523256,218,40,0.006802721088435374,0.0
-false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.41652529641523256,218,45,0.006802721088435374,0.0
-false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.41652529641523256,218,50,0.006802721088435374,0.0
-fin_whale,BpMachineLearning,fin_whale-0,0.4217449016742101,1104,1,0.07859733978234583,0.10882708585247884
-fin_whale,BpMachineLearning,fin_whale-0,0.4217449016742101,1104,5,0.06287787182587666,0.0
-fin_whale,BpMachineLearning,fin_whale-0,0.4217449016742101,1104,10,0.0471584038694075,0.0
-fin_whale,BpMachineLearning,fin_whale-0,0.4217449016742101,1104,15,0.036275695284159616,0.0
-fin_whale,BpMachineLearning,fin_whale-0,0.4217449016742101,1104,20,0.030229746070133012,0.0
-fin_whale,BpMachineLearning,fin_whale-0,0.4217449016742101,1104,25,0.02902055622732769,0.0
-fin_whale,BpMachineLearning,fin_whale-0,0.4217449016742101,1104,30,0.02539298669891173,0.0
-fin_whale,BpMachineLearning,fin_whale-0,0.4217449016742101,1104,35,0.022974607013301087,0.0
-fin_whale,BpMachineLearning,fin_whale-0,0.4217449016742101,1104,40,0.02176541717049577,0.0
-fin_whale,BpMachineLearning,fin_whale-0,0.4217449016742101,1104,45,0.020556227327690448,0.0
-fin_whale,BpMachineLearning,fin_whale-0,0.4217449016742101,1104,50,0.020556227327690448,0.0
-gray_whale,Gray-Whales,gray_whale-0,0.4623490608883032,400,1,0.09968847352024922,0.11526479750778816
-gray_whale,Gray-Whales,gray_whale-0,0.4623490608883032,400,5,0.15109034267912771,0.0
-gray_whale,Gray-Whales,gray_whale-0,0.4623490608883032,400,10,0.1308411214953271,0.0
-gray_whale,Gray-Whales,gray_whale-0,0.4623490608883032,400,15,0.12149532710280374,0.0
-gray_whale,Gray-Whales,gray_whale-0,0.4623490608883032,400,20,0.11526479750778816,0.0
-gray_whale,Gray-Whales,gray_whale-0,0.4623490608883032,400,25,0.11214953271028037,0.0
-gray_whale,Gray-Whales,gray_whale-0,0.4623490608883032,400,30,0.1059190031152648,0.0
-gray_whale,Gray-Whales,gray_whale-0,0.4623490608883032,400,35,0.10124610591900311,0.0
-gray_whale,Gray-Whales,gray_whale-0,0.4623490608883032,400,40,0.09813084112149532,0.0
-gray_whale,Gray-Whales,gray_whale-0,0.4623490608883032,400,45,0.09501557632398754,0.0
-gray_whale,Gray-Whales,gray_whale-0,0.4623490608883032,400,50,0.09345794392523364,0.0
-humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.4074860405896197,358,1,0.09090909090909091,0.17703349282296652
-humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.4074860405896197,358,5,0.05263157894736842,0.0
-humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.4074860405896197,358,10,0.028708133971291867,0.0
-humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.4074860405896197,358,15,0.028708133971291867,0.0
-humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.4074860405896197,358,20,0.028708133971291867,0.0
-humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.4074860405896197,358,25,0.028708133971291867,0.0
-humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.4074860405896197,358,30,0.028708133971291867,0.0
-humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.4074860405896197,358,35,0.028708133971291867,0.0
-humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.4074860405896197,358,40,0.023923444976076555,0.0
-humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.4074860405896197,358,45,0.023923444976076555,0.0
-humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.4074860405896197,358,50,0.023923444976076555,0.0
-humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.42133278445923095,6011,1,0.11670480549199085,0.08901601830663615
-humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.42133278445923095,6011,5,0.10274599542334097,0.0
-humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.42133278445923095,6011,10,0.08810068649885583,0.0
-humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.42133278445923095,6011,15,0.07963386727688787,0.0
-humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.42133278445923095,6011,20,0.07299771167048055,0.0
-humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.42133278445923095,6011,25,0.06842105263157895,0.0
-humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.42133278445923095,6011,30,0.06590389016018307,0.0
-humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.42133278445923095,6011,35,0.06224256292906179,0.0
-humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.42133278445923095,6011,40,0.05995423340961099,0.0
-humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.42133278445923095,6011,45,0.057665903890160186,0.0
-humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.42133278445923095,6011,50,0.05537757437070938,0.0
-killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.43495744697040173,917,1,0.050761421319796954,0.116751269035533
-killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.43495744697040173,917,5,0.08020304568527918,0.0
-killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.43495744697040173,917,10,0.06802030456852792,0.0
-killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.43495744697040173,917,15,0.06091370558375635,0.0
-killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.43495744697040173,917,20,0.05685279187817259,0.0
-killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.43495744697040173,917,25,0.05279187817258883,0.0
-killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.43495744697040173,917,30,0.05177664974619289,0.0
-killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.43495744697040173,917,35,0.050761421319796954,0.0
-killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.43495744697040173,917,40,0.050761421319796954,0.0
-killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.43495744697040173,917,45,0.049746192893401014,0.0
-killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.43495744697040173,917,50,0.046700507614213196,0.0
-killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.5593137289200696,130,1,0.005154639175257732,0.022336769759450172
-killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.5593137289200696,130,5,0.015463917525773196,0.0
-killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.5593137289200696,130,10,0.00859106529209622,0.0
-killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.5593137289200696,130,15,0.00859106529209622,0.0
-killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.5593137289200696,130,20,0.00859106529209622,0.0
-killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.5593137289200696,130,25,0.00859106529209622,0.0
-killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.5593137289200696,130,30,0.00859106529209622,0.0
-killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.5593137289200696,130,35,0.00859106529209622,0.0
-killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.5593137289200696,130,40,0.00859106529209622,0.0
-killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.5593137289200696,130,45,0.006872852233676976,0.0
-killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.5593137289200696,130,50,0.006872852233676976,0.0
-long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.410217849672347,319,1,0.0,0.053475935828877004
-long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.410217849672347,319,5,0.0213903743315508,0.0
-long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.410217849672347,319,10,0.0213903743315508,0.0
-long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.410217849672347,319,15,0.0213903743315508,0.0
-long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.410217849672347,319,20,0.0213903743315508,0.0
-long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.410217849672347,319,25,0.0213903743315508,0.0
-long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.410217849672347,319,30,0.0213903743315508,0.0
-long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.410217849672347,319,35,0.0213903743315508,0.0
-long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.410217849672347,319,40,0.0213903743315508,0.0
-long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.410217849672347,319,45,0.0213903743315508,0.0
-long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.410217849672347,319,50,0.0213903743315508,0.0
-melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.40159589706647514,3294,1,0.017485428809325562,0.09242298084929226
-melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.40159589706647514,3294,5,0.00749375520399667,0.0
-melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.40159589706647514,3294,10,0.005828476269775187,0.0
-melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.40159589706647514,3294,15,0.005828476269775187,0.0
-melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.40159589706647514,3294,20,0.004995836802664446,0.0
-melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.40159589706647514,3294,25,0.004995836802664446,0.0
-melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.40159589706647514,3294,30,0.004995836802664446,0.0
-melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.40159589706647514,3294,35,0.004163197335553705,0.0
-melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.40159589706647514,3294,40,0.004163197335553705,0.0
-melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.40159589706647514,3294,45,0.004163197335553705,0.0
-melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.40159589706647514,3294,50,0.004163197335553705,0.0
-minke_whale,Minke-Whale-Husavik,minke_whale-0,0.4103580583480009,224,1,0.1349206349206349,0.3333333333333333
-minke_whale,Minke-Whale-Husavik,minke_whale-0,0.4103580583480009,224,5,0.3253968253968254,0.0
-minke_whale,Minke-Whale-Husavik,minke_whale-0,0.4103580583480009,224,10,0.24603174603174602,0.0
-minke_whale,Minke-Whale-Husavik,minke_whale-0,0.4103580583480009,224,15,0.20634920634920634,0.0
-minke_whale,Minke-Whale-Husavik,minke_whale-0,0.4103580583480009,224,20,0.16666666666666666,0.0
-minke_whale,Minke-Whale-Husavik,minke_whale-0,0.4103580583480009,224,25,0.16666666666666666,0.0
-minke_whale,Minke-Whale-Husavik,minke_whale-0,0.4103580583480009,224,30,0.15079365079365079,0.0
-minke_whale,Minke-Whale-Husavik,minke_whale-0,0.4103580583480009,224,35,0.15079365079365079,0.0
-minke_whale,Minke-Whale-Husavik,minke_whale-0,0.4103580583480009,224,40,0.14285714285714285,0.0
-minke_whale,Minke-Whale-Husavik,minke_whale-0,0.4103580583480009,224,45,0.14285714285714285,0.0
-minke_whale,Minke-Whale-Husavik,minke_whale-0,0.4103580583480009,224,50,0.1349206349206349,0.0
-minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.7994200534215021,45,1,0.007177033492822967,0.2822966507177033
-minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.7994200534215021,45,5,0.011961722488038277,0.004784688995215311
-minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.7994200534215021,45,10,0.009569377990430622,0.0
-minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.7994200534215021,45,15,0.0023923444976076554,0.0
-minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.7994200534215021,45,20,0.0023923444976076554,0.0
-minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.7994200534215021,45,25,0.0023923444976076554,0.0
-minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.7994200534215021,45,30,0.0023923444976076554,0.0
-minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.7994200534215021,45,35,0.0023923444976076554,0.0
-minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.7994200534215021,45,40,0.0023923444976076554,0.0
-minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.7994200534215021,45,45,0.0023923444976076554,0.0
-minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.7994200534215021,45,50,0.0023923444976076554,0.0
-pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.4250210410076906,56,1,0.0,0.02040816326530612
-pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.4250210410076906,56,5,0.0,0.0
-pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.4250210410076906,56,10,0.0,0.0
-pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.4250210410076906,56,15,0.0,0.0
-pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.4250210410076906,56,20,0.0,0.0
-pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.4250210410076906,56,25,0.0,0.0
-pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.4250210410076906,56,30,0.0,0.0
-pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.4250210410076906,56,35,0.0,0.0
-pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.4250210410076906,56,40,0.0,0.0
-pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.4250210410076906,56,45,0.0,0.0
-pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.4250210410076906,56,50,0.0,0.0
-rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.4041451235573228,113,1,0.21052631578947367,0.08771929824561403
-rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.4041451235573228,113,5,0.17543859649122806,0.0
-rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.4041451235573228,113,10,0.15789473684210525,0.0
-rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.4041451235573228,113,15,0.15789473684210525,0.0
-rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.4041451235573228,113,20,0.14035087719298245,0.0
-rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.4041451235573228,113,25,0.12280701754385964,0.0
-rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.4041451235573228,113,30,0.10526315789473684,0.0
-rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.4041451235573228,113,35,0.10526315789473684,0.0
-rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.4041451235573228,113,40,0.10526315789473684,0.0
-rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.4041451235573228,113,45,0.10526315789473684,0.0
-rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.4041451235573228,113,50,0.10526315789473684,0.0
-sei_whale,FC_SEI_WHALES,sei_whale-0,0.4130525033323064,476,1,0.018050541516245487,0.06498194945848375
-sei_whale,FC_SEI_WHALES,sei_whale-0,0.4130525033323064,476,5,0.02527075812274368,0.0
-sei_whale,FC_SEI_WHALES,sei_whale-0,0.4130525033323064,476,10,0.01444043321299639,0.0
-sei_whale,FC_SEI_WHALES,sei_whale-0,0.4130525033323064,476,15,0.007220216606498195,0.0
-sei_whale,FC_SEI_WHALES,sei_whale-0,0.4130525033323064,476,20,0.0036101083032490976,0.0
-sei_whale,FC_SEI_WHALES,sei_whale-0,0.4130525033323064,476,25,0.0036101083032490976,0.0
-sei_whale,FC_SEI_WHALES,sei_whale-0,0.4130525033323064,476,30,0.0,0.0
-sei_whale,FC_SEI_WHALES,sei_whale-0,0.4130525033323064,476,35,0.0,0.0
-sei_whale,FC_SEI_WHALES,sei_whale-0,0.4130525033323064,476,40,0.0,0.0
-sei_whale,FC_SEI_WHALES,sei_whale-0,0.4130525033323064,476,45,0.0,0.0
-sei_whale,FC_SEI_WHALES,sei_whale-0,0.4130525033323064,476,50,0.0,0.0
-short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.4170454440433422,115,1,0.18292682926829268,0.15853658536585366
-short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.4170454440433422,115,5,0.23170731707317074,0.0
-short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.4170454440433422,115,10,0.1951219512195122,0.0
-short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.4170454440433422,115,15,0.14634146341463414,0.0
-short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.4170454440433422,115,20,0.13414634146341464,0.0
-short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.4170454440433422,115,25,0.13414634146341464,0.0
-short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.4170454440433422,115,30,0.13414634146341464,0.0
-short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.4170454440433422,115,35,0.12195121951219512,0.0
-short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.4170454440433422,115,40,0.12195121951219512,0.0
-short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.4170454440433422,115,45,0.12195121951219512,0.0
-short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.4170454440433422,115,50,0.12195121951219512,0.0
-short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.41868766529141993,511,1,0.024074074074074074,0.027777777777777776
-short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.41868766529141993,511,5,0.03333333333333333,0.0
-short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.41868766529141993,511,10,0.024074074074074074,0.0
-short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.41868766529141993,511,15,0.020370370370370372,0.0
-short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.41868766529141993,511,20,0.018518518518518517,0.0
-short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.41868766529141993,511,25,0.016666666666666666,0.0
-short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.41868766529141993,511,30,0.016666666666666666,0.0
-short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.41868766529141993,511,35,0.012962962962962963,0.0
-short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.41868766529141993,511,40,0.012962962962962963,0.0
-short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.41868766529141993,511,45,0.012962962962962963,0.0
-short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.41868766529141993,511,50,0.012962962962962963,0.0
-short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.40319948383112314,486,1,0.019417475728155338,0.08737864077669903
-short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.40319948383112314,486,5,0.009708737864077669,0.0
-short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.40319948383112314,486,10,0.0048543689320388345,0.0
-short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.40319948383112314,486,15,0.0048543689320388345,0.0
-short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.40319948383112314,486,20,0.0048543689320388345,0.0
-short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.40319948383112314,486,25,0.0048543689320388345,0.0
-short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.40319948383112314,486,30,0.0048543689320388345,0.0
-short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.40319948383112314,486,35,0.0048543689320388345,0.0
-short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.40319948383112314,486,40,0.0048543689320388345,0.0
-short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.40319948383112314,486,45,0.0048543689320388345,0.0
-short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.40319948383112314,486,50,0.0048543689320388345,0.0
-southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576894526888,1350,1,0.3117469879518072,0.14759036144578314
-southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576894526888,1350,5,0.2183734939759036,0.0
-southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576894526888,1350,10,0.15512048192771086,0.0
-southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576894526888,1350,15,0.13403614457831325,0.0
-southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576894526888,1350,20,0.11596385542168675,0.0
-southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576894526888,1350,25,0.10692771084337349,0.0
-southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576894526888,1350,30,0.09789156626506024,0.0
-southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576894526888,1350,35,0.09487951807228916,0.0
-southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576894526888,1350,40,0.09186746987951808,0.0
-southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576894526888,1350,45,0.08433734939759036,0.0
-southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576894526888,1350,50,0.0783132530120482,0.0
-spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.4970842362742146,42,1,0.02727272727272727,0.08181818181818182
-spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.4970842362742146,42,5,0.05454545454545454,0.00909090909090909
-spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.4970842362742146,42,10,0.03636363636363636,0.0
-spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.4970842362742146,42,15,0.02727272727272727,0.0
-spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.4970842362742146,42,20,0.00909090909090909,0.0
-spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.4970842362742146,42,25,0.00909090909090909,0.0
-spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.4970842362742146,42,30,0.00909090909090909,0.0
-spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.4970842362742146,42,35,0.00909090909090909,0.0
-spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.4970842362742146,42,40,0.00909090909090909,0.0
-spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.4970842362742146,42,45,0.00909090909090909,0.0
-spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.4970842362742146,42,50,0.00909090909090909,0.0
-spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.40749435890101343,746,1,0.037444933920704845,0.03524229074889868
-spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.40749435890101343,746,5,0.039647577092511016,0.0
-spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.40749435890101343,746,10,0.039647577092511016,0.0
-spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.40749435890101343,746,15,0.039647577092511016,0.0
-spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.40749435890101343,746,20,0.039647577092511016,0.0
-spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.40749435890101343,746,25,0.039647577092511016,0.0
-spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.40749435890101343,746,30,0.039647577092511016,0.0
-spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.40749435890101343,746,35,0.037444933920704845,0.0
-spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.40749435890101343,746,40,0.037444933920704845,0.0
-spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.40749435890101343,746,45,0.037444933920704845,0.0
-spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.40749435890101343,746,50,0.037444933920704845,0.0
-spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.4130293633024292,1421,1,0.032806804374240585,0.07776427703523693
-spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.4130293633024292,1421,5,0.02916160388821385,0.0
-spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.4130293633024292,1421,10,0.018226002430133656,0.0
-spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.4130293633024292,1421,15,0.018226002430133656,0.0
-spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.4130293633024292,1421,20,0.015795868772782502,0.0
-spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.4130293633024292,1421,25,0.015795868772782502,0.0
-spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.4130293633024292,1421,30,0.015795868772782502,0.0
-spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.4130293633024292,1421,35,0.015795868772782502,0.0
-spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.4130293633024292,1421,40,0.015795868772782502,0.0
-spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.4130293633024292,1421,45,0.014580801944106925,0.0
-spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.4130293633024292,1421,50,0.014580801944106925,0.0
-spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.4274231475165748,102,1,0.06451612903225806,0.08602150537634409
-spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.4274231475165748,102,5,0.07526881720430108,0.0
-spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.4274231475165748,102,10,0.07526881720430108,0.0
-spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.4274231475165748,102,15,0.06451612903225806,0.0
-spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.4274231475165748,102,20,0.06451612903225806,0.0
-spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.4274231475165748,102,25,0.06451612903225806,0.0
-spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.4274231475165748,102,30,0.06451612903225806,0.0
-spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.4274231475165748,102,35,0.06451612903225806,0.0
-spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.4274231475165748,102,40,0.06451612903225806,0.0
-spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.4274231475165748,102,45,0.053763440860215055,0.0
-spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.4274231475165748,102,50,0.043010752688172046,0.0
-spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.4083614821786243,685,1,0.019886363636363636,0.14488636363636365
-spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.4083614821786243,685,5,0.011363636363636364,0.0
-spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.4083614821786243,685,10,0.011363636363636364,0.0
-spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.4083614821786243,685,15,0.011363636363636364,0.0
-spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.4083614821786243,685,20,0.011363636363636364,0.0
-spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.4083614821786243,685,25,0.011363636363636364,0.0
-spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.4083614821786243,685,30,0.011363636363636364,0.0
-spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.4083614821786243,685,35,0.011363636363636364,0.0
-spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.4083614821786243,685,40,0.008522727272727272,0.0
-spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.4083614821786243,685,45,0.008522727272727272,0.0
-spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.4083614821786243,685,50,0.005681818181818182,0.0
-white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.40158790408535944,435,1,0.012903225806451613,0.15483870967741936
-white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.40158790408535944,435,5,0.025806451612903226,0.0
-white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.40158790408535944,435,10,0.025806451612903226,0.0
-white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.40158790408535944,435,15,0.025806451612903226,0.0
-white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.40158790408535944,435,20,0.025806451612903226,0.0
-white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.40158790408535944,435,25,0.025806451612903226,0.0
-white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.40158790408535944,435,30,0.025806451612903226,0.0
-white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.40158790408535944,435,35,0.025806451612903226,0.0
-white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.40158790408535944,435,40,0.025806451612903226,0.0
-white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.40158790408535944,435,45,0.025806451612903226,0.0
-white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.40158790408535944,435,50,0.025806451612903226,0.0
+species,catalog,catalog_id,p,N,matches_checked,FR,FA,cost
+beluga,Belugas-Cook-Inlet,beluga-0,0.720676614,109,1,0.083185841,0.172566372,1130
+beluga,Belugas-Cook-Inlet,beluga-0,0.720676614,109,5,0.178761062,0,2148
+beluga,Belugas-Cook-Inlet,beluga-0,0.720676614,109,10,0.137168142,0,3046
+beluga,Belugas-Cook-Inlet,beluga-0,0.720676614,109,15,0.114159292,0,3776
+beluga,Belugas-Cook-Inlet,beluga-0,0.720676614,109,20,0.098230088,0,4387
+beluga,Belugas-Cook-Inlet,beluga-0,0.720676614,109,25,0.087610619,0,4921
+beluga,Belugas-Cook-Inlet,beluga-0,0.720676614,109,30,0.07699115,0,5386
+beluga,Belugas-Cook-Inlet,beluga-0,0.720676614,109,35,0.072566372,0,5811
+beluga,Belugas-Cook-Inlet,beluga-0,0.720676614,109,40,0.07079646,0,6218
+beluga,Belugas-Cook-Inlet,beluga-0,0.720676614,109,45,0.06460177,0,6601
+beluga,Belugas-Cook-Inlet,beluga-0,0.720676614,109,50,0.062831858,0,6959
+beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607458,2029,1,0.069052103,0.096672944,3186
+beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607458,2029,5,0.095731325,0,4873
+beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607458,2029,10,0.072504708,0,6223
+beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607458,2029,15,0.061833019,0,7310
+beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607458,2029,20,0.054927809,0,8246
+beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607458,2029,25,0.051161331,0,9101
+beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607458,2029,30,0.048022599,0,9904
+beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607458,2029,35,0.04519774,0,10650
+beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607458,2029,40,0.043000628,0,11354
+beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607458,2029,45,0.041117389,0,12022
+beluga,GREMM_BELUGA_ID_PHOTOS,beluga-1,0.459607458,2029,50,0.039548023,0,12672
+blue_whale,Blue-Whales-Chile,blue_whale-0,0.404972867,1288,1,0.17211704,0.149741824,581
+blue_whale,Blue-Whales-Chile,blue_whale-0,0.404972867,1288,5,0.142857143,0,1086
+blue_whale,Blue-Whales-Chile,blue_whale-0,0.404972867,1288,10,0.115318417,0,1462
+blue_whale,Blue-Whales-Chile,blue_whale-0,0.404972867,1288,15,0.092943201,0,1767
+blue_whale,Blue-Whales-Chile,blue_whale-0,0.404972867,1288,20,0.08605852,0,2029
+blue_whale,Blue-Whales-Chile,blue_whale-0,0.404972867,1288,25,0.079173838,0,2270
+blue_whale,Blue-Whales-Chile,blue_whale-0,0.404972867,1288,30,0.074010327,0,2497
+blue_whale,Blue-Whales-Chile,blue_whale-0,0.404972867,1288,35,0.072289157,0,2708
+blue_whale,Blue-Whales-Chile,blue_whale-0,0.404972867,1288,40,0.063683305,0,2912
+blue_whale,Blue-Whales-Chile,blue_whale-0,0.404972867,1288,45,0.058519793,0,3088
+blue_whale,Blue-Whales-Chile,blue_whale-0,0.404972867,1288,50,0.051635112,0,3251
+blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.404298577,4516,1,0.191596639,0.11092437,595
+blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.404298577,4516,5,0.183193277,0,1172
+blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.404298577,4516,10,0.149579832,0,1665
+blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.404298577,4516,15,0.134453782,0,2080
+blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.404298577,4516,20,0.127731092,0,2470
+blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.404298577,4516,25,0.122689076,0,2848
+blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.404298577,4516,30,0.122689076,0,3213
+blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.404298577,4516,35,0.119327731,0,3572
+blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.404298577,4516,40,0.112605042,0,3921
+blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.404298577,4516,45,0.112605042,0,4256
+blue_whale,Cascadia-BlueWhales-new,blue_whale-1,0.404298577,4516,50,0.112605042,0,4591
+bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.740514387,352,1,0.016246111,0.047010024,2893
+bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.740514387,352,5,0.040442447,0.000345662,3511
+bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.740514387,352,10,0.030763913,0,4031
+bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.740514387,352,15,0.02661597,0,4446
+bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.740514387,352,20,0.024196336,0,4818
+bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.740514387,352,25,0.02315935,0,5163
+bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.740514387,352,30,0.021776702,0,5489
+bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.740514387,352,35,0.020394055,0,5792
+bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.740514387,352,40,0.019702731,0,6083
+bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.740514387,352,45,0.019357069,0,6368
+bottlenose_dolphin,Bottlenose-Dolphin-Aberdeen,bottlenose_dolphin-0,0.740514387,352,50,0.018665745,0,6644
+bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.412497238,193,1,0.059322034,0.025423729,118
+bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.412497238,193,5,0.033898305,0,143
+bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.412497238,193,10,0.016949153,0,158
+bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.412497238,193,15,0.008474576,0,166
+bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.412497238,193,20,0.008474576,0,171
+bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.412497238,193,25,0.008474576,0,176
+bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.412497238,193,30,0.008474576,0,181
+bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.412497238,193,35,0,0,186
+bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.412497238,193,40,0,0,186
+bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.412497238,193,45,0,0,186
+bottlenose_dolphin,Bottlenose-Dolphin-Tilen,bottlenose_dolphin-1,0.412497238,193,50,0,0,186
+bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.435756483,667,1,0.008333333,0.026388889,720
+bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.435756483,667,5,0.015277778,0,791
+bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.435756483,667,10,0.013888889,0,846
+bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.435756483,667,15,0.009722222,0,888
+bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.435756483,667,20,0.009722222,0,923
+bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.435756483,667,25,0.009722222,0,958
+bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.435756483,667,30,0.009722222,0,993
+bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.435756483,667,35,0.009722222,0,1028
+bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.435756483,667,40,0.009722222,0,1063
+bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.435756483,667,45,0.009722222,0,1098
+bottlenose_dolphin,Kaggle-Sarasota dolphins,bottlenose_dolphin-2,0.435756483,667,50,0.009722222,0,1133
+bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.429623979,519,1,0.011928429,0.045725646,503
+bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.429623979,519,5,0.013916501,0,558
+bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.429623979,519,10,0.011928429,0,590
+bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.429623979,519,15,0.011928429,0,620
+bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.429623979,519,20,0.011928429,0,650
+bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.429623979,519,25,0.011928429,0,680
+bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.429623979,519,30,0.011928429,0,710
+bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.429623979,519,35,0.011928429,0,740
+bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.429623979,519,40,0.011928429,0,770
+bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.429623979,519,45,0.011928429,0,800
+bottlenose_dolphin,PWF-Bottlenose Dolphins,bottlenose_dolphin-3,0.429623979,519,50,0.011928429,0,830
+brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.430749141,102,1,0.039215686,0.078431373,102
+brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.430749141,102,5,0.049019608,0,134
+brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.430749141,102,10,0.039215686,0,155
+brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.430749141,102,15,0.019607843,0,174
+brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.430749141,102,20,0.019607843,0,184
+brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.430749141,102,25,0.019607843,0,194
+brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.430749141,102,30,0.019607843,0,204
+brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.430749141,102,35,0.019607843,0,214
+brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.430749141,102,40,0.019607843,0,224
+brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.430749141,102,45,0.019607843,0,234
+brydes_whale,Brydes-Whales-Brazil,brydes_whale-0,0.430749141,102,50,0.019607843,0,244
+commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.403121013,173,1,0.051282051,0.205128205,78
+commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.403121013,173,5,0.025641026,0,115
+commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.403121013,173,10,0.012820513,0,121
+commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.403121013,173,15,0.012820513,0,126
+commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.403121013,173,20,0,0,131
+commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.403121013,173,25,0,0,131
+commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.403121013,173,30,0,0,131
+commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.403121013,173,35,0,0,131
+commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.403121013,173,40,0,0,131
+commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.403121013,173,45,0,0,131
+commersons_dolphin,Commersons-Dolphins,commersons_dolphin-0,0.403121013,173,50,0,0,131
+common_dolphin,Common-Dolphins,common_dolphin-0,0.498789874,76,1,0.046391753,0.134020619,194
+common_dolphin,Common-Dolphins,common_dolphin-0,0.498789874,76,5,0.103092784,0,310
+common_dolphin,Common-Dolphins,common_dolphin-0,0.498789874,76,10,0.067010309,0,391
+common_dolphin,Common-Dolphins,common_dolphin-0,0.498789874,76,15,0.06185567,0,453
+common_dolphin,Common-Dolphins,common_dolphin-0,0.498789874,76,20,0.056701031,0,513
+common_dolphin,Common-Dolphins,common_dolphin-0,0.498789874,76,25,0.056701031,0,568
+common_dolphin,Common-Dolphins,common_dolphin-0,0.498789874,76,30,0.051546392,0,623
+common_dolphin,Common-Dolphins,common_dolphin-0,0.498789874,76,35,0.051546392,0,673
+common_dolphin,Common-Dolphins,common_dolphin-0,0.498789874,76,40,0.051546392,0,723
+common_dolphin,Common-Dolphins,common_dolphin-0,0.498789874,76,45,0.046391753,0,769
+common_dolphin,Common-Dolphins,common_dolphin-0,0.498789874,76,50,0.046391753,0,814
+cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.416434916,439,1,0.079691517,0.334190231,389
+cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.416434916,439,5,0.074550129,0,687
+cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.416434916,439,10,0.048843188,0,808
+cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.416434916,439,15,0.041131105,0,896
+cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.416434916,439,20,0.035989717,0,968
+cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.416434916,439,25,0.030848329,0,1031
+cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.416434916,439,30,0.028277635,0,1089
+cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.416434916,439,35,0.028277635,0,1144
+cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.416434916,439,40,0.025706941,0,1199
+cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.416434916,439,45,0.023136247,0,1245
+cuviers_beaked_whale,ZicaMachineLearning,cuviers_beaked_whale-0,0.416434916,439,50,0.023136247,0,1290
+dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,1,0.082173913,0.148695652,2300
+dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,5,0.068695652,0.000869565,3436
+dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,10,0.057826087,0,4175
+dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,15,0.05173913,0,4815
+dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,20,0.048695652,0,5397
+dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,25,0.046521739,0,5946
+dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,30,0.045217391,0,6479
+dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,35,0.043043478,0,6989
+dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,40,0.043043478,0,7484
+dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,45,0.042173913,0,7975
+dusky_dolphin,Dusky-Dolphins,dusky_dolphin-0,0.4,6827,50,0.04173913,0,8460
+false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.413507986,29,1,0.05,0.05,20
+false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.413507986,29,5,0.05,0,27
+false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.413507986,29,10,0,0,32
+false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.413507986,29,15,0,0,32
+false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.413507986,29,20,0,0,32
+false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.413507986,29,25,0,0,32
+false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.413507986,29,30,0,0,32
+false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.413507986,29,35,0,0,32
+false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.413507986,29,40,0,0,32
+false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.413507986,29,45,0,0,32
+false_killer_whale,AET-False Killer Whales,false_killer_whale-0,0.413507986,29,50,0,0,32
+false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,1,0.009499683,0.022165928,1579
+false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,5,0.027865738,0,1769
+false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,10,0.025965801,0,1979
+false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,15,0.024699177,0,2181
+false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,20,0.024699177,0,2376
+false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,25,0.024699177,0,2571
+false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,30,0.024065864,0,2762
+false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,35,0.024065864,0,2952
+false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,40,0.02279924,0,3139
+false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,45,0.02279924,0,3319
+false_killer_whale,False killer Whale-New Zealand,false_killer_whale-1,0.8,116,50,0.022165928,0,3496
+false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.416525296,218,1,0.006802721,0.034013605,147
+false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.416525296,218,5,0.013605442,0,162
+false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.416525296,218,10,0.006802721,0,170
+false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.416525296,218,15,0.006802721,0,175
+false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.416525296,218,20,0.006802721,0,180
+false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.416525296,218,25,0.006802721,0,185
+false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.416525296,218,30,0.006802721,0,190
+false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.416525296,218,35,0.006802721,0,195
+false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.416525296,218,40,0.006802721,0,200
+false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.416525296,218,45,0.006802721,0,205
+false_killer_whale,PWF-False Killer Whales,false_killer_whale-2,0.416525296,218,50,0.006802721,0,210
+fin_whale,BpMachineLearning,fin_whale-0,0.421744902,1104,1,0.07859734,0.108827086,827
+fin_whale,BpMachineLearning,fin_whale-0,0.421744902,1104,5,0.062877872,0,1202
+fin_whale,BpMachineLearning,fin_whale-0,0.421744902,1104,10,0.047158404,0,1421
+fin_whale,BpMachineLearning,fin_whale-0,0.421744902,1104,15,0.036275695,0,1598
+fin_whale,BpMachineLearning,fin_whale-0,0.421744902,1104,20,0.030229746,0,1740
+fin_whale,BpMachineLearning,fin_whale-0,0.421744902,1104,25,0.029020556,0,1862
+fin_whale,BpMachineLearning,fin_whale-0,0.421744902,1104,30,0.025392987,0,1978
+fin_whale,BpMachineLearning,fin_whale-0,0.421744902,1104,35,0.022974607,0,2076
+fin_whale,BpMachineLearning,fin_whale-0,0.421744902,1104,40,0.021765417,0,2167
+fin_whale,BpMachineLearning,fin_whale-0,0.421744902,1104,45,0.020556227,0,2257
+fin_whale,BpMachineLearning,fin_whale-0,0.421744902,1104,50,0.020556227,0,2342
+gray_whale,Gray-Whales,gray_whale-0,0.462349061,400,1,0.099688474,0.115264798,642
+gray_whale,Gray-Whales,gray_whale-0,0.462349061,400,5,0.151090343,0,1111
+gray_whale,Gray-Whales,gray_whale-0,0.462349061,400,10,0.130841121,0,1570
+gray_whale,Gray-Whales,gray_whale-0,0.462349061,400,15,0.121495327,0,1972
+gray_whale,Gray-Whales,gray_whale-0,0.462349061,400,20,0.115264798,0,2356
+gray_whale,Gray-Whales,gray_whale-0,0.462349061,400,25,0.112149533,0,2724
+gray_whale,Gray-Whales,gray_whale-0,0.462349061,400,30,0.105919003,0,3078
+gray_whale,Gray-Whales,gray_whale-0,0.462349061,400,35,0.101246106,0,3409
+gray_whale,Gray-Whales,gray_whale-0,0.462349061,400,40,0.098130841,0,3727
+gray_whale,Gray-Whales,gray_whale-0,0.462349061,400,45,0.095015576,0,4039
+gray_whale,Gray-Whales,gray_whale-0,0.462349061,400,50,0.093457944,0,4340
+humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.407486041,358,1,0.090909091,0.177033493,209
+humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.407486041,358,5,0.052631579,0,316
+humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.407486041,358,10,0.028708134,0,360
+humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.407486041,358,15,0.028708134,0,390
+humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.407486041,358,20,0.028708134,0,420
+humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.407486041,358,25,0.028708134,0,450
+humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.407486041,358,30,0.028708134,0,480
+humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.407486041,358,35,0.028708134,0,510
+humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.407486041,358,40,0.023923445,0,537
+humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.407486041,358,45,0.023923445,0,562
+humpback_whale,Humpback-Dorsals-Australia,humpback_whale-0,0.407486041,358,50,0.023923445,0,587
+humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.421332784,6011,1,0.116704805,0.089016018,4370
+humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.421332784,6011,5,0.102745995,0,6925
+humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.421332784,6011,10,0.088100686,0,9029
+humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.421332784,6011,15,0.079633867,0,10868
+humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.421332784,6011,20,0.072997712,0,12548
+humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.421332784,6011,25,0.068421053,0,14106
+humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.421332784,6011,30,0.06590389,0,15581
+humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.421332784,6011,35,0.062242563,0,16995
+humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.421332784,6011,40,0.059954233,0,18338
+humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.421332784,6011,45,0.057665904,0,19627
+humpback_whale,Humpback-dorsals-Happywhale,humpback_whale-1,0.421332784,6011,50,0.055377574,0,20870
+killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.434957447,917,1,0.050761421,0.116751269,985
+killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.434957447,917,5,0.080203046,0,1451
+killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.434957447,917,10,0.068020305,0,1818
+killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.434957447,917,15,0.060913706,0,2135
+killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.434957447,917,20,0.056852792,0,2430
+killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.434957447,917,25,0.052791878,0,2704
+killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.434957447,917,30,0.05177665,0,2964
+killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.434957447,917,35,0.050761421,0,3218
+killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.434957447,917,40,0.050761421,0,3468
+killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.434957447,917,45,0.049746193,0,3714
+killer_whale,Killer-Whales-Antarctic-type-C,killer_whale-0,0.434957447,917,50,0.046700508,0,3953
+killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.559313729,130,1,0.005154639,0.02233677,582
+killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.559313729,130,5,0.015463918,0,633
+killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.559313729,130,10,0.008591065,0,670
+killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.559313729,130,15,0.008591065,0,695
+killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.559313729,130,20,0.008591065,0,720
+killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.559313729,130,25,0.008591065,0,745
+killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.559313729,130,30,0.008591065,0,770
+killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.559313729,130,35,0.008591065,0,795
+killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.559313729,130,40,0.008591065,0,820
+killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.559313729,130,45,0.006872852,0,842
+killer_whale,Killer-Whales-SW-Australia,killer_whale-1,0.559313729,130,50,0.006872852,0,862
+long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.41021785,319,1,0,0.053475936,187
+long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.41021785,319,5,0.021390374,0,214
+long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.41021785,319,10,0.021390374,0,234
+long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.41021785,319,15,0.021390374,0,254
+long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.41021785,319,20,0.021390374,0,274
+long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.41021785,319,25,0.021390374,0,294
+long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.41021785,319,30,0.021390374,0,314
+long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.41021785,319,35,0.021390374,0,334
+long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.41021785,319,40,0.021390374,0,354
+long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.41021785,319,45,0.021390374,0,374
+long_finned_pilot_whale,long-finned pilot whale-auckland-uni,long_finned_pilot_whale-0,0.41021785,319,50,0.021390374,0,394
+melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.401595897,3294,1,0.017485429,0.092422981,1201
+melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.401595897,3294,5,0.007493755,0,1378
+melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.401595897,3294,10,0.005828476,0,1421
+melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.401595897,3294,15,0.005828476,0,1456
+melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.401595897,3294,20,0.004995837,0,1489
+melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.401595897,3294,25,0.004995837,0,1519
+melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.401595897,3294,30,0.004995837,0,1549
+melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.401595897,3294,35,0.004163197,0,1577
+melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.401595897,3294,40,0.004163197,0,1602
+melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.401595897,3294,45,0.004163197,0,1627
+melon_headed_whale,Melon-headed Whales-Cascadia,melon_headed_whale-0,0.401595897,3294,50,0.004163197,0,1652
+minke_whale,Minke-Whale-Husavik,minke_whale-0,0.410358058,224,1,0.134920635,0.333333333,126
+minke_whale,Minke-Whale-Husavik,minke_whale-0,0.410358058,224,5,0.325396825,0,326
+minke_whale,Minke-Whale-Husavik,minke_whale-0,0.410358058,224,10,0.246031746,0,513
+minke_whale,Minke-Whale-Husavik,minke_whale-0,0.410358058,224,15,0.206349206,0,663
+minke_whale,Minke-Whale-Husavik,minke_whale-0,0.410358058,224,20,0.166666667,0,787
+minke_whale,Minke-Whale-Husavik,minke_whale-0,0.410358058,224,25,0.166666667,0,892
+minke_whale,Minke-Whale-Husavik,minke_whale-0,0.410358058,224,30,0.150793651,0,994
+minke_whale,Minke-Whale-Husavik,minke_whale-0,0.410358058,224,35,0.142857143,0,1087
+minke_whale,Minke-Whale-Husavik,minke_whale-0,0.410358058,224,40,0.134920635,0,1173
+minke_whale,Minke-Whale-Husavik,minke_whale-0,0.410358058,224,45,0.134920635,0,1258
+minke_whale,Minke-Whale-Husavik,minke_whale-0,0.410358058,224,50,0.126984127,0,1342
+minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.799420053,45,1,0.007177033,0.282296651,418
+minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.799420053,45,5,0.011961722,0.004784689,655
+minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.799420053,45,10,0.009569378,0,684
+minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.799420053,45,15,0.002392344,0,697
+minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.799420053,45,20,0.002392344,0,702
+minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.799420053,45,25,0,0,705
+minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.799420053,45,30,0,0,705
+minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.799420053,45,35,0,0,705
+minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.799420053,45,40,0,0,705
+minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.799420053,45,45,0,0,705
+minke_whale,Minke-Whale-Salish-Sea,minke_whale-1,0.799420053,45,50,0,0,705
+pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.425021041,56,1,0,0.020408163,49
+pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.425021041,56,5,0,0,51
+pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.425021041,56,10,0,0,51
+pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.425021041,56,15,0,0,51
+pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.425021041,56,20,0,0,51
+pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.425021041,56,25,0,0,51
+pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.425021041,56,30,0,0,51
+pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.425021041,56,35,0,0,51
+pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.425021041,56,40,0,0,51
+pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.425021041,56,45,0,0,51
+pygmy_killer_whale,AET-Pygmy Killer Whales,pygmy_killer_whale-0,0.425021041,56,50,0,0,51
+rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.404145124,113,1,0.210526316,0.087719298,57
+rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.404145124,113,5,0.175438596,0,106
+rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.404145124,113,10,0.157894737,0,153
+rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.404145124,113,15,0.157894737,0,198
+rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.404145124,113,20,0.140350877,0,239
+rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.404145124,113,25,0.122807018,0,277
+rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.404145124,113,30,0.105263158,0,308
+rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.404145124,113,35,0.105263158,0,338
+rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.404145124,113,40,0.105263158,0,368
+rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.404145124,113,45,0.105263158,0,398
+rough_toothed_dolphin,AET-Rough-toothed dolphin,rough_toothed_dolphin-0,0.404145124,113,50,0.105263158,0,428
+sei_whale,FC_SEI_WHALES,sei_whale-0,0.413052503,476,1,0.018050542,0.064981949,277
+sei_whale,FC_SEI_WHALES,sei_whale-0,0.413052503,476,5,0.025270758,0,333
+sei_whale,FC_SEI_WHALES,sei_whale-0,0.413052503,476,10,0.014440433,0,359
+sei_whale,FC_SEI_WHALES,sei_whale-0,0.413052503,476,15,0.007220217,0,372
+sei_whale,FC_SEI_WHALES,sei_whale-0,0.413052503,476,20,0.003610108,0,378
+sei_whale,FC_SEI_WHALES,sei_whale-0,0.413052503,476,25,0.003610108,0,383
+sei_whale,FC_SEI_WHALES,sei_whale-0,0.413052503,476,30,0,0,387
+sei_whale,FC_SEI_WHALES,sei_whale-0,0.413052503,476,35,0,0,387
+sei_whale,FC_SEI_WHALES,sei_whale-0,0.413052503,476,40,0,0,387
+sei_whale,FC_SEI_WHALES,sei_whale-0,0.413052503,476,45,0,0,387
+sei_whale,FC_SEI_WHALES,sei_whale-0,0.413052503,476,50,0,0,387
+short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.417045444,115,1,0.182926829,0.158536585,82
+short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.417045444,115,5,0.231707317,0,173
+short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.417045444,115,10,0.195121951,0,256
+short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.417045444,115,15,0.146341463,0,327
+short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.417045444,115,20,0.134146341,0,385
+short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.417045444,115,25,0.134146341,0,440
+short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.417045444,115,30,0.134146341,0,495
+short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.417045444,115,35,0.12195122,0,548
+short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.417045444,115,40,0.12195122,0,598
+short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.417045444,115,45,0.12195122,0,648
+short_finned_pilot_whale,AET-Globis,short_finned_pilot_whale-0,0.417045444,115,50,0.12195122,0,698
+short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.418687665,511,1,0.024074074,0.027777778,540
+short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.418687665,511,5,0.033333333,0,636
+short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.418687665,511,10,0.024074074,0,711
+short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.418687665,511,15,0.02037037,0,769
+short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.418687665,511,20,0.018518519,0,822
+short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.418687665,511,25,0.016666667,0,871
+short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.418687665,511,30,0.016666667,0,916
+short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.418687665,511,35,0.012962963,0,957
+short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.418687665,511,40,0.012962963,0,992
+short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.418687665,511,45,0.012962963,0,1027
+short_finned_pilot_whale,PIFSC Marianas short-finned pilot whales,short_finned_pilot_whale-1,0.418687665,511,50,0.012962963,0,1062
+short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.403199484,486,1,0.019417476,0.087378641,206
+short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.403199484,486,5,0.009708738,0,236
+short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.403199484,486,10,0.004854369,0,246
+short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.403199484,486,15,0.004854369,0,251
+short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.403199484,486,20,0.004854369,0,256
+short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.403199484,486,25,0.004854369,0,261
+short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.403199484,486,30,0.004854369,0,266
+short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.403199484,486,35,0.004854369,0,271
+short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.403199484,486,40,0.004854369,0,276
+short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.403199484,486,45,0.004854369,0,281
+short_finned_pilot_whale,PWF-Pilot Whales,short_finned_pilot_whale-2,0.403199484,486,50,0.004854369,0,286
+southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576895,1350,1,0.311746988,0.147590361,664
+southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576895,1350,5,0.218373494,0,1545
+southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576895,1350,10,0.155120482,0,2180
+southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576895,1350,15,0.134036145,0,2657
+southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576895,1350,20,0.115963855,0,3075
+southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576895,1350,25,0.106927711,0,3444
+southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576895,1350,30,0.097891566,0,3789
+southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576895,1350,35,0.094879518,0,4112
+southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576895,1350,40,0.09186747,0,4425
+southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576895,1350,45,0.084337349,0,4722
+southern_right_whale,Southern-Right-Whales-Johnston,southern_right_whale-0,0.406576895,1350,50,0.078313253,0,4997
+spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.497084236,42,1,0.027272727,0.081818182,110
+spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.497084236,42,5,0.054545455,0.009090909,152
+spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.497084236,42,10,0.036363636,0,177
+spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.497084236,42,15,0.027272727,0,196
+spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.497084236,42,20,0.009090909,0,207
+spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.497084236,42,25,0.009090909,0,212
+spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.497084236,42,30,0.009090909,0,217
+spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.497084236,42,35,0.009090909,0,222
+spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.497084236,42,40,0.009090909,0,227
+spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.497084236,42,45,0.009090909,0,232
+spinner_dolphin,Botlenose-Dolphin-Underwater,spinner_dolphin-0,0.497084236,42,50,0.009090909,0,237
+spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.407494359,746,1,0.037444934,0.035242291,454
+spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.407494359,746,5,0.039647577,0,553
+spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.407494359,746,10,0.039647577,0,643
+spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.407494359,746,15,0.039647577,0,733
+spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.407494359,746,20,0.039647577,0,823
+spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.407494359,746,25,0.039647577,0,913
+spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.407494359,746,30,0.039647577,0,1003
+spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.407494359,746,35,0.037444934,0,1091
+spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.407494359,746,40,0.037444934,0,1176
+spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.407494359,746,45,0.037444934,0,1261
+spinner_dolphin,PIFSC Marianas spinner dolphins,spinner_dolphin-1,0.407494359,746,50,0.037444934,0,1346
+spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.413029363,1421,1,0.032806804,0.077764277,823
+spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.413029363,1421,5,0.029161604,0,1027
+spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.413029363,1421,10,0.018226002,0,1127
+spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.413029363,1421,15,0.018226002,0,1202
+spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.413029363,1421,20,0.015795869,0,1274
+spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.413029363,1421,25,0.015795869,0,1339
+spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.413029363,1421,30,0.015795869,0,1404
+spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.413029363,1421,35,0.015795869,0,1469
+spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.413029363,1421,40,0.015795869,0,1534
+spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.413029363,1421,45,0.014580802,0,1596
+spinner_dolphin,PWF-Spinner Dolphins,spinner_dolphin-2,0.413029363,1421,50,0.014580802,0,1656
+spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.427423148,102,1,0.064516129,0.086021505,93
+spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.427423148,102,5,0.075268817,0,133
+spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.427423148,102,10,0.075268817,0,168
+spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.427423148,102,15,0.064516129,0,200
+spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.427423148,102,20,0.064516129,0,230
+spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.427423148,102,25,0.064516129,0,260
+spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.427423148,102,30,0.064516129,0,290
+spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.427423148,102,35,0.064516129,0,320
+spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.427423148,102,40,0.064516129,0,350
+spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.427423148,102,45,0.053763441,0,376
+spotted_dolphin,AET-Pantropical Spotted Dolphins,spotted_dolphin-0,0.427423148,102,50,0.043010753,0,397
+spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.408361482,685,1,0.019886364,0.144886364,352
+spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.408361482,685,5,0.011363636,0,459
+spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.408361482,685,10,0.011363636,0,479
+spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.408361482,685,15,0.011363636,0,499
+spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.408361482,685,20,0.011363636,0,519
+spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.408361482,685,25,0.011363636,0,539
+spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.408361482,685,30,0.011363636,0,559
+spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.408361482,685,35,0.011363636,0,579
+spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.408361482,685,40,0.008522727,0,599
+spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.408361482,685,45,0.008522727,0,614
+spotted_dolphin,PWF-Spotted Dolphins,spotted_dolphin-1,0.408361482,685,50,0.005681818,0,625
+white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.401587904,435,1,0.012903226,0.15483871,155
+white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.401587904,435,5,0.025806452,0,198
+white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.401587904,435,10,0.025806452,0,218
+white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.401587904,435,15,0.025806452,0,238
+white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.401587904,435,20,0.025806452,0,258
+white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.401587904,435,25,0.025806452,0,278
+white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.401587904,435,30,0.025806452,0,298
+white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.401587904,435,35,0.025806452,0,318
+white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.401587904,435,40,0.025806452,0,338
+white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.401587904,435,45,0.025806452,0,358
+white_sided_dolphin,Pacific White-sided Dolphin,white_sided_dolphin-0,0.401587904,435,50,0.025806452,0,378

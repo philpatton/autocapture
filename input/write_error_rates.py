@@ -18,10 +18,20 @@ def main():
     mapping = read_mapping(map_path)
 
     # add in the submission results
-    submission_path = f'input/submissions/rist-100.csv'
+    submission_path = f'input/submissions/rist-1000.csv'
     submission = pd.read_csv(submission_path)
 
-    rates = get_rates(submission, mapping, PRED_COUNT)
+    # merge the results and mapping
+    results = merge_results(submission, mapping)
+
+    # get rates
+    rates = get_rates(results, PRED_COUNT)
+
+    # get cost
+    cost = get_cost(results, PRED_COUNT)
+
+    # merge cost with rates
+    rates = rates.merge(cost)
 
     # get metadata
     folder_specs = get_folder_specs(mapping, p_max=P_MAX, p_min=P_MIN)
@@ -61,8 +71,7 @@ def read_mapping(map_path):
 
     return mapping
 
-def get_rates(submission, mapping, pred_count):
-    """calculate error rates for each folder"""
+def merge_results(submission, mapping):
 
     # rename and subset columns for easy merging
     submission.columns = ['image', 'predictions']
@@ -71,6 +80,11 @@ def get_rates(submission, mapping, pred_count):
 
     # merge
     results = results.merge(submission)
+
+    return results
+
+def get_rates(results, pred_count):
+    """calculate error rates for each folder"""
 
     # results['new_individual_id'] = replace_bad_ids(results)
 
@@ -111,12 +125,56 @@ def get_rates(submission, mapping, pred_count):
     
     # concatenate data frames
     rates = (
-        pd.concat(ctl)[['catalog','matches_checked','FR','FA']]
+        pd.concat(ctl)[['catalog', 'matches_checked','FR','FA']]
           .sort_values(['catalog', 'matches_checked'])
           .reset_index(drop=True)
     )
     
     return rates 
+
+def get_cost(results, pred_count):
+
+    # # add in the label indices
+    results['label_idx'] = get_label_index(results)
+
+    ll = []
+    for a in pred_count: 
+
+        l = np.where(
+            results.label_idx < a,
+            results.label_idx + 1,
+            a
+        )
+
+        tmp_df = results.copy()
+        tmp_df['cost'] = l
+        tmp_df['matches_checked'] = a
+        
+        tmp_df = tmp_df.groupby(['catalog', 'matches_checked'])['cost'].sum().reset_index()
+        # tmp_df['action'] = a
+        ll.append(tmp_df)
+
+    cost = pd.concat(ll)
+
+    return cost.sort_values(['catalog', 'matches_checked'])
+
+def get_label_index(results):
+    '''Extracts the location of the true label in the list of predictions.'''
+    
+    label_idx = []
+    for row in results.itertuples():
+        preds = row.predictions.split(' ')
+        test = index_mod(preds, row.id)
+        label_idx.append(test)
+
+    return label_idx
+
+def index_mod(l, value):
+    '''Same as list.index(), except returns len(list) on error.'''
+    try:
+        return l.index(value)
+    except ValueError:
+        return len(l)
 
 def replace_bad_ids(results):
     
