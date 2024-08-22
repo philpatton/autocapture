@@ -1,42 +1,47 @@
-# Code for Patton et al. (TBD) 
+# Simulating capture histories, and estimating paramters, under misidentification
 
-Code to recreate analysis in Patton et al. (TBD) *Mitigating downstream effects of automated photo--identification on capture--recapture estimators.* 
+Code to recreate analysis *Evaluating tradeoffs between automation and bias in population assessments relying on photo-identification.* 
 
 ## Simulation
 
 The simulation proceeds in three general steps.
 
-1. Simulate capture histories using a POPAN model, e.g., using `src.popan.POPAN().simulate()`.
-2. Corrupt capture histories with misidentification error, e.g., using `src.miss_id.MissID`.
-3. Estimate demographic parameters by training capture-recapture models, e.g., using `src.popan.POPAN().estimate()`.
+1. Simulate capture histories using a POPAN model. 
+2. Corrupt capture histories with misidentification error, using predetermined rates.
+3. Estimate demographic parameters by fitting capture-recapture models to the corrupted histories.
 
 ### Configuration
 
-Before tackling any of the above tasks, you may need to write the configs. To do so, use `src.config` script, specifying a scenario. The scenario dictates the error rate for a given catalog. 
+Users can provide their own configs (TODO: Improve documentation for this process). To recreate the results from the paper, run the following commands. This will create `.yaml` files in the the `config` directory. 
 
 ```
-python -m src.config --scenario fully
-python -m src.config --scenario semi5
+python -m src.config 
 ```
 
 ### Simulating capture histories
 
-The `src.simulate` script accomplishes tasks #1 and #2 above for a given scenario. In the example below, we simulate data for two scenarios: "fully" and "semi5"
+The `src.simulate` script accomplishes tasks #1 and #2 above for a given strategy. The following command runs the simulate script.
 
 ```
-python -m src.simulate --scenario fully
-python -m src.simulate --scenario semi5
+python -m src.simulate --strategy check_0
+python -m src.simulate --strategy check_5
+...
+python -m src.simulate --strategy check_25
+
 ```
 
-The script uses the `src.popan.POPAN` class and its `simulate()` function for task #1. For task #2, it uses the `src.miss_id.MissID` class. By default, simulates 100 replicates for each of the 39 catalogs in a given scenario. 
+The script uses the `POPAN` class, from the `model` module, and its `simulate()` function to simulate a capture history. Then it corrupts the history with misidentifications, using the `MissID` class from the `miss_id` module. By default, `simulate` simulates 100 replicates for dataset in a given strategy. 
 
 ### Estimating demographic parameters
 
-The `src.estimate` script accomplishes task #3 above for a given scenario and model. It relies on the `src.popan.POPAN()` class and its `estimate()` function. 
+The `src.estimate` script accomplishes task #3 above for a given scenario and model. It relies on the `POPAN` class, from the `model` module, and its `estimate()` function. 
 
 ```
-python -m src.estimate --scenario fully --model cjs
-python -m src.estimate --scenario semi5 --model cjs
+python -m src.estimate --strategy check_0
+python -m src.estimate --strategy check_5
+...
+python -m src.estimate --strategy check_25
+
 ```
 
-Models are trained using PyMC code adapted from [Austin Rochford](https://austinrochford.com/posts/2018-01-31-capture-recapture.html) 
+The parameters are estimated using PyMC. 

@@ -1,4 +1,4 @@
-"""Simulates trial_count datasets for 39 catalogs for a scenario
+"""Simulates trial_count datasets for 39 catalogs for a strategy
 
 Various functions that wrap around the actual simulation code, which can be 
 found in cjs.py or popan.py. 
@@ -11,14 +11,14 @@ import logging
 import numpy as np
 import pandas as pd
 
-from src.popan import POPAN
-from src.cjs import CJS
+from src.model import POPAN, CJS
 from src.miss_id import MissID
-from config.config import Config, load_config
+from config.config import load_config
 
 def parse():
-    parser = argparse.ArgumentParser(description="Simulating scenario")
-    parser.add_argument('-s', "--scenario", default="debug")
+    '''Parses arguments from the command line'''
+    parser = argparse.ArgumentParser(description="Simulating strategy")
+    parser.add_argument('-s', "--strategy", default="debug")
     parser.add_argument('-e', '--estimator', default='popan')
     return parser.parse_args()
 
@@ -40,27 +40,27 @@ def main():
     rates = pd.read_csv('input/rates.csv')
     catalog_ids = rates.catalog_id.unique()
 
-    # only simulate debug catalog in debug scenario
-    if args.scenario == 'debug':
-        simulate_catalog(args.estimator, args.scenario, catalog='debug')
+    # only simulate debug catalog in debug strategy
+    if args.strategy == 'debug':
+        simulate_catalog(args.estimator, args.strategy, catalog='debug')
 
     # otherwise, simulate all the other catalogs
     else:
         for catalog in catalog_ids:
             print(f'Simulating {catalog}')
-            simulate_catalog(args.estimator, args.scenario, catalog)
+            simulate_catalog(args.estimator, args.strategy, catalog)
 
     return None
 
-def simulate_catalog(estimator, scenario, catalog):
-    """Simulate 100 datasets for a given catalog and scenario."""
+def simulate_catalog(estimator, strategy, catalog):
+    """Simulate 100 datasets for a given catalog and strategy."""
 
-    # load the cfg for the scenario/catalog
+    # load the cfg for the strategy/catalog
     config_path = f'config/catalogs/{catalog}.yaml'
     cfg = load_config(config_path, "config/default.yaml")
 
-    # don't overwrite, unless we're writing the debug scenario 
-    catalog_dir =  f'sim_data/{scenario}/{catalog}'
+    # don't overwrite, unless we're writing the debug strategy 
+    catalog_dir =  f'sim_data/{strategy}/{catalog}'
     if os.path.isdir(catalog_dir):
         if catalog != 'debug':
             raise NameError(f'Directory: {catalog_dir} already exists.')
@@ -74,9 +74,9 @@ def simulate_catalog(estimator, scenario, catalog):
     # entrance probabilities - constant except for b0 
     b = np.array(cfg.b)
 
-    alpha = cfg[scenario]['alpha']
-    beta = cfg[scenario]['beta']
-    gamma = cfg[scenario]['gamma']
+    alpha = cfg[strategy]['alpha']
+    beta = cfg[strategy]['beta']
+    gamma = cfg[strategy]['gamma']
 
     # init the misidentification class 
     mi = MissID(alpha=alpha, beta=beta, gamma=gamma)
@@ -114,7 +114,7 @@ def simulate_catalog(estimator, scenario, catalog):
     settings = {'N': cfg.N, 'b': b, 'phi': cfg.phi, 'p': cfg.p, 
                 'alpha': alpha, 'beta': beta, 'gamma': gamma}       
     dumped = json.dumps(settings, cls=NumpyEncoder)
-    path = f'sim_data/{scenario}/{catalog}/catalog_settings.json'
+    path = f'sim_data/{strategy}/{catalog}/catalog_settings.json'
     with open(path, 'w') as f:
         json.dump(dumped, f)
 

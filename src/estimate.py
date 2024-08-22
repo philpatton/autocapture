@@ -1,73 +1,89 @@
-import numpy as np 
+"""Estimate parameters using PyMC.
+
+Estimate parameters using PyMC, for all datasets under a given 
+strategy or strategy.
+
+Typical usage example:
+
+  foo = ClassFoo()
+  bar = foo.FunctionBar()
+"""
+
+from multiprocessing import Pool, cpu_count
+
+import json
+import argparse
+import os
+import logging
+
+import numpy as np
 import pymc as pm
 import pandas as pd
 
-import json 
-import argparse
-import os 
-import logging
-from multiprocessing import Pool, cpu_count
-
-from config.config import load_config, Config
-from src.popan import POPAN
-from src.cjs import CJS
+from config.config import load_config
+from src.model import POPAN, CJS
 
 def parse():
+    '''Parse arguments from the command line.'''
     parser = argparse.ArgumentParser(description="Estimating Jolly-Seber")
-    parser.add_argument('-s', "--scenario", default="test")
-    parser.add_argument('-e', "--estimator", default="popan")
+    parser.add_argument('-s', "--strategy", default="test")
+    parser.add_argument('-e', "--model", default="popan")
     return parser.parse_args()
 
 def main():
-
+    '''Estimate all the datasets under a given strategy.'''
     args = parse()
 
+    # add a directory for the output 
     if not os.path.isdir('results'):
         os.mkdir('results')
 
-    # TODO: Figure out logging 
-    logging.basicConfig(filename=f'results/{args.scenario}.log')
+    # TODO: Improve logging 
+    logging.basicConfig(filename=f'results/{args.strategy}.log')
 
+    # read in the dataset information
     rates = pd.read_csv('input/rates.csv')
-    catalog_ids = rates.catalog_id.unique()
+    dataset_ids = rates.catalog_id.unique()
 
-    if args.scenario == 'debug':
+    # there are some quirks about the debug strategy, 
+    # making it helpful for quick runs 
+    if args.strategy == 'debug':
 
-        catalog = Catalog('debug', scenario='debug', estimator=args.estimator)
+        dataset = Dataset('debug', strategy='debug', model=args.model)
         results_dir =  'results/debug/debug'
         os.makedirs(results_dir, exist_ok=True)
-        catalog.estimate()
+        dataset.estimate()
 
+    # estimate parameters for each catalgog
     else:
-        for catalog in catalog_ids:
+        for dataset in dataset_ids:
 
             # create dir for results if not there
-            results_dir =  f'results/{args.scenario}/{catalog}'
+            results_dir =  f'results/{args.strategy}/{dataset}'
             if not os.path.isdir(results_dir):
                 os.makedirs(results_dir)
 
-            cat = Catalog(catalog, scenario=args.scenario, 
-                          estimator=args.estimator)
-            cat.estimate()
+            # Estimate the paramaters for the dataset
+            dataset = Dataset(dataset, strategy=args.strategy, model=args.model)
+            dataset.estimate()
 
             # break
 
-    return None
-
-class Catalog:
-
-    def __init__(self, catalog, scenario, estimator) -> None:
-        self.estimator = estimator
-        self.scenario = scenario
-        self.catalog = catalog
-        self.data_dir = f'sim_data/{scenario}/{catalog}'
-        self.results_dir = f'results/{scenario}/{catalog}/'
-        self.config_path  = f'config/catalogs/{catalog}.yaml'
+class Dataset:
+    '''Convenience class for estimating parameters '''
+    def __init__(self, dataset, strategy, model) -> None:
+        self.model = model
+        self.strategy = strategy
+        self.dataset = dataset
+        self.data_dir = f'sim_data/{strategy}/{dataset}'
+        self.results_dir = f'results/{strategy}/{dataset}/'
+        self.config_path  = f'config/datasets/{dataset}.yaml'
     
     def estimate(self): 
+        '''Use PyMC to estimate parameters for every trial for the dataset.'''
 
-        logging.info(f'Estimating {self.catalog}...')
-        print(f'Estimating {self.catalog}...')
+        logging.info(f'Estimating {self.dataset}...')
+        print(f'Estimating {self.dataset}...')
 
         cfg = load_config(self.config_path, "config/default.yaml")
 
@@ -75,7 +91,7 @@ class Catalog:
         files = [f'{self.data_dir}/trial_{t}.json' for t in range(cfg.trial_count)]
         file_existence = [os.path.isfile(f) for f in files]
         if not all(file_existence):
-            e = f'{self.ata_dir} missing data for each trial in {cfg.trial_count}'
+            e = f'{self.data_dir} missing data for each trial in {cfg.trial_count}'
             raise OSError(e) 
 
         # find paths to trials that have already been completed 
@@ -92,10 +108,10 @@ class Catalog:
             all_trials = range(cfg.trial_count)
             remaining_trials = [t for t in all_trials if t not in completed_trials]
 
-            print(f'Remaing trials for {self.catalog} are {remaining_trials}')
+            print(f'Remaing trials for {self.dataset} are {remaining_trials}')
 
         if not remaining_trials:
-            return print(f'All trials for {self.catalog} already completed.')  
+            return print(f'All trials for {self.dataset} already completed.')  
 
         # arguments for mcmc sampler
         self.sample_kwargs = {
@@ -110,11 +126,9 @@ class Catalog:
         with Pool(counts) as p:
             p.map(self.run_trial, remaining_trials)
 
-        return None
-
     def run_trial(self, trial):
-        
-        print(f'Sampling for trial {trial} of {self.scenario}...')
+        '''Use PyMC to estimate parameters for the trial.'''
+        print(f'Sampling for trial {trial} of {self.strategy}...')
 
         # load in capture history
         trial_path = f'{self.data_dir}/trial_{trial}.json'
@@ -124,24 +138,24 @@ class Catalog:
         # summarize history for js model
         capture_history = np.asarray(trial_results["capture_history"])
 
-        # mcmc sampling 
-        idata = sample_model(self.estimator, capture_history, self.sample_kwargs)
+        # mcmc sampling
+        idata = sample_model(self.model, capture_history, self.sample_kwargs)
 
         # dump results to json
         path = f'{self.results_dir}/trial_{trial}.json'
         idata.to_json(path)
     
-def sample_model(estimator, capture_history, SAMPLE_KWARGS):
-
+def sample_model(model, capture_history, SAMPLE_KWARGS):
+    '''Wrapper for sampling a model.'''
     # estimate N, p, phi, and b from capture history 
-    if estimator == 'popan':
+    if model == 'popan':
         popan = POPAN()
         model = popan.compile_pymc_model(capture_history)
-    elif estimator == 'cjs':
+    elif model == 'cjs':
         cjs = CJS()
         model = cjs.compile_pymc_model(capture_history)
     else:
-        raise ValueError('estimator must be "popan" or "cjs"')
+        raise ValueError('model must be "popan" or "cjs"')
 
     # sample from model
     with model:
@@ -149,13 +163,11 @@ def sample_model(estimator, capture_history, SAMPLE_KWARGS):
     
     return idata
 
-
 def extract_trial_number(path):
     """Extracts trial integer from 'resuts/test/beluga-0/trial_17.json'"""
     number_extension = path.split('trial_')[1]
     number = int(number_extension.split('.')[0])
     return number
-
 
 if __name__ == '__main__':
     main()

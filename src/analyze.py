@@ -1,60 +1,84 @@
+"""Module for summarizing the output of the simlulation.
+
+Leave one blank line.  The rest of this docstring should contain an
+overall description of the module or program.  Optionally, it may also
+contain a brief description of exported classes and functions and/or usage
+examples.
+
+Typical usage example:
+
+  foo = ClassFoo()
+  bar = foo.FunctionBar()
+"""
+
+from multiprocessing import Pool, cpu_count
+
+import argparse
+import json
+
 import numpy as np
 import arviz as az
 import pandas as pd
 
-import argparse
-import os
-import json
-import time 
-
-from multiprocessing import Pool, cpu_count
-
-from config.config import load_config, Config
-from src.cjs import CJS
-from src.popan import POPAN
+from config.config import load_config
+from src.model import CJS, POPAN
 
 def parse():
+    '''Parse command line arguments.'''
     parser = argparse.ArgumentParser(description="Analyzing results")
-    parser.add_argument('-s', "--scenario", default="test")
+    parser.add_argument('-s', "--strategy", default="test")
     parser.add_argument('-e', "--estimator", default="popan")
     return parser.parse_args()
 
-def analyze_scenario():
-
+def analyze_strategy():
+    '''Summarize the results of a strategy.'''
     args = parse()
 
+    # read in the dataset metadata 
     rates = pd.read_csv('input/rates.csv')
-    catalog_ids = rates.catalog_id.unique()
+    dataset_ids = rates.catalog_id.unique()
+
+    # for every dataset in the strategy
+    dataset_list = []
+    for dataset in dataset_ids:
+
+        cat = Dataset(dataset, strategy=args.strategy, estimator=args.estimator)
+
+        # analyze the output       
+        dataset_results = cat.analyze()
+        dataset_list.append(dataset_results)
+
+    # combine datasets into strategy level results
+    strategy_results = pd.concat(dataset_list)
+    strategy_results['strategy'] = args.strategy
+
+    # save to output
+    out_path = f'results/{args.strategy}/{args.strategy}-summary.csv'
+    strategy_results.to_csv(out_path)
+
+class Dataset:
+    '''Analyze a dataset.
     
-    catalog_list = []
-    for catalog in catalog_ids:
-
-        cat = Catalog(catalog, scenario=args.scenario, estimator=args.estimator)
-        
-        catalog_results = cat.analyze()
-        catalog_list.append(catalog_results)
-
-    scenario_results = pd.concat(catalog_list)
-    scenario_results['scenario'] = args.scenario
-
-    out_path = f'results/{args.scenario}/{args.scenario}-summary.csv'
-    scenario_results.to_csv(out_path)
-
-    return None
-
-class Catalog:
-
-    def __init__(self, catalog, scenario, estimator) -> None:
+    Attributes:
+        dataset: string representing the dataset being analyzed
+        strategy: string representing the strategy being evaluated
+        estimator: string representing which model (CJS or POPAN) being used
+        data_dir: path to the directory with the simulated data
+        results_dir: path to the simulation output
+        config_path: path to the config for the dataset
+    '''
+    def __init__(self, dataset, strategy, estimator) -> None:
+        '''Initializes the instance based on dataset, strategy, and model.'''
         self.estimator = estimator
-        self.scenario = scenario
-        self.catalog = catalog
-        self.data_dir = f'sim_data/{scenario}/{catalog}'
-        self.results_dir = f'results/{scenario}/{catalog}'
-        self.config_path  = f'config/catalogs/{catalog}.yaml'
+        self.strategy = strategy
+        self.dataset = dataset
+        self.data_dir = f'sim_data/{strategy}/{dataset}'
+        self.results_dir = f'results/{strategy}/{dataset}'
+        self.config_path  = f'config/datasets/{dataset}.yaml'
     
     def analyze(self):
-
-        print(f'Analyzing {self.catalog}...')
+        '''Analyze the dataset.'''
+        print(f'Analyzing {self.dataset}...')
 
         cfg = load_config(self.config_path, "config/default.yaml")
         trials = [t for t in range(cfg.trial_count)]
@@ -64,16 +88,17 @@ class Catalog:
             trial_summary_list = p.map(self.analyze_trial, trials)
 
         # concatenate results and return truth
-        catalog_results = pd.concat(trial_summary_list)
+        dataset_results = pd.concat(trial_summary_list)
         truth = get_truth(cfg)
-        catalog_results = catalog_results.merge(truth)
+        dataset_results = dataset_results.merge(truth)
 
-        return catalog_results
+        return dataset_results
 
     def analyze_trial(self, trial):
+        '''Analyze the individual trial from dataset and dataset.'''
+        print(f'Summarizing trial {trial} for {self.dataset}')
 
-        print(f'Summarizing trial {trial} for {self.catalog}')
-
+        # import the inference data object
         path = f'{self.results_dir}/trial_{trial}.json'
         idata = az.from_json(path)
         
@@ -104,11 +129,12 @@ class Catalog:
         ft_new = check_results['freeman_tukey_new']
         p_val = (ft_new > ft_obs).mean()
 
+        # add to the summary 
         summary['p_val'] = p_val
 
         # add additional information
         summary['trial'] = trial
-        summary['catalog'] = self.catalog
+        summary['dataset'] = self.dataset
 
         return summary
     
@@ -128,4 +154,4 @@ def get_truth(config):
     return truth
 
 if __name__ == '__main__':
-    analyze_scenario()
+    analyze_strategy()
