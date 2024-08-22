@@ -47,7 +47,7 @@ def write_configs():
     args = parse()
     SCENARIO = args.scenario
 
-    config_dir = 'config/catalogs'
+    config_dir = 'config/datasets'
     if not os.path.isdir(config_dir):
         os.mkdir(config_dir)
 

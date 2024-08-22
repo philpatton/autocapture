@@ -15,12 +15,7 @@ The simulation proceeds in three general steps.
 Users can provide their own configs (TODO: Improve documentation for this process). To recreate the results from the paper, run the following commands. This will create `.yaml` files in the the `config` directory. 
 
 ```
-python -m src.config --strategy check_0
-python -m src.config --strategy check_5
-python -m src.config --strategy check_10
-python -m src.config --strategy check_15
-python -m src.config --strategy check_20
-python -m src.config --strategy check_25
+python -m src.config 
 ```
 
 ### Simulating capture histories
@@ -29,6 +24,10 @@ The `src.simulate` script accomplishes tasks #1 and #2 above for a given strateg
 
 ```
 python -m src.simulate --strategy check_0
+python -m src.simulate --strategy check_5
+...
+python -m src.simulate --strategy check_25
+
 ```
 
 The script uses the `POPAN` class, from the `model` module, and its `simulate()` function to simulate a capture history. Then it corrupts the history with misidentifications, using the `MissID` class from the `miss_id` module. By default, `simulate` simulates 100 replicates for dataset in a given strategy. 
@@ -39,6 +38,10 @@ The `src.estimate` script accomplishes task #3 above for a given scenario and mo
 
 ```
 python -m src.estimate --strategy check_0
+python -m src.estimate --strategy check_5
+...
+python -m src.estimate --strategy check_25
+
 ```
 
 The parameters are estimated using PyMC. 
