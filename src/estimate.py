@@ -1,12 +1,19 @@
-"""Estimate parameters using PyMC.
+"""Run MCMC for every trial and dataset in the scenario.
 
-Estimate parameters using PyMC, for all datasets under a given 
-strategy or strategy.
+Estimate parameters using PyMC, for all datasets under a given strategy. The 
+actual PyMC code is written in the model.py model. This script then runs the
+MCMC sampler, and saves each trial's results to a json file. The stript relies
+on the multiprocessing module to parallelize the estimation process. As such,
+each trial is run in parallel, while the chains are ran sequentially. PyMC
+defaults to parallelizing the chains but, since n_trials > n_cores > n_chains,
+I decided to parallelize the trials instead.
+
+The script is called from the command line with the following arguments:
+    -s: strategy name (default: debug)
+    -m: model (default: popan)
 
 Typical usage example:
-
-  foo = ClassFoo()
-  bar = foo.FunctionBar()
+    $ python src/estimate.py --strategy check_0
 """
 
 from multiprocessing import Pool, cpu_count

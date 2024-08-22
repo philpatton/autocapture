@@ -1,14 +1,16 @@
 """Module for summarizing the output of the simlulation.
 
-Leave one blank line.  The rest of this docstring should contain an
-overall description of the module or program.  Optionally, it may also
-contain a brief description of exported classes and functions and/or usage
-examples.
+The simulation output, from estimate.py, produces MCMC chains in the form of
+arviz.InferenceData objects. These functions essentially summarize the chains
+from each trial and dataset, and then combine them into a single summary for
+the strategy. For convenience, it also adds the true values of the parameters.
+
+The script is called from the command line with the following arguments:
+    -s: strategy name (default: debug)
+    -m: model (default: popan)
 
 Typical usage example:
-
-  foo = ClassFoo()
-  bar = foo.FunctionBar()
+    $ python src/analyze.py --strategy check_0 
 """
 
 from multiprocessing import Pool, cpu_count
@@ -27,7 +29,7 @@ def parse():
     '''Parse command line arguments.'''
     parser = argparse.ArgumentParser(description="Analyzing results")
     parser.add_argument('-s', "--strategy", default="test")
-    parser.add_argument('-e', "--estimator", default="popan")
+    parser.add_argument('-e', "--model", default="popan")
     return parser.parse_args()
 
 def analyze_strategy():
@@ -42,7 +44,7 @@ def analyze_strategy():
     dataset_list = []
     for dataset in dataset_ids:
 
-        cat = Dataset(dataset, strategy=args.strategy, estimator=args.estimator)
+        cat = Dataset(dataset, strategy=args.strategy, model=args.model)
 
         # analyze the output       
         dataset_results = cat.analyze()
@@ -62,14 +64,14 @@ class Dataset:
     Attributes:
         dataset: string representing the dataset being analyzed
         strategy: string representing the strategy being evaluated
-        estimator: string representing which model (CJS or POPAN) being used
+        model: string representing which model (CJS or POPAN) being used
         data_dir: path to the directory with the simulated data
         results_dir: path to the simulation output
         config_path: path to the config for the dataset
     '''
-    def __init__(self, dataset, strategy, estimator) -> None:
+    def __init__(self, dataset, strategy, model) -> None:
         '''Initializes the instance based on dataset, strategy, and model.'''
-        self.estimator = estimator
+        self.model = model
         self.strategy = strategy
         self.dataset = dataset
         self.data_dir = f'sim_data/{strategy}/{dataset}'
@@ -110,9 +112,9 @@ class Dataset:
         summary['divergences'] = divergences
 
         # add the p value to the summary, after selecting  method
-        if self.estimator == 'popan':
+        if self.model == 'popan':
             method = POPAN()
-        elif self.estimator == 'cjs':
+        elif self.model == 'cjs':
             method = CJS()
 
         # load in data 

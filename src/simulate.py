@@ -1,7 +1,15 @@
-"""Simulates trial_count datasets for 39 catalogs for a strategy
+"""Simulate capture histories for each dataset under a given strategy. 
 
-Various functions that wrap around the actual simulation code, which can be 
-found in cjs.py or popan.py. 
+This scrip essentially wraps around the model.POPAN.simulate() to generate
+capture histories. It does so trial_count times for each dataset under a given 
+strategy. The results are saved in the sim_data directory. 
+
+The script is called from the command line with the following arguments:
+    -s: strategy name (default: debug)
+    -m: model (default: popan)
+
+Typical usage example:
+    $ python src/simulate.py --strategy check_0
 
 """
 import argparse
@@ -19,7 +27,7 @@ def parse():
     '''Parses arguments from the command line'''
     parser = argparse.ArgumentParser(description="Simulating strategy")
     parser.add_argument('-s', "--strategy", default="debug")
-    parser.add_argument('-e', '--estimator', default='popan')
+    parser.add_argument('-m', '--model', default='popan')
     return parser.parse_args()
 
 class NumpyEncoder(json.JSONEncoder):
@@ -42,17 +50,17 @@ def main():
 
     # only simulate debug catalog in debug strategy
     if args.strategy == 'debug':
-        simulate_catalog(args.estimator, args.strategy, catalog='debug')
+        simulate_catalog(args.model, args.strategy, catalog='debug')
 
     # otherwise, simulate all the other catalogs
     else:
         for catalog in catalog_ids:
             print(f'Simulating {catalog}')
-            simulate_catalog(args.estimator, args.strategy, catalog)
+            simulate_catalog(args.model, args.strategy, catalog)
 
     return None
 
-def simulate_catalog(estimator, strategy, catalog):
+def simulate_catalog(model, strategy, catalog):
     """Simulate 100 datasets for a given catalog and strategy."""
 
     # load the cfg for the strategy/catalog
@@ -84,11 +92,11 @@ def simulate_catalog(estimator, strategy, catalog):
     for trial in range(cfg.trial_count):
 
         # conduct simulate one trial 
-        if estimator == 'popan':
+        if model == 'popan':
             popan = POPAN()
             sim_results = popan.simulate(N=cfg.N, T=cfg.T, phi=cfg.phi, 
                                          p=cfg.p, b=b)
-        elif estimator == 'cjs':
+        elif model == 'cjs':
             cjs = CJS()
             sim_results = cjs.simulate(T=cfg.T, phi=cfg.phi, p=cfg.p,
                                        released_count=cfg.released_count)

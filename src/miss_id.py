@@ -11,11 +11,17 @@ single recapture to a new individual, simulating a one-off error. Ghosts and
 mark changes are two forms of false rejects.
 
 Typical usage example:
+    import numpy as np
 
-    alpha = 0.025; beta = 0.025; gamma = 0.01
-    mi = MissID(alpha, beta, gamma)
+    kwargs = {'alpha': 0.025, 'beta': 0.025, 'gamma': 0.01}
+    mi = MissID(**kwargs)
     
-    true_history = np.random.default_rng().binomial(1, 0.5, (10, 5))
+    p = 0.5
+    n = 10
+    T = 5
+
+    rng = np.random.default_rng()
+    true_history = rng.binomial(1, p, (n, T))
     capture_history = mi.simulate_capture_history(true_history)
 """
 
