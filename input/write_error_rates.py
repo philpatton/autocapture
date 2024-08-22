@@ -1,11 +1,23 @@
-import pandas as pd
-import numpy as np
-import argparse
+
+"""Writes the error rates for the 39 datasets into a csv file.'''
+
+This script reads in the submission file, which contains the top 100 
+suggested IDs for each query image in each of the 39 photo-ID datasets, then
+classifies each prediction as a false reject or false accept. The classification
+depends on the strategy. After classifying the predictions, the script 
+calculates the false accept and false reject rates for each dataset under each 
+strategy and writes them to a csv file.
+"""
 
 from pathlib import Path
 
+import pandas as pd
+import numpy as np
+
+
 def main():
-    
+    '''Write the error rates for the 39 datasets into a csv file.'''
+
     PRED_COUNT = np.insert(np.arange(5, 51, 5), 0, 1)
     P_MAX = 0.8
     P_MIN = 0.4
@@ -18,7 +30,7 @@ def main():
     mapping = read_mapping(map_path)
 
     # add in the submission results
-    submission_path = f'input/submissions/rist-1000.csv'
+    submission_path = 'input/submissions/rist-1000.csv'
     submission = pd.read_csv(submission_path)
 
     # merge the results and mapping
@@ -54,7 +66,6 @@ def read_mapping(map_path):
     """read in the mapping data and correct known errors."""
 
     # read in the full file mapping, correcting the known species errors
-    # read in the full file mapping, correcting the known species errors
     mapping = pd.read_csv(map_path, dtype='string')
     mapping['species'] = (
         mapping['species'].replace(
@@ -76,6 +87,7 @@ def read_mapping(map_path):
     return mapping
 
 def merge_results(submission, mapping):
+    '''Join the submission file to the mapping file.'''
 
     # rename and subset columns for easy merging
     submission.columns = ['image', 'predictions']
@@ -96,7 +108,7 @@ def get_rates(results, pred_count):
     ctl = []
     for count in pred_count:
         
-        # select labels top count predictions from submission 
+        # select labels top count predictions from submission
         preds = results.predictions.str.split(' ')
         preds = [p[:count] for p in preds]
         labs = results.id
@@ -104,7 +116,7 @@ def get_rates(results, pred_count):
         # classify each test image's predictions as TR, TA, FR, FA
         pred_class = [classify_prediction(p, l) for p, l in zip(preds, labs)]
     
-        # name the column 
+        # name the column
         nm = f'pred_class_{count}'
         results[nm] = pred_class
     
@@ -112,7 +124,7 @@ def get_rates(results, pred_count):
         cross_tab = pd.crosstab(
             results['catalog'],
             results[nm],
-            margins=False, 
+            margins=False,
             normalize='index'
         )
     
@@ -122,7 +134,7 @@ def get_rates(results, pred_count):
     
         # subset the results
         df = cross_tab[['FR', 'FA']].reset_index()
-        df['matches_checked'] = count 
+        df['matches_checked'] = count
         
         # add to list to be concatenated
         ctl.append(df)
@@ -144,7 +156,7 @@ def get_cost(results, pred_count):
 
     ll = []
     # what's the number of ids that we'd have to evaluate for each action?
-    for a in pred_count: 
+    for a in pred_count:
 
         # the cost of the first action is 0
         if a == 1:
@@ -156,7 +168,7 @@ def get_cost(results, pred_count):
             ll.append(tmp_df)
             continue
         
-        # how many ids would we evaluated? 
+        # how many ids would we evaluated?
         l = np.where(
             results.label_idx < a,
             results.label_idx + 1,
@@ -196,7 +208,7 @@ def index_mod(l, value):
         return len(l)
 
 def replace_bad_ids(results):
-    
+    '''Corrects some excel issues that arise when using MAC OS.'''
     is_bad = results.new_individual_id.str.contains('E+')
     bad_ids = results.loc[is_bad].new_individual_id
     bad_preds = results.loc[is_bad].predictions
@@ -294,7 +306,7 @@ def get_catalog_ids(species_list):
     return catalog_ids
 
 def scale_p(mean, p_max, p_min):
-
+    '''Scale the mean capture rate to the desired range.'''
     scaled = ((p_max - p_min) * (mean - min(mean)) / 
             (max(mean) - min(mean))) + p_min
     
