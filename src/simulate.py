@@ -9,7 +9,7 @@ The script is called from the command line with the following arguments:
     -m: model (default: popan)
 
 Typical usage example:
-    $ python src/simulate.py --strategy check_0
+    $ python -m src.simulate --strategy check_0
 
 """
 import argparse

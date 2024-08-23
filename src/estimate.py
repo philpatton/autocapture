@@ -13,7 +13,7 @@ The script is called from the command line with the following arguments:
     -m: model (default: popan)
 
 Typical usage example:
-    $ python src/estimate.py --strategy check_0
+    $ python -m src.estimate --strategy check_0
 """
 
 from multiprocessing import Pool, cpu_count
