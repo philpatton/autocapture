@@ -1,14 +1,24 @@
-"""Module for summarizing the output of the simlulation.
+"""Open-population capture-recapture models
 
-Leave one blank line.  The rest of this docstring should contain an
-overall description of the module or program.  Optionally, it may also
-contain a brief description of exported classes and functions and/or usage
-examples.
+Jolly-Seber (POPAN parameterization) and Cormack-Jolly-Seber models. Both models
+have methods for simulating data and estimating parameters. Both estimate 
+parameters by building a PyMC model, which can be sampled from using PyMC. The
+CJS class has methods for estimating the MLE as well. Users can conduct a 
+posterior predictive check, using the freeman-tukey statistic for the m-array,
+for both models (the check() method could be much improved, however).
 
 Typical usage example:
 
-  foo = ClassFoo()
-  bar = foo.FunctionBar()
+    seed = 42
+    popan = POPAN(seed)
+
+    sim_params = {'N': 100, 'T': 4, 'phi' = 0.9, 'p' = 0.5,
+                  'b': np.array([0.4, 0.2, 0.2, 0.2])}
+    results = popan.simulate(**sim_params)
+
+    mod = popan.compile_pymc_model(results['capture_history'])
+    with mod:
+        mcmc_results = pm.sample()
 """
 
 from pymc.distributions.dist_math import factln
@@ -34,17 +44,16 @@ class POPAN:
     parameterization.
 
     Typical usage example:
+        seed = 42
+        popan = POPAN(seed)
 
-        N = 100; T = 4; phi = 0.9; p = 0.5
-        b = np.array([0.4, 0.2, 0.2, 0.2])
+        sim_params = {'N': 100, 'T': 4, 'phi' = 0.9, 'p' = 0.5,
+                    'b': np.array([0.4, 0.2, 0.2, 0.2])}
+        results = popan.simulate(**sim_params)
 
-        ps = POPANSimulator(N=N, T=T, phi=phi, p=p, b=b)
-        results = ps.simulate_data()
-
-        pe = POPANEstimator(results['capture_history'])
-        popan = pe.compile()
-        with popan:
-            idata = pm.sample()
+        mod = popan.compile_pymc_model(results['capture_history'])
+        with mod:
+            mcmc_results = pm.sample()
     """
 
     def __init__(self, seed: int = None) -> None:
