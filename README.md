@@ -1,6 +1,6 @@
 # Simulating capture histories, and estimating paramters, under misidentification
 
-Code to recreate analysis *Evaluating tradeoffs between automation and bias in population assessments relying on photo-identification.* 
+Code to recreate analysis "Evaluating tradeoffs between automation and bias in population assessments relying on photo-identification," which is in press at *Conservation Biology.*
 
 ## Simulation
 
