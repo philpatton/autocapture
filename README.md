@@ -1,7 +1,8 @@
 # Simulating capture histories, and estimating paramters, under misidentification
 
-Code to recreate analysis "Evaluating tradeoffs between automation and bias in population assessments relying on photo-identification," which is in press at *Conservation Biology.*
+Code to recreate analysis in our paper:
 
+Patton, P. T., Pacifici, K., Baird, R. W., Oleson, E. M., Allen, J. B., Ashe, E., Athayde, A., Basran, C. J., Cabrera, E., Calambokidis, J., Cardoso, J., Carroll, E. L., Cesario, A., Cheney, B. J., Cheeseman, T., Corsi, E., Currie, J. J., Durban, J. W., Falcone, E. A., … Bejder, L. (2025). Optimizing automated photo identification for population assessments. Conservation Biology, e14436. https://doi.org/10.1111/cobi.14436
 ## Simulation
 
 The simulation proceeds in three general steps.
