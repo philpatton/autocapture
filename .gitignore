@@ -28,3 +28,6 @@ r/
 *.pyc
 *.DS_Store
 *.R
+# pixi environments
+.pixi
+*.egg-info
